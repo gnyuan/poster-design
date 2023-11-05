@@ -1,0 +1,83 @@
+[
+  {
+    "name": "苗方清颜",
+    "phone": "123",
+    "email": "a@a.com",
+    "children": [
+      {
+        "name": "杭州总店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "城西店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "下沙店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "万象城店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "滨江店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "萧山店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "富阳店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "良渚店",
+        "phone": "114",
+        "email": "a@a.com"
+      }
+    ]
+  },
+  {
+    "name": "和颜美帕",
+    "phone": "123",
+    "email": "a@a.com",
+    "children": [
+      {
+        "name": "北京店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "天津店",
+        "phone": "114",
+        "email": "a@a.com"
+      }
+    ]
+  },
+  {
+    "name": "痘御堂",
+    "phone": "123",
+    "email": "a@a.com",
+    "children": [
+      {
+        "name": "广州店",
+        "phone": "114",
+        "email": "a@a.com"
+      },
+      {
+        "name": "深圳店",
+        "phone": "114",
+        "email": "a@a.com"
+      }
+    ]
+  }
+]

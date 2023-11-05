@@ -9,5 +9,8 @@
   },
   "css.validate": false,
   "less.validate": false,
-  "scss.validate": false
+  "scss.validate": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  }
 }

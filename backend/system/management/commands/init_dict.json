@@ -1,0 +1,41 @@
+[
+    {
+        "name": "内部研报状态",
+        "code": "internal_report_status",
+        "children": [
+            {
+                "label": "待审核",
+                "value": "待审核",
+                "icon": ""
+            },
+            {
+                "label": "已审核",
+                "value": "已审核",
+                "icon": ""
+            },
+            {
+                "label": "已废弃",
+                "value": "已废弃",
+                "icon": ""
+            }
+        ]
+    },
+    {
+        "name": "研报类型",
+        "code": "report_type",
+        "children": [
+            {
+                "label": "外部",
+                "value": "0"
+            },
+            {
+                "label": "内部公开",
+                "value": "1"
+            },
+            {
+                "label": "内部脱敏",
+                "value": "2"
+            }
+        ]
+    }
+]
