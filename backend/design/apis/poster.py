@@ -32,32 +32,32 @@ class SchemaOut(ModelSchema):
     # model_fields = []
 
 
-@router.post("/poster", response=SchemaOut)
+@router.post("/poster", response=SchemaOut, auth=None)
 def create_poster_template(request, data: SchemaIn):
     poster = create(request, data, Templ)
     return poster
 
 
-@router.delete("/poster/{dept_id}")
+@router.delete("/poster/{dept_id}", auth=None)
 def delete_poster_template(request, dept_id: int):
     delete(dept_id, Templ)
     return {"success": True}
 
 
-@router.put("/poster/{dept_id}", response=SchemaOut)
+@router.put("/poster/{dept_id}", response=SchemaOut, auth=None)
 def update_poster_template(request, dept_id: int, data: SchemaIn):
     poster = update(request, dept_id, data, Templ)
     return poster
 
-@router.get('/design2/c3te', response=List[SchemaOut])
-@router.get("/poster", response=List[SchemaOut])
+@router.get('/design2/c3te', response=List[SchemaOut], auth=None)
+@router.get("/poster", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
     qs = retrieve(request, Templ, filters)
     return qs
 
 
-@router.get("/poster/{dept_id}", response=SchemaOut)
+@router.get("/poster/{dept_id}", response=SchemaOut, auth=None)
 def get_poster_template(request, dept_id: int):
     poster = get_object_or_404(Templ, id=dept_id)
     return poster

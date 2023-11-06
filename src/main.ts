@@ -24,8 +24,4 @@ elementConfig.plugins.forEach((plugin: any) => {
   app.use(plugin)
 })
 
-app
-  .use(store)
-  .use(router)
-  .use(utils)
-  .mount('#app')
+app.use(store).use(router).use(utils).mount('#app')

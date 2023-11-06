@@ -76,6 +76,26 @@ class Image(CoreModel):
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
 
+
+class Font(CoreModel):
+    alias = models.CharField(null=True, max_length=64, verbose_name="字体alias", help_text="字体alias")
+    font_family = models.CharField(null=True, max_length=64, verbose_name="字体family", help_text="字体family")
+    lang = models.CharField(null=True, max_length=64, verbose_name="字体语言", help_text="字体语言")
+    oid = models.IntegerField(null=True, verbose_name="oid", help_text="oid")
+    preview = models.TextField(null=True, verbose_name="字体预览", help_text="字体预览")
+    size = models.IntegerField(null=True, verbose_name="字体大小", help_text="字体大小")
+    ttf = models.TextField(null=True, verbose_name="字体ttf", help_text="字体ttf")
+    value = models.CharField(null=True, max_length=64, verbose_name="字体value", help_text="字体value")
+    version = models.CharField(null=True, max_length=64, verbose_name="字体version", help_text="字体version")
+    woff = models.TextField(null=True, verbose_name="字体woff", help_text="字体woff")
+    woff_size = models.IntegerField(null=True, verbose_name="字体大小", help_text="字体大小")
+
+    class Meta:
+        db_table = "font"
+        verbose_name = '字体'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
+
 # class Material(CoreModel):
 #     '''
 #     columns include: id key path width height url

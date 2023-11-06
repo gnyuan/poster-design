@@ -57,13 +57,19 @@ export default defineConfig({
     'process.env': process.env,
   },
   server: {
+    port: 9001,
+    https: false,
+    cors: true,
     hmr: { overlay: false },
-    // proxy: {
-    //   '/api': {
-    //     target: '',
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/api/, ''),
-    //   },
-    // },
+    proxy: {
+      '/api': {
+        target: 'http://192.168.3.27:8000/api/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+    headers: {
+      'Referrer-Policy': 'no-referrer-when-downgrade', // Change this as needed
+    },
   },
 })

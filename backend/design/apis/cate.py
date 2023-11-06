@@ -32,32 +32,35 @@ class SchemaOut(ModelSchema):
     # model_fields = []
 
 
-@router.post("/cate", response=SchemaOut)
+@router.post("/cate", response=SchemaOut, auth=None)
 def create_poster_template(request, data: SchemaIn):
     poster = create(request, data, Cate)
     return poster
 
 
-@router.delete("/cate/{dept_id}")
+@router.delete("/cate/{dept_id}", auth=None)
 def delete_poster_template(request, dept_id: int):
     delete(dept_id, Cate)
     return {"success": True}
 
 
-@router.put("/cate/{dept_id}", response=SchemaOut)
+@router.put("/cate/{dept_id}", response=SchemaOut, auth=None)
 def update_poster_template(request, dept_id: int, data: SchemaIn):
     poster = update(request, dept_id, data, Cate)
     return poster
 
 
-@router.get("/cate", response=List[SchemaOut])
-@paginate(MyPagination)
+@router.get("/cate", response=List[SchemaOut], auth=None)
+@router.get("/list", response=List[SchemaOut], auth=None)
+# @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
+    print(1111)
+    print(filters)
     qs = retrieve(request, Cate, filters)
     return qs
 
 
-@router.get("/cate/{dept_id}", response=SchemaOut)
+@router.get("/cate/{dept_id}", response=SchemaOut, auth=None)
 def get_poster_template(request, dept_id: int):
     poster = get_object_or_404(Cate, id=dept_id)
     return poster

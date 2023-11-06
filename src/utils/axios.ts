@@ -22,6 +22,9 @@ axios.interceptors.request.use(
     const values = {}
     // values.access_token = access_token;
     // values.version = version;
+    // Add these lines to enable CORS requests
+    config.withCredentials = true
+    config.crossDomain = true
 
     if (url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0) {
       url.indexOf('/') === 0 ? (config.url = baseUrl + url) : (config.url = baseUrl + '/' + url)
@@ -99,11 +102,15 @@ const fetch = (url: string, params: Type.Object, type: string | undefined = 'get
       // },
       headers: Object.assign(objtest, exheaders),
       params,
+      crossDomain: true, // Enable CORS
+      withCredentials: true, // Enable CORS
       ...extra,
     })
   } else {
     return (axios as Type.Object)[type](url, params, {
       headers: Object.assign(objtest, exheaders),
+      withCredentials: true, // Enable CORS
+      crossDomain: true, // Enable CORS
       ...extra,
     })
   }

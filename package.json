@@ -6,7 +6,7 @@
   "scripts": {
     "prepared": "npm i && cd screenshot && npm i",
     "serve": "npm run dev & cd screenshot && npm run dev",
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "cross-env NODE_ENV=development vite --host 0.0.0.0",
     "v-build": "cross-env NODE_ENV=production && vite build",
     "v-build-hard": "cross-env NODE_ENV=production vue-tsc --noEmit && vite build",
     "build": "node script/set config.json && npm run v-build && sh script/reverse.sh",
@@ -20,6 +20,7 @@
     "@webtoon/psd": "^0.4.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "dayjs": "^1.10.7",
     "element-plus": "^2.3.7",
     "fontfaceobserver": "^2.1.0",

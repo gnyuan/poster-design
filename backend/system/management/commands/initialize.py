@@ -6,7 +6,7 @@ import json
 
 from fuadmin.settings import BASE_DIR
 from system.models import Dept, Menu, MenuButton, Role, Post, Users, Dict, DictItem, CategoryDict, ApiWhiteList, SystemConfig
-from design.models import Templ, Cate
+from design.models import Templ, Cate, Font
 from utils.core_initialize import CoreInitialize
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 
@@ -342,7 +342,32 @@ class Initialize(CoreInitialize):
                     })
             else:
                 print('poster_tempalte数据已经存在，无需初始化')
-
+    def init_poster_font(self):  # 初始化poster
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_font.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if Font.objects.count() == 0:
+                for api in api_list:
+                    Font.objects.create(**{
+                        'oid': api.get('oid', 1),
+                        'alias': api.get('alias', ''),
+                        'preview': api.get('preview', ''),
+                        'ttf': api.get('ttf', ''),
+                        'woff': api.get('woff', ''),
+                        'value': api.get('value', ''),
+                        'font_family': api.get('font_family', ''),
+                        'size': api.get('size', 0),
+                        'version': api.get('version', ''),
+                        'lang': api.get('lang', ''),
+                        'woff_size': api.get('woff_size', 0),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "update_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('poster_tempalte数据已经存在，无需初始化')
     def run(self):
         self.init_dept()
         self.init_users()
@@ -355,6 +380,7 @@ class Initialize(CoreInitialize):
         self.init_systemconfig()
         self.init_poster_cate()
         self.init_poster_template()
+        self.init_poster_font()
         
 
 
