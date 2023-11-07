@@ -6,7 +6,7 @@ import json
 
 from fuadmin.settings import BASE_DIR
 from system.models import Dept, Menu, MenuButton, Role, Post, Users, Dict, DictItem, CategoryDict, ApiWhiteList, SystemConfig
-from design.models import Templ, Cate, Font
+from design.models import Templ, Cate, Font, Image, Material
 from utils.core_initialize import CoreInitialize
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 
@@ -298,7 +298,8 @@ class Initialize(CoreInitialize):
 
             if Templ.objects.count() == 0:
                 for api in api_list:
-                    Templ.objects.create(**{
+                    Templ.objects.create(**{\
+                        'id': api.get('id', None),
                         'cover': api.get('cover', ''),
                         'url': api.get('url', ''),
                         'type': api.get('type', 0),
@@ -331,6 +332,7 @@ class Initialize(CoreInitialize):
             if Cate.objects.count() == 0:
                 for api in api_list:
                     Cate.objects.create(**{
+                        'id': api.get('id', None),
                         'type': api.get('type', 0),
                         'name': api.get('name', ''),
                         "remark": api.get('remark', None),
@@ -368,6 +370,58 @@ class Initialize(CoreInitialize):
                     })
             else:
                 print('poster_tempalte数据已经存在，无需初始化')
+
+    def init_poster_image(self):  # 初始化poster
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_image.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if Image.objects.count() == 0:
+                for api in api_list:
+                    Image.objects.create(**{
+                       "id": api.get('id', None),
+                        "thumb": api.get('thumb', ''),
+                        "url": api.get('url', ''),
+                        "width": api.get('width', 0),
+                        "height": api.get('height', 0),
+                        "category": api.get('category', 0),
+                        "original": api.get('original', ''),
+                        "author": api.get('author', ''),
+                        "description": api.get('description', ''),
+                        "color": api.get('color', ''),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "update_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('image_tempalte数据已经存在，无需初始化')
+    def init_poster_material(self):  # 初始化poster
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_material.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if Material.objects.count() == 0:
+                for api in api_list:
+                    Material.objects.create(**{
+                       "id": api.get('id', None),
+                       "title": api.get('title', ''),
+                        "width": api.get('width', 0),
+                        "height": api.get('height', 0),
+                        "original": api.get('original', ''),
+                        "category": api.get('category', 0),
+                        "type": api.get('type', ''),
+                        "model": api.get('model', ''),
+                        "thumb": api.get('thumb', ''),
+                        "url": api.get('url', ''),
+                        "state": api.get('state', ''),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "update_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('material_tempalte数据已经存在，无需初始化')
     def run(self):
         self.init_dept()
         self.init_users()
@@ -381,6 +435,8 @@ class Initialize(CoreInitialize):
         self.init_poster_cate()
         self.init_poster_template()
         self.init_poster_font()
+        self.init_poster_image()
+        self.init_poster_material()
         
 
 

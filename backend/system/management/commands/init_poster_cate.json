@@ -1,26 +1,182 @@
 [
   {
+    "id": 1,
     "name": "手机海报",
-    "type": 1
+    "type": 1,
+    "pid": null
   },
   {
+    "id": 2,
     "name": "公众号封面",
-    "type": 1
+    "type": 1,
+    "pid": null
   },
   {
+    "id": 3,
     "name": "视频封面",
-    "type": 1
+    "type": 1,
+    "pid": null
   },
   {
+    "id": 4,
     "name": "文章长图",
-    "type": 1
+    "type": 1,
+    "pid": null
   },
   {
+    "id": 5,
     "name": "电商海报",
-    "type": 1
+    "type": 1,
+    "pid": null
   },
   {
+    "id": 25,
     "name": "LOGO",
-    "type": 1
+    "type": 1,
+    "pid": null
+  },
+  {
+    "id": 7,
+    "name": "箭头线条",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 10,
+    "name": "装饰元素",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 11,
+    "name": "便签贴纸",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 19,
+    "name": "形状",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 20,
+    "name": "手账元素",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 21,
+    "name": "手写文字",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 22,
+    "name": "插画",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 8,
+    "name": "图片容器",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 6,
+    "name": "形状笔刷",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 9,
+    "name": "图标",
+    "type": 2,
+    "pid": null
+  },
+  {
+    "id": 12,
+    "name": "基础文字",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 23,
+    "name": "文艺花字",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 15,
+    "name": "晒图标记",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 14,
+    "name": "电商文字",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 18,
+    "name": "按钮素材",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 24,
+    "name": "复古花字",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 13,
+    "name": "节日热点",
+    "type": 3,
+    "pid": null
+  },
+  {
+    "id": 26,
+    "name": "商务",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 27,
+    "name": "饮食",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 28,
+    "name": "动物",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 29,
+    "name": "人物",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 33,
+    "name": "电影",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 34,
+    "name": "街头",
+    "type": 4,
+    "pid": 17
+  },
+  {
+    "id": 35,
+    "name": "旅行",
+    "type": 4,
+    "pid": 17
   }
 ]

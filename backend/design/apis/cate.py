@@ -26,6 +26,7 @@ class SchemaIn(ModelSchema):
 
 
 class SchemaOut(ModelSchema):
+    pid: int = None
     class Config:
         model = Cate
         model_fields = "__all__"
@@ -51,11 +52,7 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
 
 
 @router.get("/cate", response=List[SchemaOut], auth=None)
-@router.get("/list", response=List[SchemaOut], auth=None)
-# @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
-    print(1111)
-    print(filters)
     qs = retrieve(request, Cate, filters)
     return qs
 

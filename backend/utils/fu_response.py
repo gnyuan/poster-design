@@ -31,7 +31,7 @@ from .fu_jwt import DateEncoder
 
 class FuResponse(HttpResponse):
 
-	def __init__(self, data=None, msg='success', code=2000, *args, **kwargs):
+	def __init__(self, data=None, msg='success', code=200, *args, **kwargs):
 		std_data = {
 			"code": code,
 			"result": data,

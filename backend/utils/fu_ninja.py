@@ -18,7 +18,7 @@ from .usual import get_user_info_from_token
 
 class FuNinjaAPI(NinjaAPI):
     def create_response(
-            self, request: HttpRequest, data: Any, *, status: int = 200, code: int = 2000, msg: str = "success",
+            self, request: HttpRequest, data: Any, *, status: int = 200, code: int = 200, msg: str = "success",
             temporal_response: HttpResponse = None,
     ) -> HttpResponse:
         std_data = {
@@ -42,6 +42,7 @@ class MyPagination(PaginationBase):
 
     class Output(Schema):
         items: List[Any]
+        list: List[Any]
         total: int
 
     def paginate_queryset(
@@ -55,6 +56,7 @@ class MyPagination(PaginationBase):
         return {
             "page": offset,
             "limit": limit,
+            "list": list(queryset[offset: offset + limit].values()),
             "items": queryset[offset: offset + limit],
             "total": self._items_count(queryset),
         }  # noqa: E203

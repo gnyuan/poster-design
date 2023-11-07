@@ -15,6 +15,7 @@ class Filters(FuFilters):
     name: str = Field(None, alias="name")
     status: bool = Field(None, alias="status")
     id: str = Field(None, alias="id")
+    category: int = Field(None, alias="cate")
 
 
 class SchemaIn(ModelSchema):
@@ -49,16 +50,17 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
     poster = update(request, dept_id, data, Templ)
     return poster
 
-@router.get('/design2/c3te', response=List[SchemaOut], auth=None)
 @router.get("/poster", response=List[SchemaOut], auth=None)
+@router.get("/list", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
     qs = retrieve(request, Templ, filters)
     return qs
 
 
-@router.get("/poster/{dept_id}", response=SchemaOut, auth=None)
-def get_poster_template(request, dept_id: int):
-    poster = get_object_or_404(Templ, id=dept_id)
+@router.get("/poster/{id}", response=SchemaOut, auth=None)
+@router.get("/temp", response=SchemaOut, auth=None)
+def get_poster_template(request, id: int):
+    poster = get_object_or_404(Templ, id=id)
     return poster
 

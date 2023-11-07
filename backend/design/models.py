@@ -6,20 +6,20 @@ class Templ(CoreModel):
     '''
     columns include: id title data width height
     '''
-    cover = models.CharField(max_length=256, verbose_name="封面", help_text="封面")
-    url = models.TextField(verbose_name="模板地址", help_text="模板地址")
-    type = models.IntegerField(default=0, verbose_name="模板类型", help_text="模板类型: 1模板2素材3文字4图片")
-    title = models.CharField(max_length=64, verbose_name="模板名称", help_text="模板名称")
-    name = models.CharField(max_length=64, verbose_name="模板名称", help_text="模板名称")
-    search = models.CharField(max_length=64, verbose_name="模板名称", help_text="模板名称")
-    data = models.TextField(verbose_name="模板数据", help_text="模板数据")
-    content = models.TextField(verbose_name="模板内容", help_text="模板内容")
-    width = models.IntegerField(verbose_name="宽度", help_text="宽度")
-    height = models.IntegerField(verbose_name="高度", help_text="高度")
-    state = models.IntegerField(default=1, verbose_name="是否启用", help_text="是否启用: 0-未启用, 1-启用")
-    category = models.IntegerField(default=0, verbose_name="分类", help_text="分类: ")
-    resource = models.TextField(verbose_name="资源", help_text="资源")
-    tag = models.TextField(verbose_name="标签", help_text="标签")
+    cover = models.CharField(null=True, max_length=256, verbose_name="封面", help_text="封面")
+    url = models.TextField(null=True, verbose_name="模板地址", help_text="模板地址")
+    type = models.IntegerField(null=True, default=0, verbose_name="模板类型", help_text="模板类型: 1模板2素材3文字4图片")
+    title = models.CharField(null=True, max_length=64, verbose_name="模板名称", help_text="模板名称")
+    name = models.CharField(null=True, max_length=64, verbose_name="模板名称", help_text="模板名称")
+    search = models.CharField(null=True, max_length=64, verbose_name="模板名称", help_text="模板名称")
+    data = models.TextField(null=True, verbose_name="模板数据", help_text="模板数据")
+    content = models.TextField(null=True, verbose_name="模板内容", help_text="模板内容")
+    width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
+    height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
+    state = models.IntegerField(null=True, default=1, verbose_name="是否启用", help_text="是否启用: 0-未启用, 1-启用")
+    category = models.IntegerField(null=True, default=0, verbose_name="分类", help_text="分类: ")
+    resource = models.TextField(null=True, verbose_name="资源", help_text="资源")
+    tag = models.TextField(null=True, verbose_name="标签", help_text="标签")
 
     cate = models.ForeignKey(to='Cate', verbose_name='所属类别', on_delete=models.SET_NULL, db_constraint=False,
                              null=True,
@@ -35,8 +35,8 @@ class Templ(CoreModel):
         ordering = ('-create_datetime',)
 
 class Cate(CoreModel): # categoory table
-    name = models.CharField(max_length=64, verbose_name="分类名称", help_text="分类名称")
-    type = models.IntegerField(default=0, verbose_name="分类类型", help_text="分类类型: 1模板2素材3文字4图片")
+    name = models.CharField(null=True, max_length=64, verbose_name="分类名称", help_text="分类名称")
+    type = models.IntegerField(null=True, default=0, verbose_name="分类类型", help_text="分类类型: 1模板2素材3文字4图片")
     pid = models.ForeignKey(to="Cate", on_delete=models.PROTECT, default=None, verbose_name="上级部门",
                                db_constraint=False, null=True, blank=True, help_text="上级部门")
     class Meta:
@@ -52,19 +52,19 @@ class Image(CoreModel):
     '''
     columns include: id key path width height url
     '''
-    key = models.CharField(max_length=64, verbose_name="图片key", help_text="图片key")
-    thumb = models.TextField(verbose_name="缩略图", help_text="缩略图")
-    url = models.TextField(verbose_name="图片url", help_text="图片url")
-    path = models.CharField(max_length=256, verbose_name="图片路径", help_text="图片路径")
-    width = models.IntegerField(verbose_name="宽度", help_text="宽度")
-    height = models.IntegerField(verbose_name="高度", help_text="高度")
-    category = models.IntegerField(default=0, verbose_name="分类", help_text="分类: ")
-    state = models.IntegerField(default=1, verbose_name="是否启用", help_text="是否启用: 0-未启用, 1-启用")
-    search = models.CharField(max_length=64, verbose_name="图片名称", help_text="图片名称")
-    original = models.CharField(max_length=64, verbose_name="原始图片", help_text="原始图片")
-    author = models.CharField(max_length=64, verbose_name="作者", help_text="作者")
-    color = models.CharField(max_length=64, verbose_name="颜色", help_text="颜色")
-    description = models.TextField(verbose_name="描述", help_text="描述")
+    key = models.CharField(null=True, max_length=64, verbose_name="图片key", help_text="图片key")
+    thumb = models.TextField(null=True, verbose_name="缩略图", help_text="缩略图")
+    url = models.TextField(null=True, verbose_name="图片url", help_text="图片url")
+    path = models.CharField(null=True, max_length=256, verbose_name="图片路径", help_text="图片路径")
+    width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
+    height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
+    category = models.IntegerField(null=True, default=0, verbose_name="分类", help_text="分类: ")
+    state = models.IntegerField(null=True, default=1, verbose_name="是否启用", help_text="是否启用: 0-未启用, 1-启用")
+    search = models.CharField(null=True, max_length=64, verbose_name="图片名称", help_text="图片名称")
+    original = models.CharField(null=True, max_length=64, verbose_name="原始图片", help_text="原始图片")
+    author = models.CharField(null=True, max_length=64, verbose_name="作者", help_text="作者")
+    color = models.CharField(null=True, max_length=64, verbose_name="颜色", help_text="颜色")
+    description = models.TextField(null=True, verbose_name="描述", help_text="描述")
 
     cate = models.ForeignKey(to='Cate', verbose_name='所属类别', on_delete=models.SET_NULL, db_constraint=False,
                              null=True,
@@ -76,6 +76,46 @@ class Image(CoreModel):
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
 
+
+
+class Material(CoreModel):
+    '''
+    {
+  "id": 574,
+  "title": "通用分割线简约感贴纸",
+  "width": 800,
+  "height": 125,
+  "original": "202843",
+  "category": 7,
+  "type": "svg",
+  "model": "{\"colors\":[\"#FFDEE5\"]}",
+  "thumb": "https://res.palxp.cn/static/material/gd-202843/202011020407-4069.png",
+  "url": "https://res.palxp.cn/static/material/gd-202843/20190723-180057-7ab2.plain",
+  "created_time": "2023-08-20T21:36:28.000Z",
+  "updated_time": "2023-09-15T11:42:14.000Z",
+  "state": 1
+}
+    '''
+    title = models.CharField(null=True, max_length=64, verbose_name="图片名称", help_text="图片名称")
+    width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
+    height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
+    original = models.CharField(null=True, max_length=64, verbose_name="原始图片", help_text="原始图片")
+    category = models.IntegerField(null=True, default=0, verbose_name="分类", help_text="分类: ")
+    type = models.CharField(null=True, max_length=64, verbose_name="图片类型", help_text="图片类型")
+    model = models.TextField(null=True, verbose_name="图片model", help_text="图片model")
+    thumb = models.TextField(null=True, verbose_name="缩略图", help_text="缩略图")
+    url = models.TextField(null=True, verbose_name="图片url", help_text="图片url")
+    state = models.IntegerField(null=True, default=1, verbose_name="是否启用", help_text="是否启用: 0-未启用, 1-启用")
+
+    cate = models.ForeignKey(to='Cate', verbose_name='所属类别', on_delete=models.SET_NULL, db_constraint=False,
+                             null=True,
+                             blank=True, help_text="所属类别")
+
+    class Meta:
+        db_table = "material"
+        verbose_name = '图片'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
 
 class Font(CoreModel):
     alias = models.CharField(null=True, max_length=64, verbose_name="字体alias", help_text="字体alias")
