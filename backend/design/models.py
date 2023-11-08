@@ -74,6 +74,7 @@ class UImage(CoreModel):
     width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
     url = models.TextField(null=True, verbose_name="图片url", help_text="图片url")
     username = models.CharField(max_length=32, verbose_name="登录用户名", null=True, blank=True, help_text="登录用户名")
+    category = models.IntegerField(null=True, default=0, verbose_name="分类", help_text="分类: ")
 
     class Meta:
         db_table = "uimage"

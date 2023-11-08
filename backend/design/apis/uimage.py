@@ -12,13 +12,12 @@ router = Router()
 
 
 class Filters(FuFilters):
-    name: str = Field('', alias="name")
-    type: int = Field(0, alias="type")
-    id: str = Field('', alias="id")
-    category: int = Field(0, alias="cate")
-    height: int = Field(0, alias="height")
-    width: int = Field(0, alias="width")
-    url: str = Field('', alias="url")
+    username: str = Field(None, alias="username")
+    id: str = Field(None, alias="id")
+    category: int = Field(None, alias="cate")
+    height: int = Field(None, alias="height")
+    width: int = Field(None, alias="width")
+    url: str = Field(None, alias="url")
 
 
 class SchemaIn(ModelSchema):
@@ -56,6 +55,7 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
 @router.get("/user/image", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
+    print(filters)
     qs = retrieve(request, UImage, filters)
     return qs
 

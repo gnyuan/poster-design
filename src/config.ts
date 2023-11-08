@@ -15,7 +15,6 @@ export default {
   API_URL: '/api',
   // SCREEN_URL: isDev ? 'http://localhost:7001' : '#{SCREEN_URL}', // 截图服务地址
   SCREEN_URL: 'http://192.168.3.27:9002',
-  IMG_URL: 'https://store.palxp.com/', // 七牛云资源地址
   // ICONFONT_URL: '//at.alicdn.com/t/font_3223711_74mlzj4jdue.css',
   ICONFONT_URL: '//at.alicdn.com/t/font_2717063_ypy8vprc3b.css?display=swap',
   ICONFONT_EXTRA: '//at.alicdn.com/t/c/font_3228074_zubqmza1sdk.css',

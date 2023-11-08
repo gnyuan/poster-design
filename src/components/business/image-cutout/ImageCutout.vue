@@ -149,7 +149,7 @@ export default defineComponent({
       const qnOptions = { bucket: 'xp-design', prePath: 'user' }
       const result = await Qiniu.upload(file, qnOptions)
       const { width, height } = await getImage(file)
-      const url = _config.IMG_URL + result.key
+      const url = result.url
       await api.material.addMyPhoto({ width, height, url })
       emit('done', url)
       state.show = false

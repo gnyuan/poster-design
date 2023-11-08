@@ -44,7 +44,7 @@ export default defineComponent({
     const draw = () => {
       return new Promise((resolve) => {
         state.canvasImage.createCover(({ key }: any) => {
-          resolve(_config.IMG_URL + key)
+          resolve(url)
         })
       })
     }

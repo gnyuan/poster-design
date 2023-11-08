@@ -16,6 +16,7 @@ const API = {
   del: prefix + 'pic/del',
   getToken: prefix + 'system/login',
   upload: prefix + 'system/upload',
+  showimg: prefix + 'system/showimg',
 }
 
 export const init = (params: Type.Object = {}) => fetch(API.init, params, 'post')
@@ -25,6 +26,8 @@ export const getPicList = (params: Type.Object = {}) => fetch(API.getList, param
 export const getToken = (params: Type.Object = {}) => fetch(API.getToken, params, 'post')
 
 export const upload = (params: Type.Object = {}, headers: Type.Object = {}) => fetch(API.upload, params, 'post', headers)
+
+export const showimg = (params: Type.Object = {}, headers: Type.Object = {}) => fetch(API.showimg, params, 'post', headers)
 
 export const deletePic = (params: Type.Object = {}) => fetch(API.delOne, params, 'post')
 
@@ -37,6 +40,7 @@ export default {
   getPicList,
   getToken,
   upload,
+  showimg,
   deletePic,
   delPics,
   reName,

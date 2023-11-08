@@ -32,7 +32,7 @@ export default () => {
           const qnOptions = { bucket: 'xp-design', prePath: 'user' }
           const result: any = await Qiniu.upload(file, qnOptions)
           const { width, height }: any = await getImage(file)
-          const url = _config.IMG_URL + result.key
+          const url = result.url
           await api.material.addMyPhoto({ width, height, url })
           // 添加图片到画布中
           store.commit('setShowMoveable', false) // 清理掉上一次的选择

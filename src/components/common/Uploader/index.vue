@@ -76,7 +76,7 @@ export default defineComponent({
             tempSimpleRes = await qiNiuUpload(file) // 队列有文件，执行上传
             const { width, height }: any = await getImage(file)
             useNotification('上传成功', '公共测试账户，上传请注意保护隐私哦!', { position: 'bottom-left' })
-            context.emit('done', { width, height, url: _config.IMG_URL + tempSimpleRes.key }) // 单个文件进行响应
+            context.emit('done', { width, height, url: tempSimpleRes.url }) // 单个文件进行响应
           } else useNotification('爱护小水管', '请上传小于 1M 的图片哦!', { type: 'error', position: 'bottom-left' })
           uploading = false
           handleRemove() // 移除已上传文件

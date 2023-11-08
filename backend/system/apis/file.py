@@ -95,5 +95,8 @@ def create_post(request, data: SchemaIn):
 @router.get("/image/{image_id}", auth=None)
 def get_file(request, image_id: int):
     qs = get_object_or_404(File, id=image_id)
-
     return HttpResponse(open(os.path.join(str(BASE_DIR), str(qs.url)), "rb"), content_type='image/png')
+
+@router.post("/showimg", auth=None)
+def download_img(request, data: SchemaIn):
+    return HttpResponse(open(os.path.join(str(BASE_DIR), unquote(data.url.lstrip('/'))), "rb"), content_type='image/png')

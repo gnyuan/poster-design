@@ -181,8 +181,8 @@ export default defineComponent({
     },
     draw() {
       return new Promise((resolve) => {
-        this.$refs.canvasImage.createCover(({ key }) => {
-          resolve(_config.IMG_URL + key)
+        this.$refs.canvasImage.createCover(({ url }) => {
+          resolve(url)
         })
       })
     },

@@ -11,11 +11,11 @@
       <div v-for="(item, i) in list" :key="i + 'i'" :style="{ width: item.listWidth + 'px', marginRight: item.gap + 'px' }" class="list__img" draggable="false" @mousedown="dragStart($event, i)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="select(i)" @dragstart="dragStart($event, i)">
         <edit-model v-if="edit" :options="edit" :data="{ item, i }">
           <div v-if="item.isDelect" class="list__mask">已删除</div>
-          <el-image class="img transparent-bg" :src="item.thumb || item.url" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy" />
+          <el-image class="img transparent-bg" :src="get_img_src(item.thumb || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy" />
         </edit-model>
         <template v-else>
           <imageTip :detail="item">
-            <el-image class="img" :src="item.thumb || item.url" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy">
+            <el-image class="img" :src="get_img_src(item.thumb || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy">
               <template #placeholder>
                 <div :style="{ backgroundColor: item.color }" class="image-color" />
               </template>
@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, reactive, watch, nextTick } from 'vue'
+import api from '@/api/album'
 import DragHelper from '@/common/hooks/dragHelper'
 import setImageData from '@/common/methods/DesignFeatures/setImage'
 
@@ -140,6 +141,30 @@ export default defineComponent({
       return state.listRef
     }
 
+    function get_img_src(imgStr: string): Promise<string> {
+      if (imgStr.startsWith('http')) {
+        return Promise.resolve(imgStr)
+      }
+
+      return new Promise((resolve, reject) => {
+        api
+          .showimg({ url: imgStr })
+          .then((res) => {
+            const reader = new FileReader()
+
+            reader.onload = () => {
+              resolve(reader.result as string)
+            }
+
+            reader.onerror = reject
+
+            // Read the binary data as a base64-encoded string
+            reader.readAsDataURL(res)
+          })
+          .catch(reject)
+      })
+    }
+
     const load = () => {
       state.loading = true
       context.emit('load')
@@ -179,6 +204,7 @@ export default defineComponent({
       mouseup,
       mousemove,
       getInnerHeight,
+      get_img_src,
     }
   },
 })
