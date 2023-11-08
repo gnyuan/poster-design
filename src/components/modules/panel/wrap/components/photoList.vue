@@ -141,28 +141,23 @@ export default defineComponent({
       return state.listRef
     }
 
-    function get_img_src(imgStr: string): Promise<string> {
+    function get_img_src(imgStr: string) {
       if (imgStr.startsWith('http')) {
-        return Promise.resolve(imgStr)
-      }
-
-      return new Promise((resolve, reject) => {
-        api
-          .showimg({ url: imgStr })
-          .then((res) => {
+        return imgStr
+      } else {
+        return new Promise<string>(async (resolve, reject) => {
+          try {
+            const res = await api.showimg({ url: imgStr })
             const reader = new FileReader()
-
+            reader.readAsDataURL(res)
             reader.onload = () => {
               resolve(reader.result as string)
             }
-
-            reader.onerror = reject
-
-            // Read the binary data as a base64-encoded string
-            reader.readAsDataURL(res)
-          })
-          .catch(reject)
-      })
+          } catch (error) {
+            reject(error)
+          }
+        })
+      }
     }
 
     const load = () => {
