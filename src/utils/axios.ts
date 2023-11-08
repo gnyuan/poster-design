@@ -27,7 +27,7 @@ axios.interceptors.request.use(
     config.crossDomain = true
 
     if (url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0) {
-      url.indexOf('/') === 0 ? (config.url = baseUrl + url) : (config.url = baseUrl + '/' + url)
+      url.indexOf('/') === 0 ? (config.url = url) : (config.url = baseUrl + '/' + url)
     }
 
     if (config.method === 'get') {

@@ -55,7 +55,6 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
 @router.get("/imgs", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
-    print(filters)
     qs = retrieve(request, Image, filters)
     return qs
 

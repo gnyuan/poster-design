@@ -29,11 +29,11 @@ class ImportSchema(Schema):
 def create(request, data, model, using='default'):
     if not isinstance(data, dict):
         data = data.dict()
-    user_info = get_user_info_from_token(request)
-    # 创建时默认添加创建人、修改者和所属部门
-    data['creator_id'] = user_info['id']
-    data['modifier'] = user_info['name']
-    data['belong_dept'] = user_info['dept']
+    # user_info = get_user_info_from_token(request)
+    # # 创建时默认添加创建人、修改者和所属部门
+    # data['creator_id'] = user_info['id']
+    # data['modifier'] = user_info['name']
+    # data['belong_dept'] = user_info['dept']
     query_set = model.objects.using(using).create(**data)
     return query_set
 

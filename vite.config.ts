@@ -63,9 +63,14 @@ export default defineConfig({
     hmr: { overlay: false },
     proxy: {
       '/api': {
-        target: 'http://192.168.3.27:8000/api/',
+        target: 'http://10.18.12.113:9000/api/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/ai/remove': {
+        target: 'http://10.18.12.113:9003/api/remove',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ai\/remove/, ''),
       },
     },
     headers: {

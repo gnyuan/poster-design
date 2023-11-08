@@ -6,7 +6,7 @@ import json
 
 from fuadmin.settings import BASE_DIR
 from system.models import Dept, Menu, MenuButton, Role, Post, Users, Dict, DictItem, CategoryDict, ApiWhiteList, SystemConfig
-from design.models import Templ, Cate, Font, Image, Material
+from design.models import Templ, Cate, Font, Image, Material, UImage
 from utils.core_initialize import CoreInitialize
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 
@@ -422,6 +422,27 @@ class Initialize(CoreInitialize):
                     })
             else:
                 print('material_tempalte数据已经存在，无需初始化')
+
+    def init_poster_uimage(self):  # 初始化poster
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_uimage.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if UImage.objects.count() == 0:
+                for api in api_list:
+                    UImage.objects.create(**{
+                       "id": api.get('id', None),
+                        "url": api.get('url', ''),
+                        "width": api.get('width', 0),
+                        "height": api.get('height', 0),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "update_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('uimage_tempalte数据已经存在，无需初始化')
+
     def run(self):
         self.init_dept()
         self.init_users()
@@ -437,6 +458,7 @@ class Initialize(CoreInitialize):
         self.init_poster_font()
         self.init_poster_image()
         self.init_poster_material()
+        self.init_poster_uimage()
         
 
 

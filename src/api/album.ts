@@ -11,17 +11,20 @@ const prefix = _config.API_URL + '/'
 const API = {
   init: prefix + 'pic/init',
   getList: prefix + 'pic/list',
-  getToken: prefix + 'pic/getToken',
   delOne: prefix + 'pic/delOne',
   rename: prefix + 'pic/rename',
   del: prefix + 'pic/del',
+  getToken: prefix + 'system/login',
+  upload: prefix + 'system/upload',
 }
 
 export const init = (params: Type.Object = {}) => fetch(API.init, params, 'post')
 
 export const getPicList = (params: Type.Object = {}) => fetch(API.getList, params)
 
-export const getToken = (params: Type.Object = {}) => fetch(API.getToken, params)
+export const getToken = (params: Type.Object = {}) => fetch(API.getToken, params, 'post')
+
+export const upload = (params: Type.Object = {}, headers: Type.Object = {}) => fetch(API.upload, params, 'post', headers)
 
 export const deletePic = (params: Type.Object = {}) => fetch(API.delOne, params, 'post')
 
@@ -33,6 +36,7 @@ export default {
   init,
   getPicList,
   getToken,
+  upload,
   deletePic,
   delPics,
   reName,
