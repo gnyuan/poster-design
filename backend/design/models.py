@@ -70,6 +70,8 @@ class Image(CoreModel):
 
 
 class UImage(CoreModel):
+    cover = models.CharField(null=True, max_length=256, verbose_name="封面", help_text="封面")
+    data = models.TextField(null=True, verbose_name="模板数据", help_text="模板数据")
     height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
     width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
     url = models.TextField(null=True, verbose_name="图片url", help_text="图片url")
@@ -79,6 +81,20 @@ class UImage(CoreModel):
     class Meta:
         db_table = "uimage"
         verbose_name = '用户图片'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
+
+class UPoster(CoreModel):
+    title = models.CharField(null=True, max_length=64, verbose_name="图片名称", help_text="图片名称")
+    height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
+    width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
+    url = models.TextField(null=True, verbose_name="图片url", help_text="图片url")
+    username = models.CharField(max_length=32, verbose_name="登录用户名", null=True, blank=True, help_text="登录用户名")
+    category = models.IntegerField(null=True, default=0, verbose_name="分类", help_text="分类: ")
+
+    class Meta:
+        db_table = "uposter"
+        verbose_name = '用户作品'
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
 

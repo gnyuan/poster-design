@@ -11,7 +11,7 @@ export default {
   APP_NAME: '长图设计',
   COPYRIGHT: 'YuanGengnan',
   API_URL: '/api',
-  SCREEN_URL: 'http://192.168.3.27:9002',
+  SCREEN_URL: '/screenshots',
   // ICONFONT_URL: '//at.alicdn.com/t/font_3223711_74mlzj4jdue.css',
   ICONFONT_URL: '//at.alicdn.com/t/font_2717063_ypy8vprc3b.css?display=swap',
   ICONFONT_EXTRA: '//at.alicdn.com/t/c/font_3228074_zubqmza1sdk.css',

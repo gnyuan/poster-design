@@ -62,6 +62,11 @@ export default defineConfig({
     cors: true,
     hmr: { overlay: false },
     proxy: {
+      '/screenshots': {
+        target: 'http://10.18.12.113:9002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/screenshots/, ''),
+      },
       '/api': {
         target: 'http://10.18.12.113:9000/api/',
         changeOrigin: true,

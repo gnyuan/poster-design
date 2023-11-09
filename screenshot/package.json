@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/main",
   "scripts": {
+    "prepared": "npm i",
     "dev": "ts-node-dev src/main --host 0.0.0.0 --port 9002",
     "test": "cd ./static && hs --cors",
     "build": "cross-env NODE_ENV=production webpack",

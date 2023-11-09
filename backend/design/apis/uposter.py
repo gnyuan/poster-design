@@ -3,7 +3,7 @@ from typing import List
 from django.shortcuts import get_object_or_404
 from ninja import Field, ModelSchema, Query, Router, Schema
 from ninja.pagination import paginate
-from design.models import Templ
+from design.models import UPoster
 from utils.fu_crud import create, delete, retrieve, update
 from utils.fu_ninja import FuFilters, MyPagination
 from utils.fu_response import FuResponse
@@ -12,54 +12,55 @@ router = Router()
 
 
 class Filters(FuFilters):
-    name: str = Field(None, alias="name")
-    status: bool = Field(None, alias="status")
+    username: str = Field(None, alias="username")
     id: str = Field(None, alias="id")
     category: int = Field(None, alias="cate")
+    height: int = Field(None, alias="height")
+    width: int = Field(None, alias="width")
+    url: str = Field(None, alias="url")
 
 
 class SchemaIn(ModelSchema):
-    parent_id: int = None
-
     class Config:
-        model = Templ
+        model = UPoster
         model_exclude = ['id', 'create_datetime', 'update_datetime']
 
 
 class SchemaOut(ModelSchema):
     class Config:
-        model = Templ
+        model = UPoster
         model_fields = "__all__"
-    # model_fields = []
 
 
-@router.post("/temp", response=SchemaOut, auth=None)
+@router.post("/save", response=SchemaOut, auth=None)
+@router.post("/uposter", response=SchemaOut, auth=None)
 def create_poster_template(request, data: SchemaIn):
-    poster = create(request, data, Templ)
+    poster = create(request, data, UPoster)
     return poster
 
 
-@router.delete("/temp/{dept_id}", auth=None)
+@router.delete("/uposter/{dept_id}", auth=None)
 def delete_poster_template(request, dept_id: int):
-    delete(dept_id, Templ)
+    delete(dept_id, UPoster)
     return {"success": True}
 
 
-@router.put("/temp/{dept_id}", response=SchemaOut, auth=None)
+@router.put("/uposter/{dept_id}", response=SchemaOut, auth=None)
 def update_poster_template(request, dept_id: int, data: SchemaIn):
-    poster = update(request, dept_id, data, Templ)
+    poster = update(request, dept_id, data, UPoster)
     return poster
 
-@router.get("/temp", response=List[SchemaOut], auth=None)
-@router.get("/list", response=List[SchemaOut], auth=None)
+
+@router.get("/uposter", response=List[SchemaOut], auth=None)
+@router.get("/my", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
-    qs = retrieve(request, Templ, filters)
+    qs = retrieve(request, UPoster, filters)
     return qs
 
 
-@router.get("/temp/{id}", response=SchemaOut, auth=None)
+@router.get("/uposter/{dept_id}", response=SchemaOut, auth=None)
+@router.get("/poster", response=SchemaOut, auth=None)
 def get_poster_template(request, id: int):
-    poster = get_object_or_404(Templ, id=id)
+    poster = get_object_or_404(UPoster, id=id)
     return poster
-

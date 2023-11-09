@@ -121,6 +121,8 @@ export default defineComponent({
               clearInterval(animation)
             }
           }, 800)
+          console.log(321123)
+          console.log(id, width, height)
           await _dl.downloadImg(api.home.download({ id, width, height }) + '&r=' + Math.random(), (progress: number, xhr: any) => {
             if (props.modelValue) {
               clearInterval(animation)
