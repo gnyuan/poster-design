@@ -72,6 +72,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/ai\/remove/, ''),
       },
+      '/static': {
+        target: 'http://10.18.12.113:9004/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/static/, ''),
+      },
     },
     headers: {
       'Referrer-Policy': 'no-referrer-when-downgrade', // Change this as needed

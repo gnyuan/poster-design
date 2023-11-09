@@ -45,15 +45,15 @@ export default defineComponent({
 
     let tempSimpleRes: any = null // 单个文件上传时返回
 
-    onMounted(async () => {
-      await nextTick()
-      setTimeout(() => {
-        // 加载七牛上传插件
-        const link_element = document.createElement('script')
-        link_element.setAttribute('src', _config.QINIUYUN_PLUGIN)
-        document.head.appendChild(link_element)
-      }, 1000)
-    })
+    // onMounted(async () => {
+    //   await nextTick()
+    //   setTimeout(() => {
+    //     // 加载七牛上传插件
+    //     const link_element = document.createElement('script')
+    //     link_element.setAttribute('src', _config.QINIUYUN_PLUGIN)
+    //     document.head.appendChild(link_element)
+    //   }, 1000)
+    // })
 
     const upload = ({ file }: any) => {
       if (props.hold) {

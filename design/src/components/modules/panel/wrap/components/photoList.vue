@@ -11,11 +11,11 @@
       <div v-for="(item, i) in list" :key="i + 'i'" :style="{ width: item.listWidth + 'px', marginRight: item.gap + 'px' }" class="list__img" draggable="false" @mousedown="dragStart($event, i)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="select(i)" @dragstart="dragStart($event, i)">
         <edit-model v-if="edit" :options="edit" :data="{ item, i }">
           <div v-if="item.isDelect" class="list__mask">已删除</div>
-          <el-image class="img transparent-bg" :src="get_img_src(item.thumb || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy" />
+          <el-image class="img transparent-bg" :src="get_img_src(item.album || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy" />
         </edit-model>
         <template v-else>
           <imageTip :detail="item">
-            <el-image class="img" :src="get_img_src(item.thumb || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy">
+            <el-image class="img" :src="get_img_src(item.album || item.url)" :style="{ height: getInnerHeight(item) + 'px' }" lazy loading="lazy">
               <template #placeholder>
                 <div :style="{ backgroundColor: item.color }" class="image-color" />
               </template>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, watch, nextTick } from 'vue'
+import { defineComponent, toRefs, reactive, watch, nextTick, computed } from 'vue'
 import api from '@/api/album'
 import DragHelper from '@/common/hooks/dragHelper'
 import setImageData from '@/common/methods/DesignFeatures/setImage'
@@ -67,6 +67,24 @@ export default defineComponent({
       if (e.x - startPoint.x > 2 || e.y - startPoint.y > 2) {
         isDrag = true
       }
+    }
+
+    const imageSource = computed(() => {
+      return async (url: string) => {
+        if (url.startsWith('http')) {
+          return url
+        }
+
+        const res = await api.showimg({ url: url })
+        const base64Image = arrayBufferToBase64(res)
+        return base64Image
+      }
+    })
+
+    const itemImageSource = (url: string) => {
+      return computed(() => {
+        return imageSource.value(url)
+      })
     }
 
     watch(
@@ -126,6 +144,8 @@ export default defineComponent({
         await handleList()
         state.list = state.list.concat(neatArr.flat(1))
         state.loading = false
+        console.log(2334)
+        console.log(state.list)
       },
     )
 
@@ -141,23 +161,25 @@ export default defineComponent({
       return state.listRef
     }
 
-    function get_img_src(imgStr: string) {
-      if (imgStr.startsWith('http')) {
-        return imgStr
-      } else {
-        return new Promise<string>(async (resolve, reject) => {
-          try {
-            const res = await api.showimg({ url: imgStr })
-            const reader = new FileReader()
-            reader.readAsDataURL(res)
-            reader.onload = () => {
-              resolve(reader.result as string)
-            }
-          } catch (error) {
-            reject(error)
-          }
-        })
+    function get_img_src(url: string): string {
+      if (url.startsWith('http')) {
+        return url
       }
+      const res = api.showimg({ url: url })
+      setTimeout(() => {
+        console.log(322)
+        const base64Image = arrayBufferToBase64(res)
+        return base64Image
+      }, 1000)
+    }
+
+    function arrayBufferToBase64(buffer: any) {
+      const binary = new Uint8Array(buffer)
+      let base64 = ''
+      for (let i = 0; i < binary.length; i++) {
+        base64 += String.fromCharCode(binary[i])
+      }
+      return btoa(base64)
     }
 
     const load = () => {
@@ -200,6 +222,7 @@ export default defineComponent({
       mousemove,
       getInnerHeight,
       get_img_src,
+      itemImageSource,
     }
   },
 })

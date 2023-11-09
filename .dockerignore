@@ -1,0 +1,16 @@
+# backend
+./backend/__pycache__/
+./backend/.venv/
+./backend/venv/
+./backend/env/
+./backend/.gnupg
+./backend/.vscode*
+
+# frontend
+./web/dist/
+./web/node_modules/
+./web/.cache/
+./web/.gnupg
+./web/.vscode*
+./web/.local
+./web/.npm

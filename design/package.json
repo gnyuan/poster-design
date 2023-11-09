@@ -4,7 +4,7 @@
   "private": true,
   "author": "ShawnPhang",
   "scripts": {
-    "prepared": "npm i && cd screenshot && npm i",
+    "prepared": "npm i",
     "serve": "npm run dev & cd screenshot && npm run dev",
     "dev": "cross-env NODE_ENV=development vite --host 0.0.0.0",
     "v-build": "cross-env NODE_ENV=production && vite build",
