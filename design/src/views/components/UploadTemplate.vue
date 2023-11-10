@@ -20,7 +20,7 @@ import useNotification from '@/common/methods/notification'
 import SaveImage from '@/components/business/save-download/CreateCover.vue'
 import { useFontStore } from '@/common/methods/fonts'
 import _config from '@/config'
-import github from '@/api/github'
+import Qiniu from '@/common/methods/QiNiu'
 
 export default defineComponent({
   components: { SaveImage },
@@ -43,7 +43,7 @@ export default defineComponent({
     // 生成封面
     const draw = () => {
       return new Promise((resolve) => {
-        state.canvasImage.createCover(({ key }: any) => {
+        state.canvasImage.createCover(({ url }: any) => {
           resolve(url)
         })
       })
@@ -65,7 +65,14 @@ export default defineComponent({
 
       if (page.backgroundImage) {
         context.emit('change', { downloadPercent: 1, downloadText: '正在准备上传', downloadMsg: '请等待..' })
-        page.backgroundImage = await github.putPic(page.backgroundImage.split(',')[1])
+        const imageBlob = page.backgroundImage.split(',')[1] // Assuming item.imgUrl contains the Base64 data
+        const byteArray = Uint8Array.from(atob(imageBlob), (c) => c.charCodeAt(0)) // Convert Base64 to Uint8Array
+        const blob = new Blob([byteArray], { type: 'image/png' }) // Create a Blob from Uint8Array
+        const file = new File([blob], 'background.png', { type: 'image/png' }) // Create a File
+
+        const qnOptions = { bucket: 'xp-design', prePath: 'user' }
+        const result: any = await Qiniu.upload(file, qnOptions)
+        page.backgroundImage = result.url
       }
 
       for (const item of widgets) {
@@ -81,12 +88,19 @@ export default defineComponent({
     async function uploadImgs() {
       if (queue.length > 0) {
         const item = queue.pop()
-        const url = await github.putPic(item.imgUrl.split(',')[1])
+
+        const imageBlob = item.imgUrl.split(',')[1] // Assuming item.imgUrl contains the Base64 data
+        const byteArray = Uint8Array.from(atob(imageBlob), (c) => c.charCodeAt(0)) // Convert Base64 to Uint8Array
+        const blob = new Blob([byteArray], { type: 'image/png' }) // Create a Blob from Uint8Array
+        const file = new File([blob], 'background.png', { type: 'image/png' }) // Create a File
+
+        const qnOptions = { bucket: 'xp-design', prePath: 'user' }
+        const result: any = await Qiniu.upload(file, qnOptions)
         addition += item.imgUrl.length
         let downloadPercent: any = (addition / lenCount) * 100
         downloadPercent >= 100 && (downloadPercent = null)
         context.emit('change', { downloadPercent, downloadText: '上传资源中', downloadMsg: `已完成：${lens - queue.length} / ${lens}` })
-        item.imgUrl = url
+        item.imgUrl = result.url
         uploadImgs()
       } else {
         uploadTemplate()

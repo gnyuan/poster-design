@@ -311,7 +311,7 @@ class Initialize(CoreInitialize):
                         'width': api.get('width', 0),
                         'height': api.get('height', 0),
                         'state': api.get('state', 1),
-                        'cate_id': api.get('cate', 1),
+                        'cate_id': api.get('category', 1),
                         'category': api.get('category', 0),
                         'resource': api.get('resource', ''),
                         'tag': api.get('tag', ''),

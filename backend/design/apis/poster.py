@@ -50,7 +50,7 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
     poster = update(request, dept_id, data, Templ)
     return poster
 
-@router.get("/temp", response=List[SchemaOut], auth=None)
+
 @router.get("/list", response=List[SchemaOut], auth=None)
 @paginate(MyPagination)
 def list_poster_template(request, filters: Filters = Query(...)):
@@ -63,3 +63,7 @@ def get_poster_template(request, id: int):
     poster = get_object_or_404(Templ, id=id)
     return poster
 
+@router.get("/temp", response=SchemaOut, auth=None)
+def get_poster_template(request, id: int):
+    poster = get_object_or_404(Templ, id=id)
+    return poster

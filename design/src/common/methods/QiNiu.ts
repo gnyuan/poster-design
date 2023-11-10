@@ -48,7 +48,6 @@ export default {
     })
   },
   upload: async (file: File, options: Options, cb?: Function) => {
-    const win: any = window
     let name = ''
     const suffix = file.type.split('/')[1] || 'png' // 文件后缀
     if (!options.fullPath) {
