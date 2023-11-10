@@ -6,7 +6,7 @@ import json
 
 from fuadmin.settings import BASE_DIR
 from system.models import Dept, Menu, MenuButton, Role, Post, Users, Dict, DictItem, CategoryDict, ApiWhiteList, SystemConfig
-from design.models import Templ, Cate, Font, Image, Material, UImage
+from design.models import Templ, Cate, Font, Image, Material, UImage, UPoster
 from utils.core_initialize import CoreInitialize
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 
@@ -350,6 +350,7 @@ class Initialize(CoreInitialize):
             if Font.objects.count() == 0:
                 for api in api_list:
                     Font.objects.create(**{
+                        'id': api.get('id', None),
                         'oid': api.get('oid', 1),
                         'alias': api.get('alias', ''),
                         'preview': api.get('preview', ''),
@@ -443,6 +444,30 @@ class Initialize(CoreInitialize):
             else:
                 print('uimage_tempalte数据已经存在，无需初始化')
 
+
+    def init_poster_uposter(self):  # 初始化uposter
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_uposter.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if UPoster.objects.count() == 0:
+                for api in api_list:
+                    UPoster.objects.create(**{
+                       "id": api.get('id', None),
+                       "cover": api.get('cover', None),
+                       "title": api.get('title', None),
+                       "data": api.get('data', None),
+                       "template_id": api.get('template_id', None) if api.get('template_id', None)!=0 else None,
+                        "url": api.get('url', ''),
+                        "height": api.get('height', 0),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "update_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('uposter_tempalte数据已经存在，无需初始化')
+
     def run(self):
         self.init_dept()
         self.init_users()
@@ -459,6 +484,7 @@ class Initialize(CoreInitialize):
         self.init_poster_image()
         self.init_poster_material()
         self.init_poster_uimage()
+        self.init_poster_uposter()
         
 
 

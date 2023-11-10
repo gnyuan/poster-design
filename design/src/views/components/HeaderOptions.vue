@@ -66,7 +66,8 @@ export default defineComponent({
       const widgets = proxy.dWidgets // reviseData()
       const { id: newId, stat, msg } = await api.home.saveWorks({ cover, id, title: proxy.title || '未命名设计', data: JSON.stringify({ page: proxy.dPage, widgets }), temp_id: tempid, width: proxy.dPage.width, height: proxy.dPage.height })
       stat !== 0 ? useNotification('保存成功', '可在"我的作品"中查看') : useNotification('保存失败', msg, { type: 'error' })
-      !id && router.push({ path: '/home', query: { id: newId }, replace: true })
+      // !id && router.push({ path: '/home', query: { id: newId }, replace: true })
+      router.push({ path: '/home', query: { id: newId }, replace: true })
       store.commit('setShowMoveable', true)
     }
     // 保存模板
@@ -121,8 +122,6 @@ export default defineComponent({
               clearInterval(animation)
             }
           }, 800)
-          console.log(321123)
-          console.log(id, width, height)
           await _dl.downloadImg(api.home.download({ id, width, height }) + '&r=' + Math.random(), (progress: number, xhr: any) => {
             if (props.modelValue) {
               clearInterval(animation)
