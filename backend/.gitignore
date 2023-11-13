@@ -97,5 +97,12 @@ __pycache__
 db.sqlite3
 media/
 static/
+!static/comp
+!static/cover
+!static/design
+!static/fonts
+!static/img
+!static/material
+!static/tempalte
 
 .venv

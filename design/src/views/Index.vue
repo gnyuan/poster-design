@@ -88,9 +88,8 @@ export default defineComponent({
     //   state.openDraw = true
     // }
     function jump2home() {
-      // const fullPath = window.location.href.split('/')
-      // window.open(fullPath[0] + '//' + fullPath[2])
-      window.open('https://xp.palxp.cn/')
+      const fullPath = window.location.href.split('/')
+      window.open(fullPath[0] + '//' + fullPath[2])
     }
     return {
       ...toRefs(state),
