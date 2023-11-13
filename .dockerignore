@@ -14,3 +14,12 @@
 ./web/.vscode*
 ./web/.local
 ./web/.npm
+
+# screenshot
+./screenshot/dist/
+./screenshot/node_modules/
+./screenshot/.cache/
+./screenshot/.gnupg
+./screenshot/.vscode*
+./screenshot/.local
+./screenshot/.npm
