@@ -1,4 +1,8 @@
 from typing import List
+from fuadmin.settings import BASE_DIR
+import os
+from urllib.parse import unquote
+from django.http import  HttpResponse
 
 from django.shortcuts import get_object_or_404
 from ninja import Field, ModelSchema, Query, Router, Schema
@@ -70,10 +74,14 @@ def get_poster_template(request, dept_id: int):
 @router.get("/font_sub", auth=None)
 def get_font(request, id: int, content: str):
     font = get_object_or_404(Font, id=id)
+    subfix = font.woff.split('.')[-1]
     try:
-        response = requests.get(font.woff)
+        if font.woff.startswith('http'):
+            response = requests.get(font.woff)
+            content = response.content
+        else:
+            content = open(os.path.join(str(BASE_DIR), unquote(font.woff.lstrip('/'))), "rb")
     except requests.RequestException as e:
+        print('ERROR in font_sub')
         return {'code': -1}
-    woff_base64 = base64.b64encode(response.content).decode("utf-8")
-    result_string = f"data:font/woff;base64,{woff_base64}"
-    return result_string
+    return HttpResponse(content, content_type=f'font/{subfix}')

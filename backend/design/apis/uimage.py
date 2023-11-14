@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from django.shortcuts import get_object_or_404
 from ninja import Field, ModelSchema, Query, Router, Schema
@@ -44,6 +44,15 @@ def delete_poster_template(request, dept_id: int):
     delete(dept_id, UImage)
     return {"success": True}
 
+
+class SchemaInDel(Schema):
+    id: int
+    key: Optional[str]
+
+@router.post("/user/image/del", auth=None)
+def delete_poster_template(request, data: SchemaInDel):
+    delete(data.id, UImage)
+    return {"success": True}
 
 @router.put("/uimage/{dept_id}", response=SchemaOut, auth=None)
 def update_poster_template(request, dept_id: int, data: SchemaIn):

@@ -2070,5 +2070,19 @@
     "version": null,
     "lang": "zh",
     "woff_size": 0
+  },
+  {
+    "id": 900,
+    "oid": null,
+    "alias": "华文细黑",
+    "preview": "/static/fonts/20231114-huawenxihei-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231114-huawenxihei.woff",
+    "value": "hua-wen-xi-hei",
+    "font_family": "Hua Wen Xi Hei",
+    "size": 6492696,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 6492696
   }
 ]

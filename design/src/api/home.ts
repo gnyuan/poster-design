@@ -9,7 +9,7 @@ import fetch from '@/utils/axios'
 import _config from '@/config'
 
 // const screenshot_url = window.location.protocol + '//' + window.location.host + '/draw'
-export const download = (params: Type.Object = {}) => `${_config.SCREEN_URL}/api/screenshots?id=${params.id}&width=${params.width}&height=${params.height}`
+export const download = (params: Type.Object = {}) => `${_config.SCREEN_URL}/api/screenshots?id=${params.id}&width=${params.width}&height=${params.height}&size=${params.size | 500000}&quality=${params.quality | 100}`
 
 // 获取模板列表
 export const getTempList = (params: Type.Object = {}) => fetch('design/list', params, 'get')

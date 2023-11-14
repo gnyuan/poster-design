@@ -11,9 +11,9 @@ const images = require("images");
 const { executablePath } = require("../configs.ts");
 const forceTimeOut = 60; // 强制超时时间，单位：秒
 // 4K规格，总计约830万像素 3840 * 2160 2K规格，总计约830万像素 2048 * 1080
-// const maxPXs = 8294400
-const maxPXs = 4211840; // 超出此规格会触发限制器降低dpr，节省服务器资源
-const maximum = 5000; // 最大宽高限制，超过截断以防止服务崩溃
+const maxPXs = 8294400 * 10;
+// const maxPXs = 4211840; // 超出此规格会触发限制器降低dpr，节省服务器资源
+const maximum = 10000; // 最大宽高限制，超过截断以防止服务崩溃
 
 const saveScreenshot = async (
   url: string,
@@ -86,7 +86,18 @@ const saveScreenshot = async (
           : +scale
         : limiter(Number(width), Number(height)),
     });
-    console.log("setViewport");
+    console.log(
+      "setViewport, width:",
+      Number(width) > maximum ? 5000 : Number(width),
+      ", height:",
+      Number(height) > maximum ? 5000 : Number(height),
+      ", deviceScaleFactor:",
+      !isNaN(scale)
+        ? +scale > 4
+          ? 4
+          : +scale
+        : limiter(Number(width), Number(height))
+    );
     ua && page.setUserAgent(ua);
     if (devices) {
       devices = puppeteer.devices[devices];
@@ -111,13 +122,13 @@ const saveScreenshot = async (
     }
     // 主动模式下注入全局方法
     await page.exposeFunction("loadFinishToInject", async () => {
-      // console.log('-> 开始截图')
+      console.log("-> 开始截图");
       // await page.evaluate(() => document.body.style.background = 'transparent');
       await page.screenshot({ path, omitBackground: true });
       // 关闭浏览器
       browserClose();
       compress();
-      // console.log('浏览器已释放');
+      console.log("浏览器已释放");
       clearTimeout(regulators);
       resolve();
     });

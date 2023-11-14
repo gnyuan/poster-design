@@ -5,12 +5,12 @@
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
  * @LastEditTime: 2023-10-16 10:03:51
  */
-const { saveScreenshot } = require('../utils/download-single.ts')
-const uuid = require('../utils/uuid.ts')
-const { filePath, upperLimit, drawLink } = require('../configs.ts')
-const { queueRun, queueList } = require('../utils/node-queue.ts')
+const { saveScreenshot } = require("../utils/download-single.ts");
+const uuid = require("../utils/uuid.ts");
+const { filePath, upperLimit, drawLink } = require("../configs.ts");
+const { queueRun, queueList } = require("../utils/node-queue.ts");
 // const path = require('path')
-const fs = require('fs')
+const fs = require("fs");
 
 module.exports = {
   async getImg(req: any, res: any) {
@@ -22,22 +22,22 @@ module.exports = {
      * @apiParam {String|Number} id (必传) 截图id
      * @apiParam {String} type 可选, file源文件，cover封面图
      */
-    
-    const isDev = process.env.NODE_ENV === 'development'
-    let { id, type = 'file' } = req.query
-    const path = filePath + `${id}-screenshot.png`
-    const thumbPath = type === 'cover' ? filePath + `${id}-cover.jpg` : null
+
+    const isDev = process.env.NODE_ENV === "development";
+    let { id, type = "file" } = req.query;
+    const path = filePath + `${id}-screenshot.png`;
+    const thumbPath = type === "cover" ? filePath + `${id}-cover.jpg` : null;
 
     if (id) {
       try {
-        fs.statSync(path)
-        res.setHeader('Content-Type', 'image/jpg')
-        type === 'file' ? res.sendFile(path) : res.sendFile(thumbPath)
+        fs.statSync(path);
+        res.setHeader("Content-Type", "image/jpg");
+        type === "file" ? res.sendFile(path) : res.sendFile(thumbPath);
       } catch (error) {
-        res.json({ code: 500, msg: '请求图片不存在' })
+        res.json({ code: 500, msg: "请求图片不存在" });
       }
     } else {
-      res.json({ code: 500, msg: '缺少参数，请检查' })
+      res.json({ code: 500, msg: "缺少参数，请检查" });
     }
   },
   async screenshots(req: any, res: any) {
@@ -56,31 +56,50 @@ module.exports = {
      * @apiParam {String} size 可选, 按比例缩小到宽度
      * @apiParam {String} quality 可选, 质量
      */
-    let { id, tempid, tempType, width, height, screenshot_url, type = 'file', size, quality } = req.query
-    const url = (screenshot_url || drawLink) + `${id ? '?id=' : '?tempid='}`
-    id = id || tempid
-    const path = filePath + `${id}-screenshot.png`
-    const thumbPath = type === 'cover' && tempType != 1 ? filePath + `${id}-cover.jpg` : null
+    let {
+      id,
+      tempid,
+      tempType,
+      width,
+      height,
+      screenshot_url,
+      type = "file",
+      size,
+      quality,
+    } = req.query;
+    const url = (screenshot_url || drawLink) + `${id ? "?id=" : "?tempid="}`;
+    id = id || tempid;
+    const path = filePath + `${id}-screenshot.png`;
+    const thumbPath =
+      type === "cover" && tempType != 1 ? filePath + `${id}-cover.jpg` : null;
 
     if (id && width && height) {
       if (queueList.length > upperLimit) {
-        res.json({ code: 200, msg: '服务器表示顶不住啊，等等再来吧~' })
-        return
+        res.json({ code: 200, msg: "服务器表示顶不住啊，等等再来吧~" });
+        return;
       }
-      const targetUrl = url + id + `${tempType?'&tempType='+tempType:''}`
+      const targetUrl = url + id + `${tempType ? "&tempType=" + tempType : ""}`;
       // console.log(targetUrl, path, thumbPath);
-      queueRun(saveScreenshot, targetUrl, { width, height, path, thumbPath, size, quality })
+      queueRun(saveScreenshot, targetUrl, {
+        width,
+        height,
+        path,
+        thumbPath,
+        size,
+        quality,
+        scale: 2, // 这个参数配置图片清晰度
+      })
         .then(() => {
-          res.setHeader('Content-Type', 'image/jpg')
+          res.setHeader("Content-Type", "image/jpg");
           // const stats = fs.statSync(path)
           // res.setHeader('Cache-Control', stats.size)
-          type === 'file' ? res.sendFile(path) : res.sendFile(thumbPath)
+          type === "file" ? res.sendFile(path) : res.sendFile(thumbPath);
         })
         .catch((e: any) => {
-          res.json({ code: 500, msg: '图片生成错误' })
-        })
+          res.json({ code: 500, msg: "图片生成错误" });
+        });
     } else {
-      res.json({ code: 500, msg: '缺少参数，请检查' })
+      res.json({ code: 500, msg: "缺少参数，请检查" });
     }
   },
   async printscreen(req: any, res: any) {
@@ -101,36 +120,65 @@ module.exports = {
      * @apiParam {String} devices (可选) 套用设备预设，传该值则ua、width、height均会失效。eg: iPhone 6 所有预设：/src/utils/widget/Device.js
      * @apiParam {Number} scale (可选) 针对移动端的设备像素比(DPR) 整型范围 1~4，默认1
      */
-    let { width = 375, height = 0, url, type = 'file', size, quality, prevent = false, ua, devices, scale, wait } = req.query
-    const path = filePath + `screenshot_${new Date().getTime()}_${uuid()}.png`
-    const thumbPath = type === 'cover' ? path.replace('.png', '.jpg') : null
+    let {
+      width = 375,
+      height = 0,
+      url,
+      type = "file",
+      size,
+      quality,
+      prevent = false,
+      ua,
+      devices,
+      scale,
+      wait,
+    } = req.query;
+    const path = filePath + `screenshot_${new Date().getTime()}_${uuid()}.png`;
+    const thumbPath = type === "cover" ? path.replace(".png", ".jpg") : null;
 
     if (url) {
-      const sign = `${new Date().getTime()}_${uuid(8)}`
-      req._queueSign = sign
+      const sign = `${new Date().getTime()}_${uuid(8)}`;
+      req._queueSign = sign;
       // console.log(url + id, path, thumbPath);
       if (queueList.length > upperLimit) {
-        res.json({ code: 200, msg: '业务繁忙，等等再来吧~' })
-        return
+        res.json({ code: 200, msg: "业务繁忙，等等再来吧~" });
+        return;
       }
-      queueRun(saveScreenshot, url, { width, height, path, thumbPath, size, quality, prevent, ua, devices, scale, wait }, sign)
+      queueRun(
+        saveScreenshot,
+        url,
+        {
+          width,
+          height,
+          path,
+          thumbPath,
+          size,
+          quality,
+          prevent,
+          ua,
+          devices,
+          scale,
+          wait,
+        },
+        sign
+      )
         .then(() => {
           if (!res.headersSent) {
             // res.setHeader('Content-Type', 'image/jpg')
             // const stats = fs.statSync(path)
             // res.setHeader('Cache-Control', stats.size)
-            res.json({ code: 200, msg: '截图成功', data: { path, thumbPath } })
+            res.json({ code: 200, msg: "截图成功", data: { path, thumbPath } });
           } else {
-            res.json({ code: 200, msg: 'ok' })
+            res.json({ code: 200, msg: "ok" });
           }
         })
         .catch((e: any) => {
-          res.json({ code: 500, msg: '图片生成错误!' })
-        })
+          res.json({ code: 500, msg: "图片生成错误!" });
+        });
     } else {
-      res.json({ code: 500, msg: '缺少参数，请检查' })
+      res.json({ code: 500, msg: "缺少参数，请检查" });
     }
   },
-}
+};
 
-export {}
+export {};
