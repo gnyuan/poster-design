@@ -2084,5 +2084,47 @@
     "version": null,
     "lang": "zh",
     "woff_size": 6492696
+  },
+  {
+    "id": 901,
+    "oid": null,
+    "alias": "微软雅黑",
+    "preview": "/static/fonts/20231114-weiruanyahei-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231114-weiruanyahei.woff",
+    "value": "wei-ruan-ya-hei",
+    "font_family": "Wei Ruan Ya Hei",
+    "size": 9120292,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 9120292
+  },
+  {
+    "id": 902,
+    "oid": null,
+    "alias": "华文楷体",
+    "preview": "/static/fonts/20231114-huawenkaiti-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231114-huawenkaiti.woff",
+    "value": "hua-wen-kai-ti",
+    "font_family": "Hua Wen Kai Ti",
+    "size": 8745180,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 8745180
+  },
+  {
+    "id": 903,
+    "oid": null,
+    "alias": "华文仿宋",
+    "preview": "/static/fonts/20231114-huawenfangsong-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231114-huawenfangsong.woff",
+    "value": "hua-wen-fang-song",
+    "font_family": "Hua Wen Fang Song",
+    "size": 7679936,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 7679936
   }
 ]
