@@ -13,7 +13,7 @@ const forceTimeOut = 60; // 强制超时时间，单位：秒
 // 4K规格，总计约830万像素 3840 * 2160 2K规格，总计约830万像素 2048 * 1080
 const maxPXs = 8294400 * 10;
 // const maxPXs = 4211840; // 超出此规格会触发限制器降低dpr，节省服务器资源
-const maximum = 10000; // 最大宽高限制，超过截断以防止服务崩溃
+const MAXIMUM = 10000; // 最大宽高限制，超过截断以防止服务崩溃
 
 const saveScreenshot = async (
   url: string,
@@ -23,7 +23,7 @@ const saveScreenshot = async (
     height,
     thumbPath,
     size = 0,
-    quality = 0,
+    quality = 100,
     prevent,
     ua,
     devices,
@@ -31,6 +31,9 @@ const saveScreenshot = async (
     wait,
   }: any
 ) => {
+  console.log(
+    `url:${url}, path:${path}, width:${width}, height:${height}, thumbPath:${thumbPath}, size:${size}, quality:${quality}, prevent:${prevent}, ua:${ua}, devices:${devices}, scale:${scale}, wait:${wait}`
+  );
   return new Promise(async (resolve: Function, reject: Function) => {
     let isPageLoad = false;
     let browser: any = null;
@@ -78,8 +81,8 @@ const saveScreenshot = async (
     }
     console.log("设置浏览器视窗");
     page.setViewport({
-      width: Number(width) > maximum ? 5000 : Number(width),
-      height: Number(height) > maximum ? 5000 : Number(height),
+      width: Number(width) > MAXIMUM ? MAXIMUM : Number(width),
+      height: Number(height) > MAXIMUM ? MAXIMUM : Number(height),
       deviceScaleFactor: !isNaN(scale)
         ? +scale > 4
           ? 4
@@ -88,9 +91,9 @@ const saveScreenshot = async (
     });
     console.log(
       "setViewport, width:",
-      Number(width) > maximum ? 5000 : Number(width),
+      Number(width) > MAXIMUM ? MAXIMUM : Number(width),
       ", height:",
-      Number(height) > maximum ? 5000 : Number(height),
+      Number(height) > MAXIMUM ? MAXIMUM : Number(height),
       ", deviceScaleFactor:",
       !isNaN(scale)
         ? +scale > 4
@@ -98,12 +101,12 @@ const saveScreenshot = async (
           : +scale
         : limiter(Number(width), Number(height))
     );
+    console.log("setUserAgent");
     ua && page.setUserAgent(ua);
     if (devices) {
       devices = puppeteer.devices[devices];
       devices && (await page.emulate(devices));
     }
-    console.log("setUserAgent");
     // 自动模式下页面加载完毕立即截图
     if (prevent === false) {
       console.log("自动模式下页面加载完毕立即截图");
@@ -141,6 +144,9 @@ const saveScreenshot = async (
     // 压缩图片
     function compress() {
       try {
+        console.log(
+          `开启压缩thumbPath:${thumbPath}, path:${path}, size:${size}, quality:${quality}`
+        );
         thumbPath &&
           images(path)
             .size(+size || 300)

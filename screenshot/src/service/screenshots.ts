@@ -66,7 +66,9 @@ module.exports = {
       type = "file",
       size,
       quality,
+      scale,
     } = req.query;
+    console.log(req.query);
     const url = (screenshot_url || drawLink) + `${id ? "?id=" : "?tempid="}`;
     id = id || tempid;
     const path = filePath + `${id}-screenshot.png`;
@@ -79,7 +81,7 @@ module.exports = {
         return;
       }
       const targetUrl = url + id + `${tempType ? "&tempType=" + tempType : ""}`;
-      // console.log(targetUrl, path, thumbPath);
+      console.log(targetUrl, path, thumbPath, size, quality, scale);
       queueRun(saveScreenshot, targetUrl, {
         width,
         height,
@@ -87,7 +89,7 @@ module.exports = {
         thumbPath,
         size,
         quality,
-        scale: 2, // 这个参数配置图片清晰度
+        scale,
       })
         .then(() => {
           res.setHeader("Content-Type", "image/jpg");
