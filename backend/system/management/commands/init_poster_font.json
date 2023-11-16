@@ -2126,5 +2126,19 @@
     "version": null,
     "lang": "zh",
     "woff_size": 7679936
+  },
+  {
+    "id": 904,
+    "oid": null,
+    "alias": "思源黑体",
+    "preview": "/static/fonts/20231116-SourceHanSansCN-VF-preview.jpg",
+    "ttf": null,
+    "woff": "/static/fonts/20231116-SourceHanSansCN-VF.woff2",
+    "value": "si-yuan-hei-ti",
+    "font_family": "Si Yuan Hei Ti",
+    "size": 7786716,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 7786716
   }
 ]

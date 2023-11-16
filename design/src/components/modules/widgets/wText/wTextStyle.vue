@@ -43,6 +43,7 @@
       <div style="margin-top: 10px" class="line-layout style-item">
         <text-input-area v-model="innerElement.text" @finish="(value) => finish('text', value)" />
       </div>
+      <div>uuid: {{ dActiveElement.uuid }}</div>
       <!-- </el-collapse-item> -->
     </el-collapse>
   </div>

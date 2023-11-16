@@ -70,10 +70,10 @@ export default {
     fontSize: 24,
     zoom: 1,
     fontClass: {
-      alias: '华文细黑',
-      id: 900,
+      alias: '思源黑体',
+      id: 904,
       value: 'hua-wen-xi-hei',
-      url: '/static/fonts/20231114-huawenxihei.woff',
+      url: '/static/fonts/20231116-SourceHanSansCN-VF.woff2',
     },
     fontFamily: 'SourceHanSansSC-Regular',
     fontWeight: 'normal',
