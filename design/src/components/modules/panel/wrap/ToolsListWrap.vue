@@ -10,12 +10,34 @@
     <div class="header">组件</div>
     <div class="item" @click="addQrcode">
       <i class="icon sd-w-qrcode" />
-      <div class="text"><span>二维码</span><span class="desc">在设计中使用风格化二维码</span></div>
+      <div class="text">
+        <span>二维码</span><span class="desc">在设计中使用风格化二维码</span>
+      </div>
+    </div>
+    <div class="item" @click="addPieChart">
+      <i class="icon sd-tubiaobing" />
+      <div class="text">
+        <span>饼图</span><span class="desc">使用ECharts饼图</span>
+      </div>
+    </div>
+    <div class="item" @click="addQrcode">
+      <i class="icon sd-tubiaozhu" />
+      <div class="text">
+        <span>柱状图</span><span class="desc">使用ECharts柱状图</span>
+      </div>
+    </div>
+    <div class="item" @click="addQrcode">
+      <i class="icon sd-tubiaoxian_tongyong_tongji" />
+      <div class="text">
+        <span>折线图</span><span class="desc">使用ECharts折线图</span>
+      </div>
     </div>
     <div class="header">其它</div>
     <div class="item" @click="openImageCutout">
       <i class="icon sd-AI_zhineng" />
-      <div class="text"><span>智能抠图</span> <span class="desc">上传图像一键去除背景</span></div>
+      <div class="text">
+        <span>智能抠图</span> <span class="desc">上传图像一键去除背景</span>
+      </div>
     </div>
     <imageCutout ref="imageCutout" />
   </div>
@@ -28,6 +50,7 @@ const NAME = 'tool-list-wrap'
 import { mapActions, mapGetters } from 'vuex'
 import wQrcode from '../../widgets/wQrcode/wQrcode.vue'
 import imageCutout from '@/components/business/image-cutout'
+import wPieChart from '../../widgets/wEcharts/wPieChart.vue'
 
 export default {
   name: NAME,
@@ -60,6 +83,14 @@ export default {
     addQrcode() {
       this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择
       let setting = JSON.parse(JSON.stringify(wQrcode.setting))
+      const { width: pW, height: pH } = this.dPage
+      setting.left = pW / 2 - setting.width / 2
+      setting.top = pH / 2 - setting.height / 2
+      this.addWidget(setting)
+    },
+    addPieChart() {
+      this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择
+      let setting = JSON.parse(JSON.stringify(wPieChart.setting))
       const { width: pW, height: pH } = this.dPage
       setting.left = pW / 2 - setting.width / 2
       setting.top = pH / 2 - setting.height / 2

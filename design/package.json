@@ -30,6 +30,7 @@
     "nanoid": "^3.1.23",
     "normalize.css": "^8.0.1",
     "qr-code-styling": "^1.6.0-rc.1",
+    "echarts": "^5.4.2",
     "selecto": "^1.13.0",
     "throttle-debounce": "^3.0.1",
     "vue": "^3.0.0",

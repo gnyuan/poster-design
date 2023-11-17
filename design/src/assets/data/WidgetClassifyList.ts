@@ -49,4 +49,10 @@ export default [
     show: false,
     component: 'user-wrap',
   },
+  {
+    name: 'Test',
+    icon: 'icon-shangchuan',
+    show: false,
+    component: 'test-wrap',
+  },
 ]
