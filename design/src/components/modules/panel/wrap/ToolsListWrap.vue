@@ -50,7 +50,7 @@ const NAME = 'tool-list-wrap'
 import { mapActions, mapGetters } from 'vuex'
 import wQrcode from '../../widgets/wQrcode/wQrcode.vue'
 import imageCutout from '@/components/business/image-cutout'
-import wPieChart from '../../widgets/wEcharts/wPieChart.vue'
+import wPiechart from '../../widgets/wEcharts/wPiechart.vue'
 
 export default {
   name: NAME,
@@ -87,14 +87,17 @@ export default {
       setting.left = pW / 2 - setting.width / 2
       setting.top = pH / 2 - setting.height / 2
       this.addWidget(setting)
+      console.log(setting)
     },
     addPieChart() {
       this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择
-      let setting = JSON.parse(JSON.stringify(wPieChart.setting))
+      console.log('add clicked!')
+      let setting = JSON.parse(JSON.stringify(wPiechart.setting))
       const { width: pW, height: pH } = this.dPage
       setting.left = pW / 2 - setting.width / 2
       setting.top = pH / 2 - setting.height / 2
       this.addWidget(setting)
+      console.log(setting)
     },
     openImageCutout() {
       this.$refs.imageCutout.open()

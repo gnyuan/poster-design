@@ -13,20 +13,22 @@
         opacity: params.opacity,
       }"
     >
-      <!-- <QRCode
-        ref="qrcode"
+      <QRCode
         v-bind="qrCodeOptions"
         :width="width"
         :height="width"
         class="target"
         :image="params.url"
         :value="params.value"
-      /> -->
-      <div ref="chartRef1" style="height: 100%; width: 100%" />
+      />
+      <PieChart
+        style="height: 100%; width: 100%"
+        :width="width"
+        :height="width"
+      />
 
       <div>aaaa</div>
     </div>
-    <div :width="width" :height="width"></div>
   </div>
 </template>
 
@@ -36,32 +38,7 @@ const NAME = 'w-qrcode'
 import { Ref, ref, onMounted } from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import QRCode from '@/components/business/qrcode'
-
-import { EChartsOption } from 'echarts'
-import { useECharts } from '@/components/business/echarts'
-
-const chartRef1 = ref<HTMLDivElement | null>(null)
-const { setOptions } = useECharts(chartRef1 as Ref<HTMLDivElement>, 'dark')
-console.log(111)
-
-const option1: EChartsOption = {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  },
-  yAxis: {
-    type: 'value',
-  },
-  series: [
-    {
-      data: [159, 230, 224, 218, 135, 147, 260],
-      type: 'line',
-    },
-  ],
-}
-onMounted(() => {
-  setOptions(option1)
-})
+import PieChart from '@/components/business/echarts/pie.ts'
 
 const parent = { left: 100, top: 100 }
 const width = 100

@@ -19,7 +19,15 @@
       opacity: params.opacity,
     }"
   >
-    <QRCode ref="qrcode" v-bind="qrCodeOptions" :width="width" :height="width" class="target" :image="params.url" :value="params.value" />
+    <QRCode
+      ref="qrcode"
+      v-bind="qrCodeOptions"
+      :width="width"
+      :height="width"
+      class="target"
+      :image="params.url"
+      :value="params.value"
+    />
   </div>
 </template>
 
@@ -91,7 +99,8 @@ export default {
   async mounted() {
     this.updateRecord()
     await this.$nextTick()
-    this.params.rotate && (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
+    this.params.rotate &&
+      (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
   },
   methods: {
     ...mapActions(['updateWidgetData']),
@@ -115,7 +124,13 @@ export default {
             rotation: this.params.dotRotation,
             colorStops: [
               { offset: 0, color: this.params.dotColor },
-              { offset: 1, color: this.params.dotColorType === 'single' ? this.params.dotColor : this.params.dotColor2 },
+              {
+                offset: 1,
+                color:
+                  this.params.dotColorType === 'single'
+                    ? this.params.dotColor
+                    : this.params.dotColor2,
+              },
             ],
           },
         },

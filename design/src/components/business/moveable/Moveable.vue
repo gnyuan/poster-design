@@ -19,7 +19,17 @@ import useSelecto from './Selecto'
 
 export default defineComponent({
   setup() {},
-  computed: mapGetters(['dSelectWidgets', 'dActiveElement', 'activeMouseEvent', 'showMoveable', 'showRotatable', 'dWidgets', 'updateRect', 'updateSelect', 'guidelines']),
+  computed: mapGetters([
+    'dSelectWidgets',
+    'dActiveElement',
+    'activeMouseEvent',
+    'showMoveable',
+    'showRotatable',
+    'dWidgets',
+    'updateRect',
+    'updateSelect',
+    'guidelines',
+  ]),
   watch: {
     async dActiveElement(val) {
       if (!val.record) {
@@ -38,7 +48,16 @@ export default defineComponent({
             this.moveable.renderDirections = ['e', 'se']
             break
           case 'w-image':
-            this.moveable.renderDirections = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
+            this.moveable.renderDirections = [
+              'nw',
+              'n',
+              'ne',
+              'w',
+              'e',
+              'sw',
+              's',
+              'se',
+            ]
             break
           // case 'w-svg':
           //   this.moveable.renderDirections = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
@@ -82,10 +101,13 @@ export default defineComponent({
     },
     showRotatable(val) {
       // TODO: 这里是通过旋转来判断是否可以操作
-      this.moveable.renderDirections = val ? ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'] : []
+      this.moveable.renderDirections = val
+        ? ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
+        : []
       this.moveable.resizable = val
       this.moveable.scalable = val
-      document.getElementsByClassName('moveable-rotation')[0].style.display = val ? 'block' : 'none'
+      document.getElementsByClassName('moveable-rotation')[0].style.display =
+        val ? 'block' : 'none'
     },
     updateRect(val) {
       this.moveable.updateRect()
@@ -98,16 +120,22 @@ export default defineComponent({
         for (let i = 0; i < items.length; i++) {
           console.log(items[i].uuid)
 
-          document.getElementById(items[i].uuid)?.classList.add('widget-selected')
+          document
+            .getElementById(items[i].uuid)
+            ?.classList.add('widget-selected')
         }
         this.moveable.renderDirections = []
         this.moveable.rotatable = false
-        const targetCollector = [].slice.call(document.querySelectorAll('.widget-selected'))
+        const targetCollector = [].slice.call(
+          document.querySelectorAll('.widget-selected'),
+        )
         console.log(targetCollector)
 
         this.moveable.target = targetCollector
         for (let i = 0; i < items.length; i++) {
-          document.getElementById(items[i].uuid)?.classList.remove('widget-selected')
+          document
+            .getElementById(items[i].uuid)
+            ?.classList.remove('widget-selected')
         }
       }, 400)
     },
@@ -120,15 +148,21 @@ export default defineComponent({
         // }
         if (alt) {
           for (let i = 0; i < items.length; i++) {
-            document.getElementById(items[i].uuid)?.classList.add('widget-selected')
+            document
+              .getElementById(items[i].uuid)
+              ?.classList.add('widget-selected')
           }
           this.moveable.renderDirections = []
           this.moveable.rotatable = false
-          const targetCollector = [].slice.call(document.querySelectorAll('.widget-selected'))
+          const targetCollector = [].slice.call(
+            document.querySelectorAll('.widget-selected'),
+          )
           // this.moveable.target = `[id="empty"]`
           this.moveable.target = targetCollector
           for (let i = 0; i < items.length; i++) {
-            document.getElementById(items[i].uuid)?.classList.remove('widget-selected')
+            document
+              .getElementById(items[i].uuid)
+              ?.classList.remove('widget-selected')
           }
         }
       },
@@ -276,22 +310,41 @@ export default defineComponent({
           if (String(args.direction) === '1,1') {
             moveable.keepRatio = false
             resizeStartWidth = args.target.offsetWidth
-            this.startHL = Number(args.target!.style.lineHeight.replace('px', ''))
-            this.startLS = Number(args.target!.style.letterSpacing.replace('px', ''))
+            this.startHL = Number(
+              args.target!.style.lineHeight.replace('px', ''),
+            )
+            this.startLS = Number(
+              args.target!.style.letterSpacing.replace('px', ''),
+            )
             this.resetRatio = 1
           }
-        } else if (this.dActiveElement.type === 'w-image' || this.dActiveElement.type === 'w-qrcode' || this.dActiveElement.type === 'w-svg') {
+        } else if (
+          this.dActiveElement.type === 'w-image' ||
+          this.dActiveElement.type === 'w-qrcode' ||
+          this.dActiveElement.type === 'w-piechart' ||
+          this.dActiveElement.type === 'w-svg'
+        ) {
           const dirs = ['1,0', '0,-1', '-1,0', '0,1']
           dirs.includes(String(args.direction)) && (moveable.keepRatio = false)
         }
       })
       .on('resize', (args: any) => {
-        const { target, width, height, dist, delta, clientX, clientY, direction } = args
+        const {
+          target,
+          width,
+          height,
+          dist,
+          delta,
+          clientX,
+          clientY,
+          direction,
+        } = args
         console.log(2, args)
         if (this.dActiveElement.type === 'w-text') {
           if (String(direction) === '1,1') {
             this.resetRatio = width / resizeStartWidth
-            target!.style.fontSize = this.dActiveElement.fontSize * this.resetRatio + 'px'
+            target!.style.fontSize =
+              this.dActiveElement.fontSize * this.resetRatio + 'px'
             target!.style.letterSpacing = this.startLS * this.resetRatio + 'px'
             target!.style.lineHeight = this.startHL * this.resetRatio + 'px'
           }
@@ -301,7 +354,12 @@ export default defineComponent({
           // moveable.updateRect()
           target.style.backgroundImage = 'none'
           // moveable.keepRatio !== this.resetRatio > 1 && (moveable.keepRatio = this.resetRatio > 1)
-        } else if (this.dActiveElement.type == 'w-image' || this.dActiveElement.type === 'w-qrcode' || this.dActiveElement.type === 'w-svg') {
+        } else if (
+          this.dActiveElement.type == 'w-image' ||
+          this.dActiveElement.type === 'w-qrcode' ||
+          this.dActiveElement.type === 'w-piechart' ||
+          this.dActiveElement.type === 'w-svg'
+        ) {
           this.resizeTempData = { width, height }
         } else if (this.dActiveElement.type == 'w-group') {
           // let record = this.dActiveElement.record
@@ -313,7 +371,11 @@ export default defineComponent({
         } else {
           this.$store.commit('resize', { width: width, height: height })
         }
-        this.dActiveElement.rotate && (target!.style.transform = target!.style.transform.replace('(0deg', `(${this.dActiveElement.rotate}`))
+        this.dActiveElement.rotate &&
+          (target!.style.transform = target!.style.transform.replace(
+            '(0deg',
+            `(${this.dActiveElement.rotate}`,
+          ))
       })
       .on('resizeEnd', (e: any) => {
         moveable.resizable = true
@@ -372,7 +434,9 @@ export default defineComponent({
         try {
           if (this.dActiveElement.type === 'w-text') {
             const d = e.direction || e.lastEvent.direction
-            String(d) === '1,1' && (this.dActiveElement.fontSize = this.dActiveElement.fontSize * this.resetRatio)
+            String(d) === '1,1' &&
+              (this.dActiveElement.fontSize =
+                this.dActiveElement.fontSize * this.resetRatio)
           }
         } catch (err) {}
         moveable.keepRatio = true
@@ -391,7 +455,11 @@ export default defineComponent({
         const { target, scale, transform } = e
         this.resetRatio = scale[0]
         target!.style.transform = transform
-        this.dActiveElement.rotate && (target!.style.transform = target!.style.transform.replace('0deg', this.dActiveElement.rotate))
+        this.dActiveElement.rotate &&
+          (target!.style.transform = target!.style.transform.replace(
+            '0deg',
+            this.dActiveElement.rotate,
+          ))
       })
       .on('scaleEnd', (e) => {
         moveable.resizable = true
@@ -401,7 +469,9 @@ export default defineComponent({
         try {
           if (this.dActiveElement.type === 'w-text') {
             const d = e.direction || e.lastEvent.direction
-            String(d) === '1,1' && (this.dActiveElement.fontSize = this.dActiveElement.fontSize * this.resetRatio)
+            String(d) === '1,1' &&
+              (this.dActiveElement.fontSize =
+                this.dActiveElement.fontSize * this.resetRatio)
           }
         } catch (err) {}
       })
@@ -412,7 +482,9 @@ export default defineComponent({
         const events = e.events
         for (let i = 0; i < events.length; i++) {
           const ev = events[i]
-          const currentWidget = this.dWidgets.find((item: any) => item.uuid === ev.target.getAttribute('data-uuid'))
+          const currentWidget = this.dWidgets.find(
+            (item: any) => item.uuid === ev.target.getAttribute('data-uuid'),
+          )
           const left = Number(currentWidget.left) + ev.beforeTranslate[0]
           // debug -- start --
           if (i === 1) {
@@ -422,7 +494,10 @@ export default defineComponent({
           const top = Number(currentWidget.top) + ev.beforeTranslate[1]
           ev.target.style.left = `${left}px`
           ev.target.style.top = `${top}px`
-          holdGroupPosition[`${ev.target.getAttribute('data-uuid')}`] = { left, top }
+          holdGroupPosition[`${ev.target.getAttribute('data-uuid')}`] = {
+            left,
+            top,
+          }
         }
       })
       .on('dragGroupEnd', (e) => {

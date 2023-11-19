@@ -11,7 +11,16 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch, nextTick } from 'vue'
-import QRCodeStyling, { DrawType, TypeNumber, Mode, ErrorCorrectionLevel, DotType, CornerSquareType, CornerDotType, Extension } from 'qr-code-styling'
+import QRCodeStyling, {
+  DrawType,
+  TypeNumber,
+  Mode,
+  ErrorCorrectionLevel,
+  DotType,
+  CornerSquareType,
+  CornerDotType,
+  Extension,
+} from 'qr-code-styling'
 import { debounce } from 'throttle-debounce'
 
 export default defineComponent({
@@ -98,6 +107,7 @@ export default defineComponent({
 
     onMounted(() => {
       render()
+      console.log(34)
       qrCode.append(qrCodeDom.value)
     })
 
