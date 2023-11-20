@@ -6,9 +6,17 @@
  * @LastEditTime: 2023-10-05 15:46:02
 -->
 <template>
-  <el-upload action="" accept="image/*" :http-request="upload" :show-file-list="false" multiple>
+  <el-upload
+    action=""
+    accept="image/*"
+    :http-request="upload"
+    :show-file-list="false"
+    multiple
+  >
     <slot>
-      <el-button size="small">上传图片<i class="el-icon-upload el-icon--right"></i></el-button>
+      <el-button size="small"
+        >上传图片<i class="el-icon-upload el-icon--right"></i
+      ></el-button>
     </slot>
   </el-upload>
 </template>
@@ -45,16 +53,6 @@ export default defineComponent({
 
     let tempSimpleRes: any = null // 单个文件上传时返回
 
-    // onMounted(async () => {
-    //   await nextTick()
-    //   setTimeout(() => {
-    //     // 加载七牛上传插件
-    //     const link_element = document.createElement('script')
-    //     link_element.setAttribute('src', _config.QINIUYUN_PLUGIN)
-    //     document.head.appendChild(link_element)
-    //   }, 1000)
-    // })
-
     const upload = ({ file }: any) => {
       if (props.hold) {
         context.emit('load', file)
@@ -75,9 +73,15 @@ export default defineComponent({
           if (file.size <= 1024 * 1024 * 10) {
             tempSimpleRes = await qiNiuUpload(file) // 队列有文件，执行上传
             const { width, height }: any = await getImage(file)
-            useNotification('上传成功', '公共测试账户，上传请注意保护隐私哦!', { position: 'bottom-left' })
+            useNotification('上传成功', '公共测试账户，上传请注意保护隐私哦!', {
+              position: 'bottom-left',
+            })
             context.emit('done', { width, height, url: tempSimpleRes.url }) // 单个文件进行响应
-          } else useNotification('爱护小水管', '请上传小于 10M 的图片哦!', { type: 'error', position: 'bottom-left' })
+          } else
+            useNotification('爱护小水管', '请上传小于 10M 的图片哦!', {
+              type: 'error',
+              position: 'bottom-left',
+            })
           uploading = false
           handleRemove() // 移除已上传文件
           index++
@@ -99,9 +103,13 @@ export default defineComponent({
           context.emit('load', file)
           resolve()
         } else {
-          const result: any = await Qiniu.upload(file, props.options, (res: Type.Object) => {
-            updatePercent(res.total.percent)
-          })
+          const result: any = await Qiniu.upload(
+            file,
+            props.options,
+            (res: Type.Object) => {
+              updatePercent(res.total.percent)
+            },
+          )
           resolve(result)
         }
       })

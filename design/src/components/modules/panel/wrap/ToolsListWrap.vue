@@ -15,19 +15,19 @@
       </div>
     </div>
     <div class="item" @click="addPieChart">
-      <i class="icon sd-tubiaobing" />
+      <i class="icon sd-tubiao-bingtu" />
       <div class="text">
         <span>饼图</span><span class="desc">使用ECharts饼图</span>
       </div>
     </div>
     <div class="item" @click="addQrcode">
-      <i class="icon sd-tubiaozhu" />
+      <i class="icon sd-tubiao-zhuzhuangtu" />
       <div class="text">
         <span>柱状图</span><span class="desc">使用ECharts柱状图</span>
       </div>
     </div>
     <div class="item" @click="addQrcode">
-      <i class="icon sd-tubiaoxian_tongyong_tongji" />
+      <i class="icon sd-tubiao-zhexiantu" />
       <div class="text">
         <span>折线图</span><span class="desc">使用ECharts折线图</span>
       </div>

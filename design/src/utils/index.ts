@@ -20,6 +20,7 @@ export default {
     /** 全局组件注册 */
     modules(myVue)
     /** iconfont 注入 */
+    cssLoader(_config.ICONFONT2)
     cssLoader(_config.ICONFONT_EXTRA)
     cssLoader(_config.ICONFONT_URL)
 

@@ -63,22 +63,22 @@ export default defineConfig({
     hmr: { overlay: false },
     proxy: {
       '/screenshots': {
-        target: 'http://192.168.3.27:9002',
+        target: 'http://10.18.12.113:9002',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/screenshots/, ''),
       },
       '/api': {
-        target: 'http://192.168.3.27:9000/api/',
+        target: 'http://10.18.12.113:9000/api/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/ai/remove': {
-        target: 'http://192.168.3.27:9003/api/remove',
+        target: 'http://10.18.12.113:9003/api/remove',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/ai\/remove/, ''),
       },
       '/static': {
-        target: 'http://192.168.3.27:9004/',
+        target: 'http://10.18.12.113:9004/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/static/, ''),
       },
