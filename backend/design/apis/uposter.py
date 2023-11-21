@@ -38,10 +38,11 @@ def create_poster_template(request, data: SchemaIn):
         print('更新作品')
         filtered_data = {}
         for k, v in data.__dict__.items():
-            if k =='data' or v is None:
+            if v is None:
                 continue
             filtered_data[k] = v
         poster = update(request, data.id, filtered_data, UPoster)
+        return poster
     else:
         print('新建作品')
         poster = create(request, data, UPoster)
