@@ -2,66 +2,85 @@
   <div
     ref="pieDom"
     style="height: 100%; width: 100%"
-    :height="300"
-    :width="400"
+    :height="height"
+    :width="width"
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, Ref, watch, nextTick } from 'vue'
+<script lang="ts" setup>
+import { onMounted, ref, Ref, watch, nextTick } from 'vue'
 import { debounce } from 'throttle-debounce'
 import { EChartsOption } from 'echarts'
 import { useECharts } from '@/components/business/echarts'
 
-export default defineComponent({
-  props: {
-    width: {
-      default: 300,
-    },
-    height: {
-      default: 300,
-    },
-    echartOptions: {
-      default: () =>
-        ({
-          xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          },
-          yAxis: {
-            type: 'value',
-          },
-          series: [
-            {
-              data: [150, 230, 224, 218, 135, 147, 260],
-              type: 'line',
+const props = defineProps({
+  width: { type: Number, default: 300 },
+  height: { type: Number, default: 300 },
+  echartOptions: {
+    type: Object as () => EChartsOption,
+    default: () =>
+      ({
+        tooltip: {
+          trigger: 'item',
+        },
+        legend: {
+          top: '5%',
+          left: 'center',
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2,
             },
-          ],
-        } as EChartsOption),
-      type: Object as () => EChartsOption,
-    },
+            label: {
+              show: false,
+              position: 'center',
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 40,
+                fontWeight: 'bold',
+              },
+            },
+            labelLine: {
+              show: false,
+            },
+            data: [
+              { value: 1048, name: 'Search Engine' },
+              { value: 735, name: 'Direct' },
+              { value: 580, name: 'Email' },
+              { value: 484, name: 'Union Ads' },
+              { value: 300, name: 'Video Ads' },
+            ],
+          },
+        ],
+      } as EChartsOption),
   },
-  setup(props) {
-    watch(
-      () => [props.width, props.height, props.echartOptions],
-      () => {
-        render()
-      },
-    )
+})
 
-    const render = debounce(300, false, async () => {
-      setOptions(props.echartOptions)
-    })
+const pieDom = ref<HTMLElement>()
+const { setOptions, resize } = useECharts(pieDom as Ref<HTMLDivElement>, 'dark')
 
-    const pieDom = ref<HTMLElement>()
-    const { setOptions } = useECharts(pieDom as Ref<HTMLDivElement>, 'dark')
-    onMounted(() => {
-      render()
-    })
-
-    return {
-      pieDom,
-    }
+watch(
+  () => [props.width, props.height, props.echartOptions],
+  () => {
+    render()
   },
+)
+
+const render = debounce(300, false, async () => {
+  setOptions(props.echartOptions)
+  resize()
+})
+
+onMounted(() => {
+  render()
 })
 </script>

@@ -65,9 +65,8 @@ def update(request, id, data, model, using='default'):
         dict_data = data.dict()
     else:
         dict_data = data
-    user_info = get_user_info_from_token(request)
-    # 修改时默认添加修改者
-    dict_data['modifier'] = user_info['name']
+    # user_info = get_user_info_from_token(request)
+    # dict_data['modifier'] = user_info['name']
     instance = get_object_or_404(model.objects.using(using), id=id)
     for attr, value in dict_data.items():
         setattr(instance, attr, value)

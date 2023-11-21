@@ -23,8 +23,7 @@ class Filters(FuFilters):
 class SchemaIn(ModelSchema):
     class Config:
         model = UPoster
-        model_exclude = ['id', 'create_datetime', 'update_datetime']
-
+        model_exclude = ['create_datetime', 'update_datetime']
 
 class SchemaOut(ModelSchema):
     class Config:
@@ -35,8 +34,18 @@ class SchemaOut(ModelSchema):
 @router.post("/save", response=SchemaOut, auth=None)
 @router.post("/uposter", response=SchemaOut, auth=None)
 def create_poster_template(request, data: SchemaIn):
-    poster = create(request, data, UPoster)
-    return poster
+    if data.id: # 更新
+        print('更新作品')
+        filtered_data = {}
+        for k, v in data.__dict__.items():
+            if k =='data' or v is None:
+                continue
+            filtered_data[k] = v
+        poster = update(request, data.id, filtered_data, UPoster)
+    else:
+        print('新建作品')
+        poster = create(request, data, UPoster)
+        return poster
 
 
 @router.delete("/uposter/{dept_id}", auth=None)

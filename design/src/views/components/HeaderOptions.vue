@@ -6,19 +6,39 @@
  * @LastEditTime: 2023-10-16 09:23:06
 -->
 <template>
-  <div class="top-title"><el-input v-model="title" placeholder="未命名的设计" class="input-wrap" /></div>
+  <div class="top-title">
+    <el-input v-model="title" placeholder="未命名的设计" class="input-wrap" />
+  </div>
   <div class="top-icon-wrap">
     <template v-if="tempEditing">
-      <span style="color: #999; font-size: 14px; margin-right: 0.5rem">{{ stateBollean ? '启用' : '停用' }}</span> <el-switch v-model="stateBollean" @change="stateChange" />
+      <span style="color: #999; font-size: 14px; margin-right: 0.5rem">{{
+        stateBollean ? '启用' : '停用'
+      }}</span>
+      <el-switch v-model="stateBollean" @change="stateChange" />
       <div class="divide__line">|</div>
       <el-button plain type="primary" @click="saveTemp">保存模板</el-button>
       <el-button @click="$store.commit('managerEdit', false)">取消</el-button>
       <div class="divide__line">|</div>
     </template>
     <!-- <el-button @click="draw">绘制(测试)</el-button> -->
-    <el-button size="large" class="primary-btn" :disabled="tempEditing" @click="save(false)">保存</el-button>
+    <el-button
+      size="large"
+      class="primary-btn"
+      :disabled="tempEditing"
+      @click="save(false)"
+      >保存</el-button
+    >
     <copyRight>
-      <el-button :loading="loading" size="large" class="primary-btn" :disabled="tempEditing" plain type="primary" @click="download">下载作品</el-button>
+      <el-button
+        :loading="loading"
+        size="large"
+        class="primary-btn"
+        :disabled="tempEditing"
+        plain
+        type="primary"
+        @click="download"
+        >下载作品</el-button
+      >
     </copyRight>
   </div>
   <!-- 生成图片组件 -->
@@ -27,7 +47,13 @@
 
 <script lang="ts">
 import api from '@/api'
-import { defineComponent, reactive, toRefs, getCurrentInstance, ComponentInternalInstance } from 'vue'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  getCurrentInstance,
+  ComponentInternalInstance,
+} from 'vue'
 import { mapGetters, mapActions, useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import _dl from '@/common/methods/download'
@@ -59,13 +85,31 @@ export default defineComponent({
       if (proxy?.dHistory.length <= 0) {
         return
       }
+      console.log(route.query, 6666)
+      console.log(proxy, 7777)
       store.commit('setShowMoveable', false) // 清理掉上一次的选择框
       // console.log(proxy?.dPage, proxy?.dWidgets)
       const { id, tempid } = route.query
       const cover = hasCover ? await proxy?.draw() : undefined
       const widgets = proxy.dWidgets // reviseData()
-      const { id: newId, stat, msg } = await api.home.saveWorks({ cover, id, title: proxy.title || '未命名设计', data: JSON.stringify({ page: proxy.dPage, widgets }), temp_id: tempid, width: proxy.dPage.width, height: proxy.dPage.height })
-      stat !== 0 ? useNotification('保存成功', '可在"我的作品"中查看') : useNotification('保存失败', msg, { type: 'error' })
+      console.log(JSON.stringify({ page: proxy.dPage, widgets }))
+      console.log(886)
+      const {
+        id: newId,
+        stat,
+        msg,
+      } = await api.home.saveWorks({
+        cover,
+        id,
+        title: proxy.title || '未命名设计',
+        data: JSON.stringify({ page: proxy.dPage, widgets }),
+        temp_id: tempid,
+        width: proxy.dPage.width,
+        height: proxy.dPage.height,
+      })
+      stat !== 0
+        ? useNotification('保存成功', '可在"我的作品"中查看')
+        : useNotification('保存失败', msg, { type: 'error' })
       // !id && router.push({ path: '/home', query: { id: newId }, replace: true })
       router.push({ path: '/home', query: { id: newId }, replace: true })
       store.commit('setShowMoveable', true)
@@ -88,14 +132,35 @@ export default defineComponent({
           return
           // proxy.dWidgets.push(wGroup.setting)
         }
-        res = await api.home.saveTemp({ id: tempid, type, title: proxy.title || '未命名组件', content: JSON.stringify(proxy.dWidgets), width: proxy.dPage.width, height: proxy.dPage.height })
-      } else res = await api.home.saveTemp({ id: tempid, title: proxy.title || '未命名模板', content: JSON.stringify({ page: proxy.dPage, widgets: proxy.dWidgets }), width: proxy.dPage.width, height: proxy.dPage.height })
+        res = await api.home.saveTemp({
+          id: tempid,
+          type,
+          title: proxy.title || '未命名组件',
+          content: JSON.stringify(proxy.dWidgets),
+          width: proxy.dPage.width,
+          height: proxy.dPage.height,
+        })
+      } else
+        res = await api.home.saveTemp({
+          id: tempid,
+          title: proxy.title || '未命名模板',
+          content: JSON.stringify({
+            page: proxy.dPage,
+            widgets: proxy.dWidgets,
+          }),
+          width: proxy.dPage.width,
+          height: proxy.dPage.height,
+        })
       res.stat != 0 && useNotification('保存成功', '模板内容已变更')
     }
     // 停用启用
     async function stateChange(e: any) {
       const { tempid, tempType: type } = route.query
-      const { stat } = await api.home.saveTemp({ id: tempid, type, state: e ? 1 : 0 })
+      const { stat } = await api.home.saveTemp({
+        id: tempid,
+        type,
+        state: e ? 1 : 0,
+      })
       stat != 0 && useNotification('保存成功', '模板内容已变更')
     }
     async function download() {
@@ -104,33 +169,52 @@ export default defineComponent({
       }
       state.loading = true
       context.emit('update:modelValue', true)
-      context.emit('change', { downloadPercent: 1, downloadText: '正在处理封面' })
+      context.emit('change', {
+        downloadPercent: 1,
+        downloadText: '正在处理封面',
+      })
       await save(true)
       setTimeout(async () => {
         const { id } = route.query
         if (id) {
           const { width, height } = proxy.dPage
           context.emit('update:modelValue', true)
-          context.emit('change', { downloadPercent: 1, downloadText: '准备合成图片' })
+          context.emit('change', {
+            downloadPercent: 1,
+            downloadText: '准备合成图片',
+          })
           state.loading = false
           let timerCount = 0
           const animation = setInterval(() => {
             if (props.modelValue && timerCount < 75) {
               timerCount += RandomNumber(1, 10)
-              context.emit('change', { downloadPercent: 1 + timerCount, downloadText: '正在合成图片' })
+              context.emit('change', {
+                downloadPercent: 1 + timerCount,
+                downloadText: '正在合成图片',
+              })
             } else {
               clearInterval(animation)
             }
           }, 800)
-          await _dl.downloadImg(api.home.download({ id, width, height }) + '&r=' + Math.random(), (progress: number, xhr: any) => {
-            if (props.modelValue) {
-              clearInterval(animation)
-              progress >= timerCount && context.emit('change', { downloadPercent: Number(progress.toFixed(0)), downloadText: '图片生成中' })
-            } else {
-              xhr.abort()
-            }
+          await _dl.downloadImg(
+            api.home.download({ id, width, height }) + '&r=' + Math.random(),
+            (progress: number, xhr: any) => {
+              if (props.modelValue) {
+                clearInterval(animation)
+                progress >= timerCount &&
+                  context.emit('change', {
+                    downloadPercent: Number(progress.toFixed(0)),
+                    downloadText: '图片生成中',
+                  })
+              } else {
+                xhr.abort()
+              }
+            },
+          )
+          context.emit('change', {
+            downloadPercent: 100,
+            downloadText: '图片下载中',
           })
-          context.emit('change', { downloadPercent: 100, downloadText: '图片下载中' })
         }
       }, 100)
     }
@@ -147,7 +231,13 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['dPage', 'dWidgets', 'tempEditing', 'dHistory', 'dPageHistory']),
+    ...mapGetters([
+      'dPage',
+      'dWidgets',
+      'tempEditing',
+      'dHistory',
+      'dPageHistory',
+    ]),
   },
   methods: {
     ...mapActions(['pushHistory', 'addGroup']),
@@ -160,7 +250,13 @@ export default defineComponent({
         cb()
         return
       }
-      const { data: content, title, state, width, height } = await api.home[apiName]({ id: id || tempId, type })
+      const {
+        data: content,
+        title,
+        state,
+        width,
+        height,
+      } = await api.home[apiName]({ id: id || tempId, type })
       if (content) {
         const data = JSON.parse(content)
         this.stateBollean = !!state
@@ -174,7 +270,9 @@ export default defineComponent({
           this.addGroup(data)
         } else {
           this.$store.commit('setDPage', data.page)
-          id ? this.$store.commit('setDWidgets', data.widgets) : this.$store.dispatch('setTemplate', data.widgets)
+          id
+            ? this.$store.commit('setDWidgets', data.widgets)
+            : this.$store.dispatch('setTemplate', data.widgets)
         }
         cb()
         this.pushHistory('请求加载load')
