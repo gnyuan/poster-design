@@ -33,15 +33,11 @@ const props = defineProps({
           name: 'Access From',
           type: 'pie',
           radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
+          // avoidLabelOverlap: false,
           itemStyle: {
             borderRadius: 10,
             borderColor: '#fff',
             borderWidth: 2,
-          },
-          label: {
-            show: false,
-            position: 'center',
           },
           emphasis: {
             label: {
@@ -50,8 +46,15 @@ const props = defineProps({
               fontWeight: 'bold',
             },
           },
-          labelLine: {
-            show: false,
+          // labelLine: {
+          //   show: false,
+          // },
+          label: {
+            show: true,
+            formatter(param) {
+              // correct the percentage
+              return param.name + ' (' + param.percent + '%)'
+            },
           },
           data: [
             { value: 1048, name: 'Search Engine' },
@@ -78,7 +81,6 @@ watch(
 
 const render = debounce(300, false, async () => {
   console.log('要进行渲染了！！因为height width 或者opts变动')
-  console.log(props.opts)
   setOptions(props.opts)
   resize()
 })

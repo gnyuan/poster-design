@@ -34,8 +34,17 @@
             active-text="展示标题"
             inactive-text="隐藏标题"
             @finish="(value) => finish('legendshow', value)"
-          >
-          </el-switch>
+          />
+        </div>
+        <br />
+        <div class="slide-wrap">
+          <number-slider
+            v-model="innerElement.series_radius"
+            label="环宽"
+            :step="2"
+            :maxValue="80"
+            @finish="(value) => finish('series_radius', value)"
+          />
         </div>
 
         <div style="flex-wrap: nowrap" class="line-layout">
@@ -67,23 +76,21 @@
             @finish="(value) => finish('dotColor2', value)"
           />
         </div>
-        <number-slider
-          v-show="innerElement.dotColorType !== 'single'"
-          v-model="innerElement.dotRotation"
-          style="margin-top: 8px"
-          label="渐变角度"
-          :step="1"
-          :minValue="0"
-          :maxValue="360"
-          @finish="(value) => finish('dotRotation', value)"
-        />
       </el-collapse-item>
-      <el-collapse-item title="内容设置" name="3">
+      <el-collapse-item title="数据设置" name="3">
+        <el-table-v2
+          :columns="columns"
+          :data="data"
+          :width="200"
+          :height="200"
+        />
+
+        <br />
         <text-input-area
-          v-model="innerElement.value"
+          v-model="innerElement.otheropts"
           :max="40"
-          label=""
-          @finish="(value) => finish('value', value)"
+          label="配置"
+          @finish="(value) => finish('otheropts', value)"
         />
         <br />
         <div class="slide-wrap logo__layout">
@@ -125,11 +132,19 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, nextTick, watch, watchEffect, ref } from 'vue'
+<script lang="tsx" setup>
+import { computed, nextTick, watch, watchEffect, ref, Ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 
-import { ElSelect, ElOption, ElSwitch } from 'element-plus'
+import {
+  ElSelect,
+  ElOption,
+  ElSwitch,
+  ElInput,
+  ElTableV2,
+  ElSlider,
+  ElCollapse,
+} from 'element-plus'
 import numberInput from '../../settings/numberInput.vue'
 import iconItemSelect from '../../settings/iconItemSelect.vue'
 import numberSlider from '../../settings/numberSlider.vue'
@@ -146,6 +161,82 @@ defineOptions({
   name: 'w-image-style',
   inheritAttrs: false,
 })
+
+import type { FunctionalComponent } from 'vue'
+import type { Column, InputInstance } from 'element-plus'
+
+type SelectionCellProps = {
+  value: string
+  intermediate?: boolean
+  onChange: (value: string) => void
+  forwardRef: (el: InputInstance) => void
+}
+
+const InputCell: FunctionalComponent<SelectionCellProps> = ({
+  value,
+  onChange,
+  forwardRef,
+}) => {
+  return (
+    <ElInput ref={forwardRef as any} onInput={onChange} modelValue={value} />
+  )
+}
+
+const columns: Column<any>[] = [
+  {
+    key: 'c0',
+    dataKey: 'c0',
+    title: 'Col0',
+    width: 150,
+    // cellRenderer: ({ rowData, column }) => {
+    //   const onChange = (value: string) => {
+    //     rowData[column.dataKey!] = value
+    //   }
+    //   const onEnterEditMode = () => {
+    //     rowData.editing = true
+    //   }
+    //   const onExitEditMode = () => (rowData.editing = false)
+    //   const input = ref()
+    //   const setRef = (el) => {
+    //     input.value = el
+    //     if (el) {
+    //       el.focus?.()
+    //     }
+    //   }
+    //   return rowData.editing ? (
+    //     <InputCell
+    //       forwardRef={setRef}
+    //       value={rowData[column.dataKey!]}
+    //       onChange={onChange}
+    //       onBlur={onExitEditMode}
+    //       onKeydownEnter={onExitEditMode}
+    //     />
+    //   ) : (
+    //     <div class="table-v2-inline-editing-trigger" onClick={onEnterEditMode}>
+    //       {rowData[column.dataKey!]}
+    //     </div>
+    //   )
+    // },
+  },
+  {
+    key: 'c1',
+    dataKey: 'c1',
+    title: 'Col1',
+    width: 150,
+  },
+  {
+    key: 'c2',
+    dataKey: 'c2',
+    title: 'Col2',
+    width: 150,
+  },
+]
+
+const data = ref([
+  { c0: 1, c1: 'a', c2: 1 },
+  { c0: 2, c1: 'b', c2: 2 },
+  { c0: 3, c1: 'c', c2: 3 },
+])
 
 const activeNames = ref(['1', '2', '3', '4'])
 const innerElement = ref({})
@@ -180,7 +271,6 @@ function changeValue() {
     return
   }
   for (let key in innerElement.value) {
-    console.log(key, innerElement.value[key])
     if (ingoreKeys.indexOf(key) !== -1) {
       dActiveElement.value[key] = innerElement.value[key]
     } else if (
@@ -193,13 +283,11 @@ function changeValue() {
         key: key,
         value: innerElement.value[key],
       })
-      console.log(key, innerElement.value[key], dActiveElement.value.uuid)
     }
   }
 }
 
 function finish(key, value) {
-  console('laotie', key, value)
   store.dispatch('updateWidgetData', {
     uuid: dActiveElement.value.uuid,
     key: key,

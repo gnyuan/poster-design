@@ -14,8 +14,8 @@
   >
     <PieChart
       :opts="echartOptions"
-      :width="width"
-      :height="height"
+      :width="width - 5"
+      :height="height - 5"
       class="target"
     />
   </div>
@@ -40,7 +40,8 @@ export default {
     height: 300,
     left: 0,
     top: 0,
-    legendshow: true,
+    legendshow: true, // 是否展示图例
+    series_radius: 40, // 环宽度
     zoom: 1,
     transform: '',
     radius: 0,
@@ -101,7 +102,6 @@ export default {
       // this.updateZoom()
     },
     changeValues() {
-      console.log(5656)
       console.log(this.params)
       this.echartOptions = {
         animation: false,
@@ -112,12 +112,16 @@ export default {
           top: '5%',
           left: 'center',
           show: this.params.legendshow,
+          textStyle: {
+            fontWeight: 'bold', // Setting labels to bold
+            fontSize: 30, // Adjusting the font size
+          },
         },
         series: [
           {
             name: 'Access From',
             type: 'pie',
-            radius: ['40%', '70%'],
+            radius: [`${this.params.series_radius}%`, '80%'],
             avoidLabelOverlap: false,
             itemStyle: {
               borderRadius: 10,
@@ -125,8 +129,16 @@ export default {
               borderWidth: 2,
             },
             label: {
-              show: false,
-              position: 'center',
+              position: 'inside', // 设置标签位置为外部
+              show: true,
+              formatter(param) {
+                // correct the percentage
+                return param.name + ' (' + param.percent + '%)'
+              },
+              textStyle: {
+                fontWeight: 'bold', // Setting labels to bold
+                fontSize: 30, // Adjusting the font size
+              },
             },
             emphasis: {
               label: {
@@ -136,7 +148,7 @@ export default {
               },
             },
             labelLine: {
-              show: false,
+              show: true,
             },
             data: [
               { value: 1048, name: 'Search Engine' },
