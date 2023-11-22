@@ -107,7 +107,6 @@ export default defineComponent({
 
     onMounted(() => {
       render()
-      console.log(34)
       qrCode.append(qrCodeDom.value)
     })
 

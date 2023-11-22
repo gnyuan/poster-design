@@ -125,7 +125,8 @@ const saveScreenshot = async (
     }
     // 主动模式下注入全局方法
     await page.exposeFunction("loadFinishToInject", async () => {
-      console.log("-> 开始截图");
+      await page.waitFor(2000);
+      console.log("已等待2s确保渲染无误 -> 开始截图");
       // await page.evaluate(() => document.body.style.background = 'transparent');
       await page.screenshot({ path, omitBackground: true });
       // 关闭浏览器

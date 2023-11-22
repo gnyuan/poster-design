@@ -207,10 +207,14 @@ export default {
           }
         }
         if (count <= 1) {
-          const index = widgets.findIndex((item) => item.uuid === activeElement.parent)
+          const index = widgets.findIndex(
+            (item) => item.uuid === activeElement.parent,
+          )
           widgets.splice(index, 1)
           if (count === 1) {
-            const widget = widgets.find((item) => item.parent === activeElement.parent)
+            const widget = widgets.find(
+              (item) => item.parent === activeElement.parent,
+            )
             widget.parent = '-1'
           }
           count = 0
@@ -222,7 +226,9 @@ export default {
       // 重置 activeElement
       store.state.dActiveElement = store.state.dPage
     } else {
-      store.state.dActiveElement = widgets.find((item) => item.uuid === activeElement.parent)
+      store.state.dActiveElement = widgets.find(
+        (item) => item.uuid === activeElement.parent,
+      )
     }
 
     if (store.state.dActiveElement.uuid !== '-1') {
@@ -347,7 +353,12 @@ export default {
   selectWidgetsInOut(store, { uuid }) {
     const selectWidgets = store.state.dSelectWidgets
     const widget = store.state.dWidgets.find((item) => item.uuid === uuid)
-    if (widget && uuid !== '-1' && widget.parent === '-1' && !widget.isContainer) {
+    if (
+      widget &&
+      uuid !== '-1' &&
+      widget.parent === '-1' &&
+      !widget.isContainer
+    ) {
       if (selectWidgets.length === 0) {
         if (store.state.dActiveElement.uuid !== '-1') {
           selectWidgets.push(store.state.dActiveElement)
@@ -476,7 +487,10 @@ export default {
         case 'top':
           const t = widgetXY.y + Math.floor((dy * 100) / store.state.dZoom)
           top = Math.max(t, 0)
-          top = Math.min(widgetXY.y + resizeWH.height - target.record.minHeight, top)
+          top = Math.min(
+            widgetXY.y + resizeWH.height - target.record.minHeight,
+            top,
+          )
           target.height += target.top - top
           target.height = Math.max(target.height, target.record.minHeight)
           target.top = top
@@ -492,7 +506,10 @@ export default {
           left = Math.max(tLeft, 0)
           target.width += target.left - left
           target.width = Math.max(target.width, target.record.minWidth)
-          left = Math.min(widgetXY.x + resizeWH.width - target.record.minWidth, left)
+          left = Math.min(
+            widgetXY.x + resizeWH.width - target.record.minWidth,
+            left,
+          )
           target.left = left
           break
         case 'right':
@@ -544,7 +561,9 @@ export default {
   },
   updateAlign(store: any, { align, uuid, group }: any) {
     const widgets = store.state.dWidgets
-    const target = uuid ? widgets.find((item: any) => item.uuid === uuid) : store.state.dActiveElement
+    const target = uuid
+      ? widgets.find((item: any) => item.uuid === uuid)
+      : store.state.dActiveElement
     let parent = group || store.state.dPage
 
     if (target.parent !== '-1') {
@@ -634,7 +653,9 @@ export default {
       }
       for (let i = 0; i < sortWidgets.length; ++i) {
         const uuid = sortWidgets[i].uuid
-        const index = widgets.findIndex((item: Type.Object) => item.uuid === uuid)
+        const index = widgets.findIndex(
+          (item: Type.Object) => item.uuid === uuid,
+        )
         const widget = { ...widgets[index] } // clone
         if (widget.isContainer) {
           widgets.splice(index, 1) // 删除旧组合
@@ -662,8 +683,14 @@ export default {
         // })
         left = Math.min(left, widget.left)
         top = Math.min(top, widget.top)
-        right = Math.max(right, Number(widget.width || widget.record.width) + Number(widget.left))
-        bottom = Math.max(bottom, Number(widget.height || widget.record.height) + Number(widget.top))
+        right = Math.max(
+          right,
+          Number(widget.width || widget.record.width) + Number(widget.left),
+        )
+        bottom = Math.max(
+          bottom,
+          Number(widget.height || widget.record.height) + Number(widget.top),
+        )
       }
       // sortWidgets.sort((a, b) => a.index > b.index)
       // for (let i = 0; i < sortWidgets.length; ++i) {
@@ -702,7 +729,9 @@ export default {
         }
         for (let i = 0; i < sortWidgets.length; ++i) {
           const uuid = sortWidgets[i].uuid
-          const index = widgets.findIndex((item: Type.Object) => item.uuid === uuid)
+          const index = widgets.findIndex(
+            (item: Type.Object) => item.uuid === uuid,
+          )
           const widget = { ...widgets[index] } // clone
           left = Math.min(left, widget.left)
           top = Math.min(top, widget.top)
@@ -774,7 +803,11 @@ export default {
         break
         // 如果父容器一样并且（目标组件不是容器或者先上移动并且目标组件是容器），则是要移动的位置
       } else if (nextWidget.parent === '-1') {
-        if ((gCount === 0 && nextWidget.isContainer) || !nextWidget.isContainer || (value < 0 && nextWidget.isContainer)) {
+        if (
+          (gCount === 0 && nextWidget.isContainer) ||
+          !nextWidget.isContainer ||
+          (value < 0 && nextWidget.isContainer)
+        ) {
           if (gCount === 0 && value > 0) {
             next -= value
           }

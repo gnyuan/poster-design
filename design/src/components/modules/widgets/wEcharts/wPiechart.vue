@@ -13,8 +13,7 @@
     }"
   >
     <PieChart
-      ref="qrcode"
-      v-bind="echartOptions"
+      :opts="echartOptions"
       :width="width"
       :height="height"
       class="target"
@@ -22,11 +21,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // 图片组件
 const NAME = 'w-piechart'
 
 import { mapGetters, mapActions } from 'vuex'
+import { EChartsOption } from 'echarts'
 import PieChart from '@/components/business/echarts/pie.ts'
 
 export default {
@@ -40,6 +40,7 @@ export default {
     height: 300,
     left: 0,
     top: 0,
+    legendshow: true,
     zoom: 1,
     transform: '',
     radius: 0,
@@ -57,21 +58,7 @@ export default {
   props: ['params', 'parent'],
   data() {
     return {
-      echartOptions: {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            data: [1990, 230, 224, 218, 135, 147, 260],
-            type: 'line',
-          },
-        ],
-      },
+      echartOptions: {},
     }
   },
   computed: {
@@ -114,28 +101,53 @@ export default {
       // this.updateZoom()
     },
     changeValues() {
-      this.pieOptions = {
-        qrOptions: { typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' },
-        // dotsOptions: { color: '#999999' },
-        dotsOptions: {
-          type: this.params.dotType,
-          color: this.params.dotColor,
-          gradient: {
-            type: 'linear',
-            rotation: this.params.dotRotation,
-            colorStops: [
-              { offset: 0, color: this.params.dotColor },
-              {
-                offset: 1,
-                color:
-                  this.params.dotColorType === 'single'
-                    ? this.params.dotColor
-                    : this.params.dotColor2,
+      console.log(5656)
+      console.log(this.params)
+      this.echartOptions = {
+        animation: false,
+        tooltip: {
+          trigger: 'item',
+        },
+        legend: {
+          top: '5%',
+          left: 'center',
+          show: this.params.legendshow,
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2,
+            },
+            label: {
+              show: false,
+              position: 'center',
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 40,
+                fontWeight: 'bold',
               },
+            },
+            labelLine: {
+              show: false,
+            },
+            data: [
+              { value: 1048, name: 'Search Engine' },
+              { value: 735, name: 'Direct' },
+              { value: 580, name: 'Email' },
+              { value: 484, name: 'Union Ads' },
+              { value: 300, name: 'Video Ads' },
             ],
           },
-        },
-      }
+        ],
+      } as EChartsOption
     },
   },
 }

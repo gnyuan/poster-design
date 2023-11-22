@@ -85,15 +85,11 @@ export default defineComponent({
       if (proxy?.dHistory.length <= 0) {
         return
       }
-      console.log(route.query, 6666)
-      console.log(proxy, 7777)
       store.commit('setShowMoveable', false) // 清理掉上一次的选择框
       // console.log(proxy?.dPage, proxy?.dWidgets)
       const { id, tempid } = route.query
       const cover = hasCover ? await proxy?.draw() : undefined
       const widgets = proxy.dWidgets // reviseData()
-      console.log(JSON.stringify({ page: proxy.dPage, widgets }))
-      console.log(886)
       const {
         id: newId,
         stat,
