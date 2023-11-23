@@ -25,7 +25,11 @@
             label="高"
             @finish="(value) => finish('height', value)"
           />
+          <br />
         </div>
+        <el-input :value="dActiveElement.uuid">
+          <template #prepend>UUID</template>
+        </el-input>
       </el-collapse-item>
       <el-collapse-item title="样式设计" name="2">
         <div style="flex-wrap: nowrap" class="line-layout">
@@ -46,68 +50,6 @@
             @finish="(value) => finish('series_radius', value)"
           />
         </div>
-
-        <div style="flex-wrap: nowrap" class="line-layout">
-          <el-select v-model="innerElement.dotColorType">
-            <el-option
-              v-for="ctype in localization.dotColorTypes"
-              :key="ctype.key"
-              :label="ctype.value"
-              :value="ctype.key"
-            />
-          </el-select>
-          <el-select v-model="innerElement.dotType" class="selector">
-            <el-option
-              v-for="dtype in localization.dotTypes"
-              :key="dtype.key"
-              :label="dtype.value"
-              :value="dtype.key"
-            />
-          </el-select>
-        </div>
-        <div style="flex-wrap: nowrap; margin-top: 1rem" class="line-layout">
-          <color-select
-            v-model="innerElement.dotColor"
-            @finish="(value) => finish('dotColor', value)"
-          />
-          <color-select
-            v-show="innerElement.dotColorType !== 'single'"
-            v-model="innerElement.dotColor2"
-            @finish="(value) => finish('dotColor2', value)"
-          />
-        </div>
-      </el-collapse-item>
-      <el-collapse-item title="数据设置" name="3">
-        <el-table-v2
-          :columns="columns"
-          :data="data"
-          :width="200"
-          :height="200"
-        />
-
-        <br />
-        <text-input-area
-          v-model="innerElement.otheropts"
-          :max="40"
-          label="配置"
-          @finish="(value) => finish('otheropts', value)"
-        />
-        <br />
-        <div class="slide-wrap logo__layout">
-          <img v-show="innerElement.url" :src="innerElement.url" class="logo" />
-          <uploader class="options__upload" @done="uploadImgDone">
-            <el-button size="small" plain>{{
-              innerElement.url ? '替换图片' : '上传 Logo'
-            }}</el-button>
-          </uploader>
-          <el-button
-            v-show="innerElement.url"
-            size="small"
-            link
-            @click="finish('url', '')"
-            >删除</el-button
-          >
-        </div>
         <br />
         <div class="slide-wrap">
           <number-slider
@@ -119,6 +61,50 @@
           />
         </div>
       </el-collapse-item>
+      <el-collapse-item title="数据" name="3">
+        <table>
+          <thead>
+            <tr>
+              <th
+                v-for="column in columns"
+                :key="column.key"
+                @click="addColumn(column)"
+              >
+                <el-input v-model="column.title"></el-input>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(row, index) in data"
+              :key="index"
+              @click="addRow(index)"
+            >
+              <td v-for="column in columns" :key="column.key">
+                <el-input v-model="row[column.key]"></el-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </el-collapse-item>
+      <el-collapse-item title="颜色" name="4">
+        <template v-for="column in columns" :key="column.key">
+          <color-select
+            v-model="column.color"
+            @finish="(value) => finish('dotColor', value)"
+          />
+        </template>
+      </el-collapse-item>
+
+      <el-collapse-item title="echart配置" name="5">
+        <text-input-area
+          v-model="innerElement.otheropts"
+          :max="40"
+          label=""
+          @finish="(value) => finish('otheropts', value)"
+        />
+      </el-collapse-item>
+
       <br />
       <icon-item-select
         class="style-item"
@@ -132,28 +118,17 @@
   </div>
 </template>
 
-<script lang="tsx" setup>
-import { computed, nextTick, watch, watchEffect, ref, Ref, reactive } from 'vue'
+<script lang="ts" setup>
+import { computed, nextTick, watch, ref } from 'vue'
 import { useStore } from 'vuex'
 
-import {
-  ElSelect,
-  ElOption,
-  ElSwitch,
-  ElInput,
-  ElTableV2,
-  ElSlider,
-  ElCollapse,
-} from 'element-plus'
+import { ElSwitch, ElInput, ElSlider, ElCollapse } from 'element-plus'
 import numberInput from '../../settings/numberInput.vue'
 import iconItemSelect from '../../settings/iconItemSelect.vue'
 import numberSlider from '../../settings/numberSlider.vue'
 import textInputArea from '../../settings/textInputArea.vue'
 import colorSelect from '../../settings/colorSelect.vue'
 
-import api from '@/api'
-import localization from '@/assets/data/QrCodeLocalization'
-import uploader from '@/components/common/Uploader/index.vue'
 import layerIconList from '@/assets/data/LayerIconList'
 import alignIconList from '@/assets/data/AlignListData'
 
@@ -162,81 +137,41 @@ defineOptions({
   inheritAttrs: false,
 })
 
-import type { FunctionalComponent } from 'vue'
-import type { Column, InputInstance } from 'element-plus'
-
-type SelectionCellProps = {
-  value: string
-  intermediate?: boolean
-  onChange: (value: string) => void
-  forwardRef: (el: InputInstance) => void
-}
-
-const InputCell: FunctionalComponent<SelectionCellProps> = ({
-  value,
-  onChange,
-  forwardRef,
-}) => {
-  return (
-    <ElInput ref={forwardRef as any} onInput={onChange} modelValue={value} />
-  )
-}
-
-const columns: Column<any>[] = [
-  {
-    key: 'c0',
-    dataKey: 'c0',
-    title: 'Col0',
-    width: 150,
-    // cellRenderer: ({ rowData, column }) => {
-    //   const onChange = (value: string) => {
-    //     rowData[column.dataKey!] = value
-    //   }
-    //   const onEnterEditMode = () => {
-    //     rowData.editing = true
-    //   }
-    //   const onExitEditMode = () => (rowData.editing = false)
-    //   const input = ref()
-    //   const setRef = (el) => {
-    //     input.value = el
-    //     if (el) {
-    //       el.focus?.()
-    //     }
-    //   }
-    //   return rowData.editing ? (
-    //     <InputCell
-    //       forwardRef={setRef}
-    //       value={rowData[column.dataKey!]}
-    //       onChange={onChange}
-    //       onBlur={onExitEditMode}
-    //       onKeydownEnter={onExitEditMode}
-    //     />
-    //   ) : (
-    //     <div class="table-v2-inline-editing-trigger" onClick={onEnterEditMode}>
-    //       {rowData[column.dataKey!]}
-    //     </div>
-    //   )
-    // },
-  },
-  {
-    key: 'c1',
-    dataKey: 'c1',
-    title: 'Col1',
-    width: 150,
-  },
-  {
-    key: 'c2',
-    dataKey: 'c2',
-    title: 'Col2',
-    width: 150,
-  },
-]
-
-const data = ref([
-  { c0: 1, c1: 'a', c2: 1 },
-  { c0: 2, c1: 'b', c2: 2 },
-  { c0: 3, c1: 'c', c2: 3 },
+const columns = ref([
+  { key: 'c1', title: '系列1', color: '#7a5050ff' },
+  { key: 'c2', title: '系列2', color: '#9c1313ff' },
 ])
+const data = ref([
+  { c1: 10, c2: 5 },
+  { c1: 13, c2: 6 },
+  { c1: 14, c2: 7 },
+])
+
+const addRow = (index) => {
+  if (index === data.value.length - 1) {
+    const newRow = {} // Create a new row
+    columns.value.forEach((column) => {
+      newRow[column.key] = ''
+    })
+    data.value.push(newRow)
+  }
+  console.log(columns.value)
+  console.log(data.value)
+}
+
+const addColumn = (clickedColumn) => {
+  const lastColumn = columns.value[columns.value.length - 1]
+  if (clickedColumn === lastColumn) {
+    const newIndex = columns.value.length + 1
+    const newKey = `c${newIndex}`
+    const newTitle = `系列${newIndex}`
+    columns.value.push({ key: newKey, title: newTitle })
+
+    data.value.forEach((row) => {
+      row[newKey] = ''
+    })
+  }
+}
 
 const activeNames = ref(['1', '2', '3', '4'])
 const innerElement = ref({})
@@ -310,12 +245,6 @@ async function alignAction(item) {
   await nextTick()
   store.commit('updateRect')
 }
-async function uploadImgDone(img) {
-  store.commit('setShowMoveable', false)
-  await api.material.addMyPhoto(img)
-  innerElement.value.url = img.url
-  store.commit('setShowMoveable', true)
-}
 
 watch(
   dActiveElement,
@@ -343,8 +272,6 @@ watch(
   },
   { deep: true },
 )
-
-// change()
 </script>
 
 <style lang="less" scoped>

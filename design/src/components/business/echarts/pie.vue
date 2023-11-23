@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, Ref, watch, nextTick, defineExpose } from 'vue'
+import { onMounted, ref, Ref, watch } from 'vue'
 import { debounce } from 'throttle-debounce'
 import { EChartsOption } from 'echarts'
 import { useECharts } from '@/components/business/echarts'
