@@ -105,5 +105,8 @@ static/*
 !static/img
 !static/material
 !static/template
+!static/echartcover
+!static/echartdata
+!static/echartoption
 
 .venv

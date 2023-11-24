@@ -6,7 +6,7 @@ import json
 
 from fuadmin.settings import BASE_DIR
 from system.models import Dept, Menu, MenuButton, Role, Post, Users, Dict, DictItem, CategoryDict, ApiWhiteList, SystemConfig
-from design.models import Templ, Cate, Font, Image, Material, UImage, UPoster
+from design.models import Templ, Cate, Font, Image, Material, UImage, UPoster, Echart
 from utils.core_initialize import CoreInitialize
 from django_celery_beat.models import CrontabSchedule, IntervalSchedule, PeriodicTask
 
@@ -26,7 +26,7 @@ class Initialize(CoreInitialize):
                     "modifier": code_dict.get('modifier', None),
                     "belong_dept": code_dict.get('belong_dept', None),
                     "update_datetime": datetime.datetime.now(),
-                    "update_datetime": datetime.datetime.now(),
+                    "create_datetime": datetime.datetime.now(),
                     "parent_id": parent_id,
                     "creator_id": 1,
                     'sort': i+1,
@@ -71,7 +71,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": user.get('belong_dept', None),
                         "modifier": user.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('Users数据已经存在，无需初始化')
@@ -99,7 +99,7 @@ class Initialize(CoreInitialize):
                     "keepalive": code_dict.get('keepalive', None),
                     "hide_menu": code_dict.get('hide_menu', None),
                     "update_datetime": datetime.datetime.now(),
-                    "update_datetime": datetime.datetime.now(),
+                    "create_datetime": datetime.datetime.now(),
                     "parent_id": parent_id,
                     "creator_id": 1,
                     'sort': i+1,
@@ -116,7 +116,7 @@ class Initialize(CoreInitialize):
                             "belong_dept": code_dict.get('belong_dept', None),
                             "modifier": code_dict.get('modifier', None),
                             "update_datetime": datetime.datetime.now(),
-                            "update_datetime": datetime.datetime.now(),
+                            "create_datetime": datetime.datetime.now(),
                             "menu_id": menu.id,
                         })
                 if code_dict.get('children', None):
@@ -141,7 +141,7 @@ class Initialize(CoreInitialize):
                     "modifier": code_dict.get('modifier', None),
                     "belong_dept": code_dict.get('belong_dept', None),
                     "update_datetime": datetime.datetime.now(),
-                    "update_datetime": datetime.datetime.now(),
+                    "create_datetime": datetime.datetime.now(),
                     "sort": i+1,
                     "parent_id": parent_id,
                     "creator_id": 1,
@@ -182,7 +182,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": role.get('belong_dept', None),
                         "modifier": role.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('角色数据已经存在，无需初始化')
@@ -203,7 +203,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('接口白名单数据已经存在，无需初始化')
@@ -275,7 +275,7 @@ class Initialize(CoreInitialize):
                     "modifier": code_dict.get('modifier', None),
                     "belong_dept": code_dict.get('belong_dept', None),
                     "update_datetime": datetime.datetime.now(),
-                    "update_datetime": datetime.datetime.now(),
+                    "create_datetime": datetime.datetime.now(),
                     "parent_id": parent_id,
                     "creator_id": 1,
                     'sort': i+1,
@@ -340,7 +340,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('poster_tempalte数据已经存在，无需初始化')
@@ -367,7 +367,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('poster_tempalte数据已经存在，无需初始化')
@@ -393,7 +393,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('image_tempalte数据已经存在，无需初始化')
@@ -419,7 +419,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('material_tempalte数据已经存在，无需初始化')
@@ -439,7 +439,7 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('uimage_tempalte数据已经存在，无需初始化')
@@ -463,10 +463,51 @@ class Initialize(CoreInitialize):
                         "belong_dept": api.get('belong_dept', None),
                         "modifier": api.get('modifier', None),
                         "update_datetime": datetime.datetime.now(),
-                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
                     })
             else:
                 print('uposter_tempalte数据已经存在，无需初始化')
+
+    def init_poster_echart(self):  # 初始化 echart组件
+        with open(os.path.join(BASE_DIR, 'system', 'management', 'commands', 'init_poster_echart.json'), 'r', encoding="utf-8") as load_f:
+            api_list = json.load(load_f)
+            if Echart.objects.count() == 0:
+                for api in api_list:
+                    Echart.objects.create(**{
+                       "labelNames": api.get('labelNames', None),
+                        "wgtShownm": api.get('wgtShownm', None),
+                        "wgtRestype": api.get('wgtRestype', None),
+                        "merchantName": api.get('merchantName', None),
+                        "labelIds": api.get('labelIds', None),
+                        "bgColor": api.get('bgColor', None),
+                        "chartId": api.get('chartId', None),
+                        "merchantId": api.get('merchantId', None),
+                        "wgtCover": api.get('wgtCover', None),
+                        "ddcoptions": api.get('ddcoptions', None),
+                        "wgtName": api.get('wgtName', None),
+                        "height": api.get('height', 0),
+                        "categoryLevel1": api.get('categoryLevel1', None),
+                        "wgtId": api.get('wgtId', None),
+                        "categoryLevel2": api.get('categoryLevel2', None),
+                        "dyndsUrl": api.get('dyndsUrl', None),
+                        "xmlTag": api.get('xmlTag', None),
+                        "ddcdata": api.get('ddcdata', None),
+                        "width": api.get('width', 0),
+                        "wgtSecover": api.get('wgtSecover', None),
+                        "groupCode": api.get('groupCode', None),
+                        "labelName": api.get('labelName', None),
+                        "labelId": api.get('labelId', None),
+
+                        "sort": api.get('sortValue', None),
+                        "remark": api.get('remark', None),
+                        "creator_id": 1,
+                        "belong_dept": api.get('belong_dept', None),
+                        "modifier": api.get('modifier', None),
+                        "update_datetime": datetime.datetime.now(),
+                        "create_datetime": datetime.datetime.now(),
+                    })
+            else:
+                print('echart_tempalte数据已经存在，无需初始化')
 
     def run(self):
         self.init_dept()
@@ -485,6 +526,7 @@ class Initialize(CoreInitialize):
         self.init_poster_material()
         self.init_poster_uimage()
         self.init_poster_uposter()
+        self.init_poster_echart()
         
 
 

@@ -144,3 +144,33 @@ class Font(CoreModel):
         verbose_name = '字体'
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
+
+class Echart(CoreModel):
+    groupCode = models.CharField(max_length=255, verbose_name="组别代码", null=True, blank=True, help_text="组别代码")
+    labelName = models.CharField(max_length=255, verbose_name="标签名称", null=True, blank=True, help_text="标签名称")
+    labelId = models.CharField(max_length=255, verbose_name="标签ID", null=True, blank=True, help_text="标签ID")
+    labelNames = models.CharField(max_length=255, verbose_name="标签名称集合", null=True, blank=True, help_text="标签名称集合")
+    wgtShownm = models.CharField(max_length=255, verbose_name="控件显示名称", null=True, blank=True, help_text="控件显示名称")
+    wgtRestype = models.CharField(max_length=255, verbose_name="控件资源类型", null=True, blank=True, help_text="控件资源类型")
+    merchantName = models.CharField(max_length=255, verbose_name="商家名称", null=True, blank=True, help_text="商家名称")
+    labelIds = models.CharField(max_length=255, verbose_name="标签ID集合", null=True, blank=True, help_text="标签ID集合")
+    bgColor = models.CharField(max_length=255, verbose_name="背景颜色", null=True, blank=True, help_text="背景颜色")
+    chartId = models.CharField(max_length=255, verbose_name="图表ID", null=True, blank=True, help_text="图表ID")
+    merchantId = models.IntegerField(null=True, verbose_name="商家ID", help_text="商家ID")
+    wgtCover = models.CharField(max_length=255, verbose_name="控件封面", null=True, blank=True, help_text="控件封面")
+    ddcoptions = models.CharField(max_length=255, verbose_name="选项", null=True, blank=True, help_text="选项")
+    wgtName = models.CharField(max_length=255, verbose_name="控件名称", null=True, blank=True, help_text="控件名称")
+    categoryLevel1 = models.CharField(max_length=255, verbose_name="一级分类", null=True, blank=True, help_text="一级分类")
+    wgtId = models.CharField(max_length=255, verbose_name="控件ID", null=True, blank=True, help_text="控件ID")
+    categoryLevel2 = models.CharField(max_length=255, verbose_name="二级分类", null=True, blank=True, help_text="二级分类")
+    dyndsUrl = models.CharField(max_length=255, verbose_name="动态URL", null=True, blank=True, help_text="动态URL")
+    xmlTag = models.CharField(max_length=255, verbose_name="XML标签", null=True, blank=True, help_text="XML标签")
+    ddcdata = models.CharField(max_length=255, verbose_name="数据", null=True, blank=True, help_text="数据")
+    height = models.IntegerField(null=True, verbose_name="高度", help_text="高度")
+    width = models.IntegerField(null=True, verbose_name="宽度", help_text="宽度")
+    wgtSecover = models.CharField(max_length=255, verbose_name="控件封面2", null=True, blank=True, help_text="控件封面2")
+
+    class Meta:
+        db_table = "echart"
+        verbose_name = 'echart图表控件'
+        verbose_name_plural = verbose_name

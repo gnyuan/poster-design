@@ -6,13 +6,28 @@
  * @LastEditTime: 2023-10-09 00:42:48
 -->
 <template>
-  <el-dialog v-model="show" title="AI 智能抠图" align-center width="650" @close="handleClose">
-    <uploader v-if="!rawImage" :hold="true" :drag="true" :multiple="true" class="uploader" @load="selectFile">
+  <el-dialog
+    v-model="show"
+    title="AI 智能抠图"
+    align-center
+    width="650"
+    @close="handleClose"
+  >
+    <uploader
+      v-if="!rawImage"
+      :hold="true"
+      :drag="true"
+      :multiple="true"
+      class="uploader"
+      @load="selectFile"
+    >
       <div class="uploader__box">
         <upload-filled style="width: 64px; height: 64px" />
         <div class="el-upload__text">在此拖入或选择<em>上传图片</em></div>
       </div>
-      <div class="el-upload__tip">服务器带宽过低，为了更好的体验，请上传 2M 内的图片</div>
+      <div class="el-upload__tip">
+        服务器带宽过低，为了更好的体验，请上传 2M 内的图片
+      </div>
     </uploader>
     <el-progress v-if="!cutImage && progressText" :percentage="progress">
       <el-button text>
@@ -20,19 +35,57 @@
       </el-button>
     </el-progress>
     <div class="content">
-      <div v-show="rawImage" v-loading="!cutImage" :style="{ width: offsetWidth ? offsetWidth + 'px' : '100%' }" class="scan-effect transparent-bg">
-        <img ref="raw" :style="{ 'clip-path': 'inset(0 0 0 ' + percent + '%)' }" :src="rawImage" alt="" />
-        <img v-show="cutImage" :src="cutImage" alt="结果图像" @mousemove="mousemove" />
-        <div v-show="cutImage" :style="{ left: percent + '%' }" class="scan-line"></div>
+      <div
+        v-show="rawImage"
+        v-loading="!cutImage"
+        :style="{ width: offsetWidth ? offsetWidth + 'px' : '100%' }"
+        class="scan-effect transparent-bg"
+      >
+        <img
+          ref="raw"
+          :style="{ 'clip-path': 'inset(0 0 0 ' + percent + '%)' }"
+          :src="rawImage"
+          alt=""
+        />
+        <img
+          v-show="cutImage"
+          :src="cutImage"
+          alt="结果图像"
+          @mousemove="mousemove"
+        />
+        <div
+          v-show="cutImage"
+          :style="{ left: percent + '%' }"
+          class="scan-line"
+        ></div>
       </div>
     </div>
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button v-show="rawImage && toolModel" @click="clear">清空重选</el-button>
-        <el-button v-show="cutImage" type="primary" plain @click="edit">进入编辑模式</el-button>
-        <el-button v-show="cutImage && toolModel" type="primary" plain @click="download"> 下载 </el-button>
-        <el-button v-show="cutImage && !toolModel" v-loading="loading" type="primary" plain @click="cutDone"> {{ loading ? '上传中..' : '完成抠图' }} </el-button>
+        <el-button v-show="rawImage && toolModel" @click="clear"
+          >清空重选</el-button
+        >
+        <el-button v-show="cutImage" type="primary" plain @click="edit"
+          >进入编辑模式</el-button
+        >
+        <el-button
+          v-show="cutImage && toolModel"
+          type="primary"
+          plain
+          @click="download"
+        >
+          下载
+        </el-button>
+        <el-button
+          v-show="cutImage && !toolModel"
+          v-loading="loading"
+          type="primary"
+          plain
+          @click="cutDone"
+        >
+          {{ loading ? '上传中..' : '完成抠图' }}
+        </el-button>
       </span>
     </template>
     <ImageExtraction ref="matting" />
@@ -74,7 +127,7 @@ export default defineComponent({
     let isRuning: boolean = false
 
     const selectFile = async (file: File) => {
-      if (file.size > 1024 * 1024 * 2) {
+      if (file.size > 1024 * 1024 * 10) {
         alert('上传图片超出限制')
         return false
       }
@@ -85,15 +138,18 @@ export default defineComponent({
       state.rawImage = URL.createObjectURL(file)
       fileName = file.name
       // 返回抠图结果
-      const result: any = await api.ai.upload(file, (up: number, dp: number) => {
-        if (dp) {
-          state.progressText = dp === 100 ? '' : '导入中..'
-          state.progress = dp
-        } else {
-          state.progressText = up < 100 ? '上传中..' : '正在处理，请稍候..'
-          state.progress = up < 100 ? up : 0
-        }
-      })
+      const result: any = await api.ai.upload(
+        file,
+        (up: number, dp: number) => {
+          if (dp) {
+            state.progressText = dp === 100 ? '' : '导入中..'
+            state.progress = dp
+          } else {
+            state.progressText = up < 100 ? '上传中..' : '正在处理，请稍候..'
+            state.progress = up < 100 ? up : 0
+          }
+        },
+      )
       if (result.type !== 'application/json') {
         const resultImage = URL.createObjectURL(result)
         state.rawImage && (state.cutImage = resultImage)
