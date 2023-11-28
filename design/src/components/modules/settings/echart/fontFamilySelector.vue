@@ -30,7 +30,7 @@ export default {
     const fontOptions = [
       { name: 'Arial', label: 'Arial' },
       { name: 'Helvetica', label: 'Helvetica' },
-      // Add more font options here
+      { name: 'HarmonyOS_Sans_SC_Regular', label: 'HarmonyOS_Sans_SC_Regular' },
     ]
 
     const handleFontChange = debounce(() => {

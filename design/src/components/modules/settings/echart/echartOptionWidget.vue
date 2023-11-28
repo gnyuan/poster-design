@@ -14,18 +14,27 @@
     <div v-if="type === 'input'">
       <el-input v-model="inputValue" @change="handleChange" />
     </div>
+    <div v-if="type === 'font-family-selector'">
+      <font-family-selector v-model="inputValue" @change="handleChange" />
+    </div>
+    <div v-if="type === 'color-picker'">
+      <el-color-picker v-model="inputValue" @change="handleChange" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, defineProps, onBeforeMount, reactive } from 'vue'
-import { ElInputNumber, ElSwitch, ElInput } from 'element-plus'
+import { ElInputNumber, ElSwitch, ElInput, ElColorPicker } from 'element-plus'
+import fontFamilySelector from './fontFamilySelector.vue'
 
 const props = defineProps({
   field: String,
   type: String,
-  // default: null,
-  init_value: null,
+  init_echartopts: {
+    type: Object,
+    default: () => ({}),
+  },
   props: {
     type: Object,
     default: () => ({}),
@@ -34,9 +43,22 @@ const props = defineProps({
 
 const emit = defineEmits(['update-options'])
 
-const inputValue = ref(props.init_value)
-// const inputValue = ref(props.default || 0)
-// console.log('my default', props.default, inputValue.value)
+function getValueByPath(obj, path) {
+  const keys = path.split('.')
+  let value = obj
+  for (const key of keys) {
+    if (value && typeof value === 'object' && key in value) {
+      value = value[key]
+    } else {
+      value = undefined
+      break
+    }
+  }
+  console.log('hhhh', obj, path, value)
+  return value
+}
+
+const inputValue = ref(getValueByPath(props.init_echartopts, props.field))
 
 const min = ref(props.props?.min || 0)
 const max = ref(props.props?.max || Infinity)

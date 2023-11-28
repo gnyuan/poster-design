@@ -5,7 +5,6 @@ export const titleInit = {
       title: '显示标题',
       field: 'title.0.show',
       type: 'switch',
-      // default: true,
     },
     {
       title: '图表标题',
@@ -15,16 +14,15 @@ export const titleInit = {
         placeholder: '请输入标题内容',
       },
     },
-    // {
-    //   title: '标题字体',
-    //   field: 'title.0.textStyle.fontFamily',
-    //   type: 'font-family-selector',
-    // },
+    {
+      title: '标题字体',
+      field: 'title.0.textStyle.fontFamily',
+      type: 'font-family-selector',
+    },
     {
       title: '标题字号',
       field: 'title.0.textStyle.fontSize',
       type: 'number-input',
-      // default: 30,
       props: {
         min: 10,
         max: 100,
@@ -35,11 +33,11 @@ export const titleInit = {
     //   field: 'title.0.left',
     //   type: 'text-align-selector',
     // },
-    // {
-    //   title: '标题颜色',
-    //   field: 'title.0.textStyle.color',
-    //   type: 'color-picker',
-    // },
+    {
+      title: '标题颜色',
+      field: 'title.0.textStyle.color',
+      type: 'color-picker',
+    },
     {
       title: '显示数据来源',
       field: 'title.1.show',
@@ -53,16 +51,15 @@ export const titleInit = {
         placeholder: '数据来源: 思迪信息',
       },
     },
-    // {
-    //   title: '数据来源字体',
-    //   field: 'title.1.textStyle.fontFamily',
-    //   type: 'font-family-selector',
-    // },
+    {
+      title: '数据来源字体',
+      field: 'title.1.textStyle.fontFamily',
+      type: 'font-family-selector',
+    },
     {
       title: '数据来源字号',
       field: 'title.1.textStyle.fontSize',
       type: 'number-input',
-      // default: 20,
       props: {
         min: 10,
         max: 100,
@@ -73,11 +70,11 @@ export const titleInit = {
     //   field: 'title.1.left',
     //   type: 'text-align-selector',
     // },
-    // {
-    //   title: '数据来源颜色',
-    //   field: 'title.1.textStyle.color',
-    //   type: 'color-picker',
-    // },
+    {
+      title: '数据来源颜色',
+      field: 'title.1.textStyle.color',
+      type: 'color-picker',
+    },
   ],
 }
 

@@ -39,40 +39,10 @@
               :key="index"
               :field="item.field"
               :type="item.type"
-              :init_value="6"
+              :init_echartopts="dActiveElement.echartopts"
               @update-options="updateEchartsOptions"
             />
           </div>
-        </div>
-      </el-collapse-item>
-      <el-collapse-item title="样式设计" name="样式设计">
-        <div style="flex-wrap: nowrap" class="line-layout">
-          <el-switch
-            v-model="dActiveElement.legendshow"
-            active-text="展示标题"
-            inactive-text="隐藏标题"
-            @finish="(value) => finish('legendshow', value)"
-          />
-        </div>
-        <br />
-        <div class="slide-wrap">
-          <number-slider
-            v-model="dActiveElement.series_radius"
-            label="环宽"
-            :step="2"
-            :maxValue="80"
-            @finish="(value) => finish('series_radius', value)"
-          />
-        </div>
-        <br />
-        <div class="slide-wrap">
-          <number-slider
-            v-model="dActiveElement.opacity"
-            label="不透明"
-            :step="0.01"
-            :maxValue="1"
-            @finish="(value) => finish('opacity', value)"
-          />
         </div>
       </el-collapse-item>
       <el-collapse-item title="数据" name="数据">
@@ -101,24 +71,6 @@
           </tbody>
         </table>
       </el-collapse-item>
-      <el-collapse-item title="颜色" name="颜色">
-        <template v-for="column in columns" :key="column.key">
-          <color-select
-            v-model="column.color"
-            @finish="(value) => finish('dotColor', value)"
-          />
-        </template>
-      </el-collapse-item>
-
-      <el-collapse-item title="echart配置" name="echart配置">
-        <text-input-area
-          v-model="dActiveElement.otheropts"
-          :max="40"
-          label=""
-          @finish="(value) => finish('otheropts', value)"
-        />
-      </el-collapse-item>
-
       <br />
       <icon-item-select
         class="style-item"
@@ -160,6 +112,7 @@ const titlesection = ref(titleInit)
 
 function updateEchartsOptions(option_path, option_value) {
   console.log(option_path, option_value, 'in updateEchartsOptions')
+  console.log(dActiveElement.value)
 
   store.dispatch('updateWidgetData', {
     uuid: dActiveElement.value.uuid,
@@ -205,15 +158,7 @@ const addColumn = (clickedColumn) => {
   }
 }
 
-const activeNames = ref([
-  '位置尺寸',
-  '文本设置',
-  '样式设计',
-  '数据',
-  '颜色',
-  'echart配置',
-])
-// const tag = ref(false)
+const activeNames = ref(['位置尺寸', '文本设置'])
 const lastUuid = ref(-1)
 const ingoreKeys = [
   'left',

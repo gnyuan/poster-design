@@ -64,15 +64,14 @@ export default {
     height: 300,
     left: 0,
     top: 0,
-    legendshow: true, // 是否展示图例
-    series_radius: 40, // 环宽度
     zoom: 1,
     transform: '',
     radius: 0,
     opacity: 1,
     parent: '-1',
     setting: [],
-    opts: {},
+    opts: {}, // 当前的echart具体某项配置的key以及value
+    echartopts: {}, // 当前的echart全部配置
     record: {
       width: 0,
       height: 0,
@@ -115,6 +114,7 @@ export default {
     await this.$nextTick()
     this.params.rotate &&
       (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
+    console.log(this.echartOptions)
   },
 
   async created() {
@@ -209,14 +209,23 @@ export default {
         })
       })
 
-      console.log('!!!!!!!!', mergedOptions)
-
-      this.echartOptions = mergedOptions
+      console.log('!!!!!!!!deep copy this to this.echartOpions', mergedOptions)
+      console.log(123)
+      this.echartOptions = JSON.parse(JSON.stringify(mergedOptions))
+      console.log(321)
     } catch (error) {
       console.error('获取数据时出错：', error)
       // 处理错误情况
       console.log('error!')
     }
+    console.log('!!!!!!!!!!!!mounted and set echartopts!!!!')
+    this.updateWidgetData({
+      uuid: this.dActiveElement.uuid,
+      key: 'echartopts',
+      value: this.echartOptions,
+      pushHistory: true,
+    })
+    console.log('!!!!!!!!!!!!mounted and set echartopts!!!!')
   },
 
   methods: {
