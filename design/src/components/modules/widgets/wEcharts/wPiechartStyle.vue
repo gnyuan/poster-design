@@ -1,26 +1,26 @@
 <template>
   <div id="w-image-style">
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="位置尺寸" name="1">
+      <el-collapse-item title="位置尺寸" name="位置尺寸">
         <div class="line-layout">
           <number-input
-            v-model="innerElement.left"
+            v-model="dActiveElement.left"
             label="X"
             @finish="(value) => finish('left', value)"
           />
           <number-input
-            v-model="innerElement.top"
+            v-model="dActiveElement.top"
             label="Y"
             @finish="(value) => finish('top', value)"
           />
           <number-input
-            v-model="innerElement.width"
+            v-model="dActiveElement.width"
             style="margin-top: 0.5rem"
             label="宽"
             @finish="(value) => finish('width', value)"
           />
           <number-input
-            v-model="innerElement.height"
+            v-model="dActiveElement.height"
             style="margin-top: 0.5rem"
             label="高"
             @finish="(value) => finish('height', value)"
@@ -31,10 +31,24 @@
           <template #prepend>UUID</template>
         </el-input>
       </el-collapse-item>
-      <el-collapse-item title="样式设计" name="2">
+      <el-collapse-item :title="titlesection.name" :name="titlesection.name">
+        <div v-for="(item, index) in titlesection.items" class="setting-option">
+          <div>{{ item.title }}</div>
+          <div class="right">
+            <echart-option-widget
+              :key="index"
+              :field="item.field"
+              :type="item.type"
+              :init_value="6"
+              @update-options="updateEchartsOptions"
+            />
+          </div>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="样式设计" name="样式设计">
         <div style="flex-wrap: nowrap" class="line-layout">
           <el-switch
-            v-model="innerElement.legendshow"
+            v-model="dActiveElement.legendshow"
             active-text="展示标题"
             inactive-text="隐藏标题"
             @finish="(value) => finish('legendshow', value)"
@@ -43,7 +57,7 @@
         <br />
         <div class="slide-wrap">
           <number-slider
-            v-model="innerElement.series_radius"
+            v-model="dActiveElement.series_radius"
             label="环宽"
             :step="2"
             :maxValue="80"
@@ -53,7 +67,7 @@
         <br />
         <div class="slide-wrap">
           <number-slider
-            v-model="innerElement.opacity"
+            v-model="dActiveElement.opacity"
             label="不透明"
             :step="0.01"
             :maxValue="1"
@@ -61,7 +75,7 @@
           />
         </div>
       </el-collapse-item>
-      <el-collapse-item title="数据" name="3">
+      <el-collapse-item title="数据" name="数据">
         <table>
           <thead>
             <tr>
@@ -87,7 +101,7 @@
           </tbody>
         </table>
       </el-collapse-item>
-      <el-collapse-item title="颜色" name="4">
+      <el-collapse-item title="颜色" name="颜色">
         <template v-for="column in columns" :key="column.key">
           <color-select
             v-model="column.color"
@@ -96,9 +110,9 @@
         </template>
       </el-collapse-item>
 
-      <el-collapse-item title="echart配置" name="5">
+      <el-collapse-item title="echart配置" name="echart配置">
         <text-input-area
-          v-model="innerElement.otheropts"
+          v-model="dActiveElement.otheropts"
           :max="40"
           label=""
           @finish="(value) => finish('otheropts', value)"
@@ -129,13 +143,31 @@ import numberSlider from '../../settings/numberSlider.vue'
 import textInputArea from '../../settings/textInputArea.vue'
 import colorSelect from '../../settings/colorSelect.vue'
 
+import fontFamilySelector from '../../settings/echart/fontFamilySelector.vue'
+import echartOptionWidget from '../../settings/echart/echartOptionWidget.vue'
+
 import layerIconList from '@/assets/data/LayerIconList'
 import alignIconList from '@/assets/data/AlignListData'
+
+import { titleInit } from './echartsettings'
 
 defineOptions({
   name: 'w-image-style',
   inheritAttrs: false,
 })
+
+const titlesection = ref(titleInit)
+
+function updateEchartsOptions(option_path, option_value) {
+  console.log(option_path, option_value, 'in updateEchartsOptions')
+
+  store.dispatch('updateWidgetData', {
+    uuid: dActiveElement.value.uuid,
+    key: 'opts',
+    value: { k: option_path, v: option_value },
+    pushHistory: true,
+  })
+}
 
 const columns = ref([
   { key: 'c1', title: '系列1', color: '#7a5050ff' },
@@ -173,9 +205,15 @@ const addColumn = (clickedColumn) => {
   }
 }
 
-const activeNames = ref(['1', '2', '3', '4'])
-const innerElement = ref({})
-const tag = ref(false)
+const activeNames = ref([
+  '位置尺寸',
+  '文本设置',
+  '样式设计',
+  '数据',
+  '颜色',
+  'echart配置',
+])
+// const tag = ref(false)
 const lastUuid = ref(-1)
 const ingoreKeys = [
   'left',
@@ -190,54 +228,31 @@ const ingoreKeys = [
 ]
 const store = useStore()
 const dActiveElement = computed(() => store.getters.dActiveElement)
-const dMoving = computed(() => store.getters.dMoving)
-
-function change() {
-  tag.value = true
-  innerElement.value = JSON.parse(JSON.stringify(dActiveElement.value))
-}
-
-function changeValue() {
-  if (tag.value) {
-    tag.value = false
-    return
-  }
-  if (dMoving.value) {
-    return
-  }
-  for (let key in innerElement.value) {
-    if (ingoreKeys.indexOf(key) !== -1) {
-      dActiveElement.value[key] = innerElement.value[key]
-    } else if (
-      key !== 'setting' &&
-      key !== 'record' &&
-      innerElement.value[key] !== dActiveElement.value[key]
-    ) {
-      store.dispatch('updateWidgetData', {
-        uuid: dActiveElement.value.uuid,
-        key: key,
-        value: innerElement.value[key],
-      })
-    }
-  }
-}
+// const dMoving = computed(() => store.getters.dMoving)
 
 function finish(key, value) {
-  store.dispatch('updateWidgetData', {
-    uuid: dActiveElement.value.uuid,
-    key: key,
-    value: value,
-    pushHistory: true,
-  })
+  console.log('never call finish!!!!!!')
+  if (!ingoreKeys.includes(key)) {
+    store.dispatch('updateWidgetData', {
+      uuid: dActiveElement.value.uuid,
+      key: key,
+      value: value,
+      pushHistory: true,
+    })
+  } else {
+    console.log(
+      `The property '${key}' is in the ingoreKeys list and won't be updated.`,
+    )
+  }
 }
 function layerAction(item) {
-  console.log(item)
   store.dispatch('updateLayerIndex', {
     uuid: dActiveElement.value.uuid,
     value: item.value,
   })
 }
 async function alignAction(item) {
+  console.log(dActiveElement.value, 9898)
   store.dispatch('updateAlign', {
     align: item.value,
     uuid: dActiveElement.value.uuid,
@@ -245,36 +260,22 @@ async function alignAction(item) {
   await nextTick()
   store.commit('updateRect')
 }
-
-watch(
-  dActiveElement,
-  (newValue, oldValue) => {
-    change()
-    if (newValue.uuid === -1) {
-      console.log(4444)
-      innerElement.value.cropEdit = false
-      store.dispatch('updateWidgetData', {
-        uuid: lastUuid.value,
-        key: 'cropEdit',
-        value: false,
-      })
-    } else {
-      lastUuid.value = newValue.uuid
-    }
-  },
-  { deep: true },
-)
-
-watch(
-  innerElement,
-  (newValue, oldValue) => {
-    changeValue()
-  },
-  { deep: true },
-)
 </script>
 
 <style lang="less" scoped>
+.setting-option {
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-option > div {
+  width: 70%;
+}
+
+.right {
+  margin-left: auto; /* 将右侧元素推到最右边 */
+}
+
 .slide-wrap {
   width: 100%;
   padding: 16px;

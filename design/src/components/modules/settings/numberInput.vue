@@ -13,7 +13,17 @@
   </div> -->
   <div class="number-input2">
     <div class="input-wrap" @click="edit">
-      <input :class="{ 'real-input': true, disable: !editable }" type="text" :value="modelValue" :readonly="editable ? false : 'readonly'" @input="updateValue($event.target.value)" @focus="focusInput" @blur="blurInput" @keyup="verifyNumber" @keydown="(e) => opNumber(e)" />
+      <input
+        :class="{ 'real-input': true, disable: !editable }"
+        type="text"
+        :value="modelValue"
+        :readonly="editable ? false : 'readonly'"
+        @input="updateValue($event.target.value)"
+        @focus="focusInput"
+        @blur="blurInput"
+        @keyup="verifyNumber"
+        @keydown="(e) => opNumber(e)"
+      />
     </div>
     <span style="color: rgba(0, 0, 0, 0.45)">{{ label }}</span>
     <!-- <div :class="{ 'input-wrap': true, active: inputBorder }">
