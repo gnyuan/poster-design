@@ -31,20 +31,34 @@
           <template #prepend>UUID</template>
         </el-input>
       </el-collapse-item>
-      <el-collapse-item :title="titlesection.name" :name="titlesection.name">
-        <div v-for="(item, index) in titlesection.items" class="setting-option">
-          <div>{{ item.title }}</div>
-          <div class="right">
-            <echart-option-widget
-              :key="index"
-              :field="item.field"
-              :type="item.type"
-              :init_echartopts="dActiveElement.echartopts"
-              @update-options="updateEchartsOptions"
-            />
+      <template
+        v-for="(section, sectionindex) in optionList"
+        :key="sectionindex"
+      >
+        <el-collapse-item :title="section.name" :name="section.name">
+          <div
+            v-for="(item, index) in section.items"
+            :key="index"
+            class="setting-option flex items-center justify-between"
+          >
+            <div class="flex items-center">{{ item.title }}</div>
+            <div class="right ml-4">
+              <echart-option-widget
+                :key="index"
+                :title="item.title"
+                :field="item.field"
+                :type="item.type"
+                :options="item.options || []"
+                :value="item.value"
+                :emit="item.emit || []"
+                :emitPrefix="item.emitPrefix"
+                :init_echartopts="dActiveElement.echartopts"
+                @update-options="updateEchartsOptions"
+              />
+            </div>
           </div>
-        </div>
-      </el-collapse-item>
+        </el-collapse-item>
+      </template>
       <el-collapse-item title="数据" name="数据">
         <table>
           <thead>
@@ -88,7 +102,7 @@
 import { computed, nextTick, watch, ref } from 'vue'
 import { useStore } from 'vuex'
 
-import { ElSwitch, ElInput, ElSlider, ElCollapse } from 'element-plus'
+import { ElSwitch, ElInput, ElCollapse } from 'element-plus'
 import numberInput from '../../settings/numberInput.vue'
 import iconItemSelect from '../../settings/iconItemSelect.vue'
 import numberSlider from '../../settings/numberSlider.vue'
@@ -101,19 +115,28 @@ import echartOptionWidget from '../../settings/echart/echartOptionWidget.vue'
 import layerIconList from '@/assets/data/LayerIconList'
 import alignIconList from '@/assets/data/AlignListData'
 
-import { titleInit } from './echartsettings'
+import {
+  titleInit,
+  animationUpdate,
+  chartUpdate,
+  dataFormat,
+  moreUpdate,
+} from './echartsettings'
 
 defineOptions({
   name: 'w-image-style',
   inheritAttrs: false,
 })
 
-const titlesection = ref(titleInit)
+const optionList = [
+  // titleInit,
+  // animationUpdate,
+  chartUpdate,
+  dataFormat,
+  moreUpdate,
+]
 
 function updateEchartsOptions(option_path, option_value) {
-  console.log(option_path, option_value, 'in updateEchartsOptions')
-  console.log(dActiveElement.value)
-
   store.dispatch('updateWidgetData', {
     uuid: dActiveElement.value.uuid,
     key: 'opts',
@@ -140,8 +163,6 @@ const addRow = (index) => {
     })
     data.value.push(newRow)
   }
-  console.log(columns.value)
-  console.log(data.value)
 }
 
 const addColumn = (clickedColumn) => {
@@ -158,7 +179,15 @@ const addColumn = (clickedColumn) => {
   }
 }
 
-const activeNames = ref(['位置尺寸', '文本设置'])
+const activeNames = ref([
+  '位置尺寸',
+  '文本设置',
+  '动画设置',
+  '图表设置',
+  '数据格式',
+  '更多设置',
+])
+// const activeNames = ref(['动画设置'])
 const lastUuid = ref(-1)
 const ingoreKeys = [
   'left',
@@ -190,14 +219,14 @@ function finish(key, value) {
     )
   }
 }
-function layerAction(item) {
+async function layerAction(item) {
   store.dispatch('updateLayerIndex', {
     uuid: dActiveElement.value.uuid,
     value: item.value,
   })
+  // TODO updateRect 需要在窗口大小变动的时候执行
 }
 async function alignAction(item) {
-  console.log(dActiveElement.value, 9898)
   store.dispatch('updateAlign', {
     align: item.value,
     uuid: dActiveElement.value.uuid,
@@ -208,19 +237,6 @@ async function alignAction(item) {
 </script>
 
 <style lang="less" scoped>
-.setting-option {
-  display: flex;
-  justify-content: space-between;
-}
-
-.setting-option > div {
-  width: 70%;
-}
-
-.right {
-  margin-left: auto; /* 将右侧元素推到最右边 */
-}
-
 .slide-wrap {
   width: 100%;
   padding: 16px;

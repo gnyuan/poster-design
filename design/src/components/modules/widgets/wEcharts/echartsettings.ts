@@ -28,11 +28,11 @@ export const titleInit = {
         max: 100,
       },
     },
-    // {
-    //   title: '标题对齐',
-    //   field: 'title.0.left',
-    //   type: 'text-align-selector',
-    // },
+    {
+      title: '标题对齐',
+      field: 'title.0.left',
+      type: 'text-align-selector',
+    },
     {
       title: '标题颜色',
       field: 'title.0.textStyle.color',
@@ -65,11 +65,11 @@ export const titleInit = {
         max: 100,
       },
     },
-    // {
-    //   title: '数据来源对齐',
-    //   field: 'title.1.left',
-    //   type: 'text-align-selector',
-    // },
+    {
+      title: '数据来源对齐',
+      field: 'title.1.left',
+      type: 'text-align-selector',
+    },
     {
       title: '数据来源颜色',
       field: 'title.1.textStyle.color',
@@ -78,7 +78,7 @@ export const titleInit = {
   ],
 }
 
-const animationUpdate = {
+export const animationUpdate = {
   name: '动画设置',
   items: [
     {
@@ -104,12 +104,10 @@ const animationUpdate = {
         },
         {
           label: '先快后慢',
-          // value: 'cubicOut',
           value: 'sinusoidalOut',
         },
         {
           label: '先慢后快',
-          // value: 'cubicIn',
           value: 'sinusoidalIn',
         },
       ],
@@ -143,7 +141,6 @@ const animationUpdate = {
     },
     {
       title: '动画时长（秒）',
-      // field: 'cache.dyEffect.duration',
       field: 'cache.dyEffect.time.duration',
       type: 'number-input',
       emit: ['change'],
@@ -171,7 +168,7 @@ const animationUpdate = {
   ],
 }
 
-const chartUpdate = {
+export const chartUpdate = {
   name: '图表设置',
   items: [
     {
@@ -184,11 +181,11 @@ const chartUpdate = {
       field: 'cache.chart.backgroundColor.color',
       type: 'color-picker',
     },
-    {
-      title: '扇形颜色',
-      field: 'cache.chart.legend.color',
-      type: 'color-picker',
-    },
+    // {
+    //   title: '扇形颜色',
+    //   field: 'cache.chart.legend.color',
+    //   type: 'color-picker',
+    // },
     {
       title: '显示图例',
       field: 'legend.show',
@@ -239,11 +236,11 @@ const chartUpdate = {
         max: 60,
       },
     },
-    {
-      title: '图例颜色',
-      field: 'legend.textStyle.color',
-      type: 'color-picker',
-    },
+    // {
+    //   title: '图例颜色',
+    //   field: 'legend.textStyle.color',
+    //   type: 'color-picker',
+    // },
     {
       title: '显示数值标注',
       field: 'cache.chart.series.label.show',
@@ -274,7 +271,7 @@ const chartUpdate = {
   ],
 }
 
-const dataFormat = {
+export const dataFormat = {
   name: '数据格式',
   items: [
     {
@@ -309,7 +306,7 @@ const dataFormat = {
   ],
 }
 
-const moreUpdate = {
+export const moreUpdate = {
   name: '更多设置',
   items: [
     {
@@ -367,11 +364,11 @@ const moreUpdate = {
         max: 10,
       },
     },
-    {
-      title: '扇形边框颜色',
-      field: 'cache.chart.series.itemStyle.borderColor',
-      type: 'color-picker',
-    },
+    // {
+    //   title: '扇形边框颜色',
+    //   field: 'cache.chart.series.itemStyle.borderColor',
+    //   type: 'color-picker',
+    // },
     {
       title: '同心圆半径',
       field: 'cache.chart.series.radius.0',

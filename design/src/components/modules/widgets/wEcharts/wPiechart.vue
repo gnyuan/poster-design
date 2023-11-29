@@ -114,14 +114,11 @@ export default {
     await this.$nextTick()
     this.params.rotate &&
       (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
-    console.log(this.echartOptions)
   },
 
   async created() {
     try {
       const mypie = await api.echart.getEchart({ chartId: 'doughnut_pie' })
-      // console.log(mypie.data)
-      // console.log(mypie.option)
       const data = mypie.data.data
       const option = mypie.option.option
       const default_option = {
@@ -209,23 +206,18 @@ export default {
         })
       })
 
-      console.log('!!!!!!!!deep copy this to this.echartOpions', mergedOptions)
-      console.log(123)
       this.echartOptions = JSON.parse(JSON.stringify(mergedOptions))
-      console.log(321)
     } catch (error) {
       console.error('获取数据时出错：', error)
       // 处理错误情况
       console.log('error!')
     }
-    console.log('!!!!!!!!!!!!mounted and set echartopts!!!!')
     this.updateWidgetData({
       uuid: this.dActiveElement.uuid,
       key: 'echartopts',
       value: this.echartOptions,
       pushHistory: true,
     })
-    console.log('!!!!!!!!!!!!mounted and set echartopts!!!!')
   },
 
   methods: {
@@ -240,7 +232,6 @@ export default {
     changeValues() {
       if (Object.keys(this.params.opts).length !== 0) {
         if (Object.keys(this.echartOptions).length !== 0) {
-          console.log('can??')
           let current = this.echartOptions
           const keys = this.params.opts.k.split('.')
           // 遍历属性路径数组，找到目标属性所在的位置
@@ -249,15 +240,11 @@ export default {
             current[key] = current[key] || {}
             current = current[key]
           }
-
           // 将最终属性设为 v
           current[keys[keys.length - 1]] = this.params.opts.v
-
-          console.log(this.echartOptions)
-          console.log('this.echartOptions 已经改变了啊！')
+          console.log('this.echartOptions 已经改变了啊！', this.echartOptions)
         }
       }
-      console.log('must end')
     },
   },
 }

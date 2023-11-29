@@ -280,7 +280,7 @@ export default defineComponent({
       .on('rotate', ({ target, beforeDist, dist, transform }: any) => {
         // console.log('onRotate', Number(this.dActiveElement.rotate) + Number(beforeDist + dist))
         // target.style.transform = transform
-        console.log(target.style.transform)
+        // console.log(target.style.transform)
       })
       .on('rotateEnd', (e: any) => {
         const tf = e.target.style.transform
@@ -299,7 +299,7 @@ export default defineComponent({
           })
       })
       .on('resizeStart', (args) => {
-        console.log(args.target.style.transform)
+        // console.log(args.target.style.transform)
 
         this.moveable.snappable = false
         if (this.dActiveElement.type === 'w-text') {
@@ -339,7 +339,7 @@ export default defineComponent({
           clientY,
           direction,
         } = args
-        console.log(2, args)
+        // console.log(2, args)
         if (this.dActiveElement.type === 'w-text') {
           if (String(direction) === '1,1') {
             this.resetRatio = width / resizeStartWidth

@@ -9,9 +9,22 @@
   <div class="icon-item-select">
     <span v-if="label" class="label">{{ label }}</span>
     <ul class="list btn__bar flex">
-      <el-tooltip v-for="(item, index) in data" :key="index" class="item" effect="dark" :content="item.tip" placement="top" :auto-close="400">
-        <li :class="{ 'list-item': true, active: item.select }" @click="selectItem(item)">
-          <i :class="`${item.extraIcon ? 'icon' : 'iconfont'} ${item.icon}`"></i>
+      <el-tooltip
+        v-for="(item, index) in data"
+        :key="index"
+        class="item"
+        effect="dark"
+        :content="item.tip"
+        placement="top"
+        :auto-close="400"
+      >
+        <li
+          :class="{ 'list-item': true, active: item.select }"
+          @click="selectItem(item)"
+        >
+          <i
+            :class="`${item.extraIcon ? 'icon' : 'iconfont'} ${item.icon}`"
+          ></i>
         </li>
       </el-tooltip>
     </ul>
