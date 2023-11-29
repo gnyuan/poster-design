@@ -32,6 +32,12 @@ export default [
     component: 'photo-list-wrap',
   },
   {
+    name: '图表',
+    icon: 'icon-gallery',
+    show: false,
+    component: 'chart-list-wrap',
+  },
+  {
     name: '背景',
     icon: 'icon-beijing',
     show: false,

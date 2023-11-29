@@ -6,7 +6,7 @@
  * @LastEditTime: 2023-06-29 17:53:23
 -->
 <template>
-  <div id="w-image-style">
+  <div id="w-qrcode-style">
     <el-collapse v-if="!dMoving" v-model="activeNames">
       <el-collapse-item title="位置尺寸" name="位置尺寸">
         <div class="line-layout">
@@ -128,7 +128,7 @@
 
 <script>
 // 二维码组件样式
-const NAME = 'w-image-style'
+const NAME = 'w-qrcode-style'
 import { mapGetters, mapActions } from 'vuex'
 import { ElSelect, ElOption } from 'element-plus'
 import numberInput from '../../settings/numberInput.vue'

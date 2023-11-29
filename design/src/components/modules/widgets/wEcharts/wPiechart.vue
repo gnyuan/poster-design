@@ -26,8 +26,9 @@
 const NAME = 'w-piechart'
 
 import { mapGetters, mapActions } from 'vuex'
-import { EChartsOption } from 'echarts'
 import { merge } from 'lodash-es'
+import { EChartsOption } from 'echarts'
+
 import api from '@/api'
 import PieChart from '@/components/business/echarts/pie.ts'
 
@@ -57,7 +58,7 @@ export default {
   name: NAME,
   components: { PieChart },
   setting: {
-    name: '饼图',
+    name: '图表',
     type: NAME,
     uuid: -1,
     width: 300,
@@ -87,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['dActiveElement', 'dZoom']),
+    ...mapGetters(['dActiveElement']),
     width() {
       return Number(this.params.width)
     },

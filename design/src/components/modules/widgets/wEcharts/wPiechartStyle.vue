@@ -1,5 +1,5 @@
 <template>
-  <div id="w-image-style">
+  <div id="w-piechart-style">
     <el-collapse v-model="activeNames">
       <el-collapse-item title="位置尺寸" name="位置尺寸">
         <div class="line-layout">
@@ -124,13 +124,13 @@ import {
 } from './echartsettings'
 
 defineOptions({
-  name: 'w-image-style',
+  name: 'w-piechart-style',
   inheritAttrs: false,
 })
 
 const optionList = [
-  // titleInit,
-  // animationUpdate,
+  titleInit,
+  animationUpdate,
   chartUpdate,
   dataFormat,
   moreUpdate,

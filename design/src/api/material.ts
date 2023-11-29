@@ -20,6 +20,9 @@ export const getFontSub = (params: Type.Object = {}, extra: any = {}) => fetch('
 // 图库列表
 export const getImagesList = (params: Type.Object = {}) => fetch('design/imgs', params, 'get')
 
+// 图表列表
+export const getChartList = (params: Type.Object = {}) => fetch('design/echart', params, 'get')
+
 // 我的上传列表
 export const getMyPhoto = (params: Type.Object = {}) => fetch('design/user/image', params)
 export const deleteMyPhoto = (params: Type.Object = {}) => fetch('design/user/image/del', params, 'post')

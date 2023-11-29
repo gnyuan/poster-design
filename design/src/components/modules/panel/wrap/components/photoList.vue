@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, reactive, watch, nextTick, computed } from 'vue'
-import api from '@/api/album'
 import DragHelper from '@/common/hooks/dragHelper'
 import setImageData from '@/common/methods/DesignFeatures/setImage'
 

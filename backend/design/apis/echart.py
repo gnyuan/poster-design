@@ -23,6 +23,7 @@ class Filters(FuFilters):
     type: int = Field(None, alias="type")
     id: str = Field(None, alias="id")
     content: str = Field(None, alias="content")
+    labelName: str = Field(None, alias="labelName")
 
 
 class SchemaIn(ModelSchema):
