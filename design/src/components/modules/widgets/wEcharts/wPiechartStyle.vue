@@ -42,12 +42,13 @@
             class="setting-option flex items-center justify-between"
           >
             <div class="flex items-center">{{ item.title }}</div>
-            <div class="right ml-4">
+            <div class="flex items-center">
               <echart-option-widget
                 :key="index"
                 :title="item.title"
                 :field="item.field"
                 :type="item.type"
+                :props="item.props"
                 :options="item.options || []"
                 :value="item.value"
                 :emit="item.emit || []"
@@ -129,8 +130,8 @@ defineOptions({
 })
 
 const optionList = [
-  titleInit,
-  animationUpdate,
+  // titleInit,
+  // animationUpdate,
   chartUpdate,
   dataFormat,
   moreUpdate,
@@ -205,7 +206,6 @@ const dActiveElement = computed(() => store.getters.dActiveElement)
 // const dMoving = computed(() => store.getters.dMoving)
 
 function finish(key, value) {
-  console.log('never call finish!!!!!!')
   if (!ingoreKeys.includes(key)) {
     store.dispatch('updateWidgetData', {
       uuid: dActiveElement.value.uuid,

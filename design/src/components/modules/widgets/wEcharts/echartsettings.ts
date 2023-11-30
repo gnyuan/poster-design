@@ -181,11 +181,11 @@ export const chartUpdate = {
       field: 'cache.chart.backgroundColor.color',
       type: 'color-picker',
     },
-    // {
-    //   title: '扇形颜色',
-    //   field: 'cache.chart.legend.color',
-    //   type: 'color-picker',
-    // },
+    {
+      title: '扇形颜色',
+      field: 'cache.chart.legend.color',
+      type: 'color-picker',
+    },
     {
       title: '显示图例',
       field: 'legend.show',

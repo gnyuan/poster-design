@@ -6,9 +6,22 @@
  * @LastEditTime: 2023-10-16 09:46:23
 -->
 <template>
-  <div id="number-slider">
-    <span :style="{ width: labelWidth }" class="label">{{ label }}</span>
-    <el-slider v-model="innerValue" :min="minValue" :max="maxValue" :step="step" input-size="small" :show-input="showInput" :show-tooltip="false" :show-input-controls="false" @change="changeValue"> </el-slider>
+  <div class="flex items-center">
+    <span :style="{ width: labelWidth }" class="select-none mr-4">{{
+      label
+    }}</span>
+    <el-slider
+      v-model="innerValue"
+      :min="minValue"
+      :max="maxValue"
+      :step="step"
+      input-size="small"
+      :show-input="showInput"
+      :show-tooltip="false"
+      :show-input-controls="false"
+      @change="changeValue"
+    >
+    </el-slider>
   </div>
 </template>
 
@@ -74,7 +87,7 @@ export default {
 </script>
 
 <style lang="less">
-// style fix
+// style fix for el-slider
 .el-slider {
   width: 100%;
   .show-input {
@@ -82,12 +95,6 @@ export default {
   }
   .el-slider__input {
     width: 50px !important;
-    // .el-input-number__decrease {
-    //   width: 16px !important;
-    // }
-    // .el-input-number__increase {
-    //   width: 16px !important;
-    // }
     .el-input--small {
       .el-input__wrapper {
         padding-left: 10px !important;
@@ -97,7 +104,7 @@ export default {
   }
 }
 </style>
-
+<!-- 
 <style lang="less" scoped>
 #number-slider {
   align-items: center;
@@ -107,8 +114,8 @@ export default {
     margin-right: 4px;
   }
 }
-.slider-demo-block .el-slider {
-  margin-top: 0;
-  margin-left: 12px;
-}
-</style>
+// .slider-demo-block .el-slider {
+//   margin-top: 0;
+//   margin-left: 12px;
+// }
+</style> -->

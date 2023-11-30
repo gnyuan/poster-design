@@ -33,7 +33,7 @@ export default [
   },
   {
     name: '图表',
-    icon: 'icon-gallery',
+    icon: 'sd-tubiao',
     show: false,
     component: 'chart-list-wrap',
   },
@@ -54,11 +54,5 @@ export default [
     icon: 'icon-shangchuan',
     show: false,
     component: 'user-wrap',
-  },
-  {
-    name: 'Test',
-    icon: 'icon-shangchuan',
-    show: false,
-    component: 'test-wrap',
   },
 ]

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-200">
+  <div class="w-40">
     <div v-if="type === 'number-input'">
       <el-input-number
         v-model="inputValue"
@@ -18,7 +18,11 @@
       <font-family-selector v-model="inputValue" @change="handleChange" />
     </div>
     <div v-if="type === 'color-picker'">
-      <el-color-picker v-model="inputValue" @change="handleChange" />
+      <el-color-picker
+        v-model="inputValue"
+        :predefine="predefine"
+        @change="handleChange"
+      />
     </div>
     <div v-if="type === 'text-align-selector'">
       <icon-item-select :data="textAlignSlector" @finish="handleTextAlign" />
@@ -42,8 +46,12 @@
     <div v-if="type === 'slider'">
       <el-slider
         v-model="inputValue"
-        :min="20"
-        :max="60"
+        :min="min"
+        :max="max"
+        input-size="small"
+        :show-input="true"
+        :show-tooltip="false"
+        :show-input-controls="false"
         @change="handleChange"
       />
     </div>
@@ -94,9 +102,10 @@ function getValueByPath(obj, path) {
 }
 
 const inputValue = ref(getValueByPath(props.init_echartopts, props.field))
+console.log(666, typeof inputValue.value, inputValue.value)
 
 const min = ref(props.props?.min || 0)
-const max = ref(props.props?.max || Infinity)
+const max = ref(props.props?.max || 100)
 const textAlignSlector = [
   {
     key: 'align',
@@ -118,11 +127,38 @@ const textAlignSlector = [
   },
 ]
 
+// 取色器预设颜色
+const predefine = [
+  '#4E70F0',
+  '#00C5D2',
+  '#FFCE2B',
+  '#FF812C',
+  '#FF5A2E',
+  '#1720D1',
+  '#A64DFF',
+  '#F95DBA',
+  '#81D4FA',
+  '#9FA8DA',
+  '#CE93D8',
+  '#F48FB1',
+  '#FFAB91',
+  '#FFCC80',
+  '#FFE082',
+  '#FFE082',
+  '#A5D6A7',
+  '#80CBC4',
+  '#B0BEC5',
+  '#FFFFFF',
+]
+
 // 选项
 const options = ref(props.options || [])
+
+console.log('!!!!!!!!!', props.type, props.title, min.value, max.value, props)
+
 // 对于选项，如果这里设置有初始值
-if (props.props.value !== undefined) {
-  inputValue.value = props.props.value
+if (props.value !== undefined) {
+  inputValue.value = props.value
 }
 async function handleChange() {
   console.log(props.type, props.field, inputValue.value)
@@ -163,39 +199,6 @@ async function handleChange() {
     emit('update-options', 'backgroundColor', inputValue.value)
     return
   }
-
-  // // 处理图例位置
-  // if (
-  //   props.type === 'select' &&
-  //   props.field === 'cache.chart.legend.location'
-  // ) {
-  //   const legendOptions = {
-  //     'top-left': { orient: 'horizontal', left: 10, top: 10 },
-  //     'top-center': { orient: 'horizontal', left: 'center', top: 10 },
-  //     'top-right': { orient: 'horizontal', right: 10, top: 10 },
-  //     'bottom-left': { orient: 'horizontal', left: 10, bottom: 70 },
-  //     'bottom-center': { orient: 'horizontal', left: 'center', bottom: 70 },
-  //     'bottom-right': { orient: 'horizontal', right: 10, bottom: 70 },
-  //   }
-
-  //   const selectedOption = legendOptions[inputValue.value]
-
-  //   if (selectedOption) {
-  //     const { orient, left, right, top, bottom } = selectedOption
-
-  //     emit('update-options', 'legend', {
-  //       show: true,
-  //       orient,
-  //       left,
-  //       right,
-  //       top,
-  //       bottom,
-  //     })
-  //     await nextTick()
-  //   } else {
-  //     console.log('No legend position choice.')
-  //   }
-  // }
 
   // 处理图例位置
   if (
