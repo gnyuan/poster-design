@@ -124,7 +124,9 @@ defineOptions({
 })
 
 const optionList = Object.entries(echarts_comp['doughnut_pie'])
-  .filter(([key, value]) => key !== 'name' && key !== 'group') // 过滤掉键为'name'的项
+  .filter(
+    ([key, value]) => key !== 'name' && key !== 'group' && key !== 'default',
+  ) // 过滤掉键为'name'的项
   .map(([key, value]) => value) // 映射为包含键值对的对象
 
 function updateEchartsOptions(option_path, option_value) {

@@ -130,6 +130,66 @@ export const echarts_comp = {
   doughnut_pie: {
     name: '基础环图',
     group: '饼图',
+    default: {
+      backgroundColor: '#FFFFFF',
+      title: [{ top: '3%' }, { top: '96%', right: '5%', left: null }],
+      grid: {
+        top: '20%',
+        bottom: '15%',
+        left: '10%',
+        right: '12%',
+        containLabel: true,
+      },
+      legend: {
+        bottom: '14.4%',
+        left: 'center',
+        itemGap: 15,
+        textStyle: {
+          rich: {
+            a: {
+              fontSize: 24,
+              align: 'left',
+              width: 100,
+              fontFamily: 'HarmonyOS_Sans_SC_Regular',
+            },
+            b: {
+              fontSize: 24,
+              align: 'right',
+              fontFamily: 'HarmonyOS_Sans_SC_Regular',
+            },
+          },
+        },
+        icon: 'roundRect',
+        orient: 'horizontal',
+        top: '90%',
+      },
+
+      series: [
+        {
+          name: '访问来源',
+          animation: false,
+          type: 'pie',
+          clockwise: true,
+          radius: ['25%', '70%'],
+          center: ['50%', '50%'],
+          startAngle: 90,
+          labelLine: {
+            show: true,
+            length: 15,
+            length2: 10,
+            smooth: 0.5,
+          },
+          itemStyle: {
+            borderRadius: 3,
+            borderColor: '#ffffff',
+            borderWidth: 2,
+          },
+          animationEasing: 'sinusoidalOut',
+          animationDuration: 2000,
+          animationDelay: 0,
+        },
+      ],
+    },
     titleInit: {
       name: '文本设置',
       items: [
