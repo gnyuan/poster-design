@@ -5,27 +5,42 @@
         v-model="inputValue"
         :min="min"
         :max="max"
-        @change="handleChange"
+        @change="handleNumberInput"
       />
     </div>
     <div v-if="type === 'switch'">
-      <el-switch v-model="inputValue" @change="handleChange" />
+      <el-switch v-model="inputValue" @change="handleSwitch" />
     </div>
     <div v-if="type === 'input'">
-      <el-input v-model="inputValue" @change="handleChange" />
+      <el-input v-model="inputValue" @change="handleInput" />
     </div>
     <div v-if="type === 'font-family-selector'">
-      <font-family-selector v-model="inputValue" @change="handleChange" />
+      <font-family-selector
+        v-model="inputValue"
+        @change="handleFontFaimlySelector"
+      />
     </div>
     <div v-if="type === 'color-picker'">
       <el-color-picker
         v-model="inputValue"
         :predefine="predefine"
-        @change="handleChange"
+        @change="handleColorPicker"
       />
     </div>
+    <div v-if="type === 'color-picker2'">
+      <template v-for="(item, index) in inputValue" :key="index">
+        <el-color-picker
+          v-model="inputValue[index]"
+          :predefine="predefine"
+          @change="handleColorPicker2(index)"
+        />
+      </template>
+    </div>
     <div v-if="type === 'text-align-selector'">
-      <icon-item-select :data="textAlignSlector" @finish="handleTextAlign" />
+      <icon-item-select
+        :data="textAlignSlector"
+        @finish="handleTextAlignSelector"
+      />
     </div>
     <div v-if="type === 'select'">
       <el-select
@@ -33,7 +48,7 @@
         class="m-2"
         placeholder="请选择"
         size="large"
-        @change="handleChange"
+        @change="handleSelect"
       >
         <el-option
           v-for="item in options"
@@ -52,7 +67,7 @@
         :show-input="true"
         :show-tooltip="false"
         :show-input-controls="false"
-        @change="handleChange"
+        @change="handleSlider"
       />
     </div>
   </div>
@@ -102,7 +117,6 @@ function getValueByPath(obj, path) {
 }
 
 const inputValue = ref(getValueByPath(props.init_echartopts, props.field))
-console.log(666, typeof inputValue.value, inputValue.value)
 
 const min = ref(props.props?.min || 0)
 const max = ref(props.props?.max || 100)
@@ -154,26 +168,38 @@ const predefine = [
 // 选项
 const options = ref(props.options || [])
 
-console.log('!!!!!!!!!', props.type, props.title, min.value, max.value, props)
-
 // 对于选项，如果这里设置有初始值
 if (props.value !== undefined) {
   inputValue.value = props.value
 }
-async function handleChange() {
-  console.log(props.type, props.field, inputValue.value)
-  // 处理是否展示画布
-  if (
-    props.type === 'switch' &&
-    props.field === 'cache.chart.backgroundColor.show'
-  ) {
+
+async function handleNumberInput() {
+  if (props.field === 'cache.chart.series.label.fontSize') {
+    for (
+      let i = 0;
+      i < dActiveElement.value.echartopts.series[0].data.length;
+      i++
+    ) {
+      emit(
+        'update-options',
+        `series.0.data.${i}.label.fontSize`,
+        inputValue.value,
+      )
+      await nextTick()
+    }
+  }
+  emit('update-options', props.field, inputValue.value)
+}
+
+let is_first_enter_percent = true
+async function handleSwitch() {
+  if (props.field === 'cache.chart.backgroundColor.show') {
     if (inputValue.value) {
       const bgColor =
         dActiveElement.value.echartopts.cache.chart.backgroundColor.color
       emit('update-options', 'backgroundColor', bgColor)
     } else {
       // 不展示则保存画布颜色，并把画布置为#00000000
-      console.log('morga ', dActiveElement.value)
       emit(
         'update-options',
         'cache.chart.backgroundColor.color',
@@ -182,14 +208,103 @@ async function handleChange() {
       await nextTick()
       emit('update-options', 'backgroundColor', '#00000000')
     }
-    return
+  } else if (props.field === 'cache.chart.series.label.show') {
+    for (
+      let i = 0;
+      i < dActiveElement.value.echartopts.series[0].data.length;
+      i++
+    ) {
+      emit('update-options', `series.0.data.${i}.label.show`, inputValue.value)
+      await nextTick()
+    }
+  } else if (props.field === 'cache.sundry.dataFormat.percent') {
+    console.log(is_first_enter_percent, inputValue.value)
+    if (!is_first_enter_percent && inputValue.value === false) {
+      for (
+        let i = 0;
+        i < dActiveElement.value.echartopts.series[0].data.length;
+        i++
+      ) {
+        await emit(
+          'update-options',
+          `series.0.data.${i}.value`,
+          String(
+            parseFloat(dActiveElement.value.echartopts.series[0].data[i].value),
+          ),
+        )
+        await nextTick()
+      }
+    }
+    if (inputValue.value === true) {
+      for (
+        let i = 0;
+        i < dActiveElement.value.echartopts.series[0].data.length;
+        i++
+      ) {
+        await emit(
+          'update-options',
+          `series.0.data.${i}.value`,
+          String(
+            parseFloat(
+              dActiveElement.value.echartopts.series[0].data[i].value,
+            ) * 100,
+          ),
+        )
+        await nextTick()
+      }
+    }
+    if (is_first_enter_percent) {
+      is_first_enter_percent = false
+    }
+  } else if (props.field === 'cache.chart.series.clockwise') {
+    await emit('update-options', `series.0.clockwise`, inputValue.value)
+    await nextTick()
+  } else if (props.field === 'cache.chart.series.labelLine.show') {
+    console.log(111)
+  } else {
+    console.log('pass')
   }
-  // 处理选择画布颜色
-  if (
-    props.type === 'color-picker' &&
-    props.field === 'cache.chart.backgroundColor.color'
-  ) {
-    console.log(inputValue.value, '666666')
+  await emit('update-options', props.field, inputValue.value)
+}
+
+async function handleInput() {
+  if (props.field === 'cache.chart.series.label.formatter') {
+    for (
+      let i = 0;
+      i < dActiveElement.value.echartopts.series[0].data.length;
+      i++
+    ) {
+      emit(
+        'update-options',
+        `series.0.data.${i}.label.formatter`,
+        inputValue.value,
+      )
+      await nextTick()
+    }
+  }
+  emit('update-options', props.field, inputValue.value)
+}
+
+async function handleFontFaimlySelector() {
+  if (props.field === 'cache.chart.series.label.fontFamily') {
+    for (
+      let i = 0;
+      i < dActiveElement.value.echartopts.series[0].data.length;
+      i++
+    ) {
+      emit(
+        'update-options',
+        `series.0.data.${i}.label.fontFamily`,
+        inputValue.value,
+      )
+      await nextTick()
+    }
+  }
+  await emit('update-options', props.field, inputValue.value)
+}
+
+async function handleColorPicker() {
+  if (props.field === 'cache.chart.backgroundColor.color') {
     emit(
       'update-options',
       'cache.chart.backgroundColor.color',
@@ -197,15 +312,35 @@ async function handleChange() {
     )
     await nextTick()
     emit('update-options', 'backgroundColor', inputValue.value)
-    return
+  } else if (props.field === 'cache.chart.series.itemStyle.borderColor') {
+    await emit(
+      'update-options',
+      'series.0.itemStyle.borderColor',
+      inputValue.value,
+    )
+    await nextTick()
+  } else {
+    console.log('no opitons')
   }
+  emit('update-options', props.field, inputValue.value)
+}
 
-  // 处理图例位置
-  if (
-    props.type === 'select' &&
-    props.field === 'cache.chart.legend.location'
-  ) {
-    console.log('hello', props.value, inputValue.value)
+async function handleColorPicker2() {
+  emit('update-options', props.field, inputValue.value)
+  await nextTick()
+  if (props.field === 'cache.chart.legend.color') {
+    // 扇形颜色
+    for (let i = 0; i < inputValue.value.length; i++) {
+      emit('update-options', `color.${i}`, inputValue.value[i])
+      await nextTick()
+    }
+  } else {
+    console.log('pass!')
+  }
+}
+
+async function handleSelect() {
+  if (props.field === 'cache.chart.legend.location') {
     // 设置所有图例位置属性为 null
     emit('update-options', 'legend.show', null)
     await nextTick()
@@ -281,15 +416,94 @@ async function handleChange() {
         console.log('no legend position choice.')
         break
     }
-    return
   }
-  console.log('impossible!!!!!')
+  if (props.field === 'cache.sundry.dataFormat.dataDecimal') {
+    if (inputValue.value === 'default' || inputValue.value === 'two') {
+      for (
+        let i = 0;
+        i < dActiveElement.value.echartopts.series[0].data.length;
+        i++
+      ) {
+        await emit(
+          'update-options',
+          `series.0.data.${i}.value`,
+          String(
+            parseFloat(
+              dActiveElement.value.echartopts.series[0].data[i].value,
+            ).toFixed(2),
+          ),
+        )
+      }
+    } else if (inputValue.value === 'one') {
+      for (
+        let i = 0;
+        i < dActiveElement.value.echartopts.series[0].data.length;
+        i++
+      ) {
+        await emit(
+          'update-options',
+          `series.0.data.${i}.value`,
+          String(
+            parseFloat(
+              dActiveElement.value.echartopts.series[0].data[i].value,
+            ).toFixed(1),
+          ),
+        )
+      }
+    } else if (inputValue.value === 'ZahlenQ') {
+      for (
+        let i = 0;
+        i < dActiveElement.value.echartopts.series[0].data.length;
+        i++
+      ) {
+        await emit(
+          'update-options',
+          `series.0.data.${i}.value`,
+          String(
+            Math.abs(
+              parseFloat(
+                dActiveElement.value.echartopts.series[0].data[i].value,
+              ),
+            ),
+          ),
+        )
+      }
+    } else {
+      console.log('no this option', inputValue.value)
+    }
+    await nextTick()
+    await emit('update-options', props.field, inputValue.value)
+  }
+}
 
+async function handleSlider() {
+  if (props.field === 'cache.chart.series.startAngle') {
+    await emit('update-options', `series.0.startAngle`, inputValue.value)
+    await nextTick()
+  } else if (props.field === 'cache.chart.series.radius.0') {
+    await emit('update-options', `series.0.radius.0`, `${inputValue.value}%`)
+    await nextTick()
+  } else if (props.field === 'cache.chart.series.itemStyle.borderWidth') {
+    await emit(
+      'update-options',
+      'series.0.itemStyle.borderWidth',
+      inputValue.value,
+    )
+    await nextTick()
+  } else if (props.field === 'cache.chart.series.itemStyle.borderRadius') {
+    await emit(
+      'update-options',
+      'series.0.itemStyle.borderRadius',
+      inputValue.value,
+    )
+    await nextTick()
+  } else {
+    console.log('no this option', inputValue.value)
+  }
   emit('update-options', props.field, inputValue.value)
 }
 
-function handleTextAlign(item) {
-  console.log(props.field, inputValue.value)
+function handleTextAlignSelector(item) {
   emit('update-options', props.field, item.value)
 }
 

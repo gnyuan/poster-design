@@ -243,7 +243,12 @@ export default {
           }
           // 将最终属性设为 v
           current[keys[keys.length - 1]] = this.params.opts.v
-          console.log('this.echartOptions 已经改变了啊！', this.echartOptions)
+          console.log(
+            'this.echartOptions 已经改变了啊！',
+            this.params.opts.k,
+            this.params.opts.v,
+            this.echartOptions,
+          )
         }
       }
     },
