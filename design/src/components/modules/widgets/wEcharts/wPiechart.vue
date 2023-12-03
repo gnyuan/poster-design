@@ -121,7 +121,6 @@ export default {
   async created() {
     try {
       const chart_type_id = this.params.echarttype // doughnut_pie  group_line_bar
-      console.log('HOPEE', this.params, this.dActiveElement)
       const mypie = await api.echart.getEchart({
         chartId: chart_type_id,
       })
@@ -184,14 +183,6 @@ export default {
             current = current[key]
           }
           // 将最终属性设为 v
-          console.log(
-            '6??',
-            keys,
-            keys.length - 1,
-            keys[keys.length - 1],
-            this.params.opts.v,
-            current[keys[keys.length - 1]],
-          )
           current[keys[keys.length - 1]] = this.params.opts.v
           console.log(
             'this.echartOptions 已经改变了啊！且通知到了updateWidgetData',

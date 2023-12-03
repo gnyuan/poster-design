@@ -79,29 +79,19 @@ onMounted(async () => {
 })
 
 const selectChart = async (index, list) => {
-  console.log(index, list, 776777)
   const item = list ? list[index] : state.recommendImgList[index]
   store.commit('setShowMoveable', false) // 清理掉上一次的选择
-  console.log('USE!!', item)
 
   let setting = JSON.parse(JSON.stringify(wPiechart.setting))
   const { width: pW, height: pH } = dPage
   setting.left = pW / 2 - setting.width / 2
   setting.top = pH / 2 - setting.height / 2
   setting.echarttype = item.chartId // 设置预设模板
+  setting.width = 1200 // echart图的初始化大小
+  setting.height = 1200
+  setting.X = 0
+  setting.Y = 0
   store.dispatch('addWidget', setting)
-  console.log('!!!!!', setting)
-
-  // let setting = JSON.parse(JSON.stringify(wImage.setting))
-  // const img = await setImageData(item) // await getImage(item.url)
-  // console.log('!!!!', item, img)
-  // setting.width = img.width
-  // setting.height = img.height // parseInt(100 / item.value.ratio, 10)
-  // setting.imgUrl = item.wgtCover
-  // const { width: pW, height: pH } = dPage
-  // setting.left = pW / 2 - img.width / 2
-  // setting.top = pH / 2 - img.height / 2
-  // store.dispatch('addWidget', setting)
 }
 
 const getDataList = async () => {
