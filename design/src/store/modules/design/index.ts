@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import mutations from './mutations'
 import actions from './actions'
 const all = {
@@ -35,7 +36,7 @@ const all = {
       width: 0,
       height: 0,
     },
-    dActiveElement: {}, // 选中的组件或页面
+    dActiveElement: ref({}), // 选中的组件或页面
     dCopyElement: [], // 复制的组件（可能是单个也可能是数组）
     dHoverUuid: '-1', // 鼠标在这个图层上
     dDropOverUuid: '', // 拖动时放在哪个图层上

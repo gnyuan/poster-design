@@ -90,11 +90,7 @@ export default defineComponent({
       const { id, tempid } = route.query
       const cover = hasCover ? await proxy?.draw() : undefined
       const widgets = proxy.dWidgets // reviseData()
-      const {
-        id: newId,
-        stat,
-        msg,
-      } = await api.home.saveWorks({
+      const { id: newId } = await api.home.saveWorks({
         cover,
         id,
         title: proxy.title || '未命名设计',
@@ -103,9 +99,7 @@ export default defineComponent({
         width: proxy.dPage.width,
         height: proxy.dPage.height,
       })
-      stat !== 0
-        ? useNotification('保存成功', '可在"我的作品"中查看')
-        : useNotification('保存失败', msg, { type: 'error' })
+      useNotification('保存成功', '可在"我的作品"中查看')
       // !id && router.push({ path: '/home', query: { id: newId }, replace: true })
       router.push({ path: '/home', query: { id: newId }, replace: true })
       store.commit('setShowMoveable', true)

@@ -27,11 +27,11 @@ const NAME = 'w-piechart'
 
 import { mapGetters, mapActions } from 'vuex'
 import { merge } from 'lodash-es'
-import { EChartsOption } from 'echarts'
 
 import api from '@/api'
 import PieChart from '@/components/business/echarts/pie.ts'
-import { echarts_comp } from './echartsettings'
+import { echarts_default } from './echartdefault'
+import { nextTick } from 'vue'
 
 const COLORS = [
   '#4E70F0',
@@ -120,50 +120,43 @@ export default {
 
   async created() {
     try {
-      const mypie = await api.echart.getEchart({ chartId: 'doughnut_pie' })
+      const chart_type_id = 'group_line_bar' // doughnut_pie  group_line_bar
+      const mypie = await api.echart.getEchart({ chartId: chart_type_id })
       const data = mypie.data.data
       const option = mypie.option.option
       const mergedOptions = merge(
         {},
         option,
-        echarts_comp['doughnut_pie'].default,
+        echarts_default[chart_type_id],
+        this.params.echartopts,
       ) // 设置echart option
-      mergedOptions.legend.data = data.slice(1).map((item) => item[0]) // 设置echart lengend
+      if (mypie.data.columns !== undefined) {
+        mergedOptions.legend.data = data[0].slice(1)
+      } else {
+        // 如果没定义columns说明数据是单列的
+        mergedOptions.legend.data = data.slice(1).map((item) => item[0])
+      }
       mergedOptions.color = COLORS.slice(0, data.length - 1) // 设置color
+      mergedOptions.series[0].data = []
       data.slice(1).forEach((item, index) => {
         const [name, value] = item
-        mergedOptions.series[0].data = mergedOptions.series[0].data || []
         mergedOptions.series[0].data.push({
           value: value.toString(),
           name,
-          label: {
-            show: true,
-            position: 'outside',
-            color: 'inherit',
-            formatter: `{b} {c}%`,
-            fontSize: 26,
-            fontFamily: 'HarmonyOS_Sans_SC_Regular',
-          },
-          labelLine: {
-            show: true,
-            length: 15,
-            length2: 10,
-          },
         })
       })
 
       this.echartOptions = JSON.parse(JSON.stringify(mergedOptions))
     } catch (error) {
       console.error('获取数据时出错：', error)
-      // 处理错误情况
-      console.log('error!')
     }
-    this.updateWidgetData({
+    await this.updateWidgetData({
       uuid: this.dActiveElement.uuid,
       key: 'echartopts',
       value: this.echartOptions,
       pushHistory: true,
     })
+    await this.$nextTick()
   },
 
   methods: {
@@ -179,6 +172,7 @@ export default {
       if (Object.keys(this.params.opts).length !== 0) {
         if (Object.keys(this.echartOptions).length !== 0) {
           let current = this.echartOptions
+          console.log(this.params.opts.k, this.params.opts.v)
           const keys = this.params.opts.k.split('.')
           // 遍历属性路径数组，找到目标属性所在的位置
           for (let i = 0; i < keys.length - 1; i++) {
@@ -187,13 +181,27 @@ export default {
             current = current[key]
           }
           // 将最终属性设为 v
+          console.log(
+            '6??',
+            keys,
+            keys.length - 1,
+            keys[keys.length - 1],
+            this.params.opts.v,
+            current[keys[keys.length - 1]],
+          )
           current[keys[keys.length - 1]] = this.params.opts.v
           console.log(
-            'this.echartOptions 已经改变了啊！',
+            'this.echartOptions 已经改变了啊！且通知到了updateWidgetData',
             this.params.opts.k,
             this.params.opts.v,
             this.echartOptions,
           )
+          this.updateWidgetData({
+            uuid: this.dActiveElement.uuid,
+            key: 'echartopts',
+            value: this.echartOptions,
+            pushHistory: true,
+          })
         }
       }
     },

@@ -106,11 +106,7 @@ import { useStore } from 'vuex'
 import { ElSwitch, ElInput, ElCollapse } from 'element-plus'
 import numberInput from '../../settings/numberInput.vue'
 import iconItemSelect from '../../settings/iconItemSelect.vue'
-import numberSlider from '../../settings/numberSlider.vue'
-import textInputArea from '../../settings/textInputArea.vue'
-import colorSelect from '../../settings/colorSelect.vue'
 
-import fontFamilySelector from '../../settings/echart/fontFamilySelector.vue'
 import echartOptionWidget from '../../settings/echart/echartOptionWidget.vue'
 
 import layerIconList from '@/assets/data/LayerIconList'
@@ -123,11 +119,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const optionList = Object.entries(echarts_comp['doughnut_pie'])
-  .filter(
-    ([key, value]) => key !== 'name' && key !== 'group' && key !== 'default',
-  ) // 过滤掉键为'name'的项
-  .map(([key, value]) => value) // 映射为包含键值对的对象
+const chart_type_id = 'group_line_bar' // doughnut_pie   group_line_bar
+const optionList = ref(
+  Object.entries(echarts_comp[chart_type_id][0].props.forms)
+    .filter(([key, value]) => key !== 'name' && key !== 'group') // 过滤掉键为'name'的项
+    .map(([key, value]) => value),
+) // 映射为包含键值对的对象
 
 function updateEchartsOptions(option_path, option_value) {
   store.dispatch('updateWidgetData', {

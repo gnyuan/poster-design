@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
 import fontFamilySelector from './fontFamilySelector.vue'
@@ -90,7 +90,9 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-  value: String,
+  value: {
+    type: null,
+  },
   options: Array,
   emit: Array,
   emitPrefix: String,
@@ -116,7 +118,12 @@ function getValueByPath(obj, path) {
   return value
 }
 
+const { value } = toRefs(props)
 const inputValue = ref(getValueByPath(props.init_echartopts, props.field))
+// 对于选项，如果数据库没有，也就是从对象经过路径解码出来的没有，则用默认的props.value
+if (inputValue.value === undefined) {
+  inputValue.value = value.value
+}
 
 const min = ref(props.props?.min || 0)
 const max = ref(props.props?.max || 100)
@@ -168,11 +175,6 @@ const predefine = [
 // 选项
 const options = ref(props.options || [])
 
-// 对于选项，如果这里设置有初始值
-if (props.value !== undefined) {
-  inputValue.value = props.value
-}
-
 async function handleNumberInput() {
   if (props.field === 'cache.chart.series.label.fontSize') {
     for (
@@ -180,15 +182,18 @@ async function handleNumberInput() {
       i < dActiveElement.value.echartopts.series[0].data.length;
       i++
     ) {
-      emit(
+      await emit(
         'update-options',
         `series.0.data.${i}.label.fontSize`,
         inputValue.value,
       )
       await nextTick()
     }
+  } else {
+    console.log('other', props.field)
   }
-  emit('update-options', props.field, inputValue.value)
+  await emit('update-options', props.field, inputValue.value)
+  await nextTick()
 }
 
 let is_first_enter_percent = true
@@ -197,16 +202,15 @@ async function handleSwitch() {
     if (inputValue.value) {
       const bgColor =
         dActiveElement.value.echartopts.cache.chart.backgroundColor.color
-      emit('update-options', 'backgroundColor', bgColor)
+      await emit('update-options', 'backgroundColor', bgColor)
     } else {
       // 不展示则保存画布颜色，并把画布置为#00000000
-      emit(
+      await emit(
         'update-options',
         'cache.chart.backgroundColor.color',
         dActiveElement.value.echartopts.backgroundColor || '#FFFFFFFF',
       )
-      await nextTick()
-      emit('update-options', 'backgroundColor', '#00000000')
+      await emit('update-options', 'backgroundColor', '#00000000')
     }
   } else if (props.field === 'cache.chart.series.label.show') {
     for (
@@ -214,8 +218,11 @@ async function handleSwitch() {
       i < dActiveElement.value.echartopts.series[0].data.length;
       i++
     ) {
-      emit('update-options', `series.0.data.${i}.label.show`, inputValue.value)
-      await nextTick()
+      await emit(
+        'update-options',
+        `series.0.data.${i}.label.show`,
+        inputValue.value,
+      )
     }
   } else if (props.field === 'cache.sundry.dataFormat.percent') {
     console.log(is_first_enter_percent, inputValue.value)
@@ -232,7 +239,6 @@ async function handleSwitch() {
             parseFloat(dActiveElement.value.echartopts.series[0].data[i].value),
           ),
         )
-        await nextTick()
       }
     }
     if (inputValue.value === true) {
@@ -250,7 +256,6 @@ async function handleSwitch() {
             ) * 100,
           ),
         )
-        await nextTick()
       }
     }
     if (is_first_enter_percent) {
@@ -258,9 +263,18 @@ async function handleSwitch() {
     }
   } else if (props.field === 'cache.chart.series.clockwise') {
     await emit('update-options', `series.0.clockwise`, inputValue.value)
-    await nextTick()
   } else if (props.field === 'cache.chart.series.labelLine.show') {
-    console.log(111)
+    console.log('cache.chart.series.labelLine.show')
+  } else if (props.field === 'cache.chart.series.bar.label.show') {
+    for (let i = 0; i < dActiveElement.value.echartopts.series.length; i++) {
+      if (dActiveElement.value.echartopts.series[i].type === 'bar')
+        await emit('update-options', `series.${i}.label.show`, inputValue.value)
+    }
+  } else if (props.field === 'cache.chart.series.line.label.show') {
+    for (let i = 0; i < dActiveElement.value.echartopts.series.length; i++) {
+      if (dActiveElement.value.echartopts.series[i].type === 'line')
+        await emit('update-options', `series.${i}.label.show`, inputValue.value)
+    }
   } else {
     console.log('pass')
   }
@@ -274,7 +288,7 @@ async function handleInput() {
       i < dActiveElement.value.echartopts.series[0].data.length;
       i++
     ) {
-      emit(
+      await emit(
         'update-options',
         `series.0.data.${i}.label.formatter`,
         inputValue.value,
@@ -282,7 +296,7 @@ async function handleInput() {
       await nextTick()
     }
   }
-  emit('update-options', props.field, inputValue.value)
+  await emit('update-options', props.field, inputValue.value)
 }
 
 async function handleFontFaimlySelector() {
@@ -292,7 +306,7 @@ async function handleFontFaimlySelector() {
       i < dActiveElement.value.echartopts.series[0].data.length;
       i++
     ) {
-      emit(
+      await emit(
         'update-options',
         `series.0.data.${i}.label.fontFamily`,
         inputValue.value,
@@ -305,13 +319,7 @@ async function handleFontFaimlySelector() {
 
 async function handleColorPicker() {
   if (props.field === 'cache.chart.backgroundColor.color') {
-    emit(
-      'update-options',
-      'cache.chart.backgroundColor.color',
-      inputValue.value,
-    )
-    await nextTick()
-    emit('update-options', 'backgroundColor', inputValue.value)
+    await emit('update-options', 'backgroundColor', inputValue.value)
   } else if (props.field === 'cache.chart.series.itemStyle.borderColor') {
     await emit(
       'update-options',
@@ -322,21 +330,24 @@ async function handleColorPicker() {
   } else {
     console.log('no opitons')
   }
-  emit('update-options', props.field, inputValue.value)
+  await emit('update-options', props.field, inputValue.value)
 }
 
-async function handleColorPicker2() {
-  emit('update-options', props.field, inputValue.value)
-  await nextTick()
+async function handleColorPicker2(index) {
   if (props.field === 'cache.chart.legend.color') {
     // 扇形颜色
-    for (let i = 0; i < inputValue.value.length; i++) {
-      emit('update-options', `color.${i}`, inputValue.value[i])
-      await nextTick()
-    }
+    await emit('update-options', `color.${index}`, inputValue.value[index])
+    await nextTick()
+    await emit(
+      'update-options',
+      `series.${index}.color`,
+      inputValue.value[index],
+    )
+    await nextTick()
   } else {
     console.log('pass!')
   }
+  await emit('update-options', props.field, inputValue.value)
 }
 
 async function handleSelect() {
@@ -416,8 +427,7 @@ async function handleSelect() {
         console.log('no legend position choice.')
         break
     }
-  }
-  if (props.field === 'cache.sundry.dataFormat.dataDecimal') {
+  } else if (props.field === 'cache.sundry.dataFormat.dataDecimal') {
     if (inputValue.value === 'default' || inputValue.value === 'two') {
       for (
         let i = 0;
@@ -472,8 +482,13 @@ async function handleSelect() {
       console.log('no this option', inputValue.value)
     }
     await nextTick()
-    await emit('update-options', props.field, inputValue.value)
+  } else if (props.field === 'cache.chart.legend.icon') {
+    await emit('update-options', `legend.icon`, inputValue.value)
+    await nextTick()
+  } else {
+    console.log('other')
   }
+  await emit('update-options', props.field, inputValue.value)
 }
 
 async function handleSlider() {
@@ -500,16 +515,10 @@ async function handleSlider() {
   } else {
     console.log('no this option', inputValue.value)
   }
-  emit('update-options', props.field, inputValue.value)
+  await emit('update-options', props.field, inputValue.value)
 }
 
 function handleTextAlignSelector(item) {
   emit('update-options', props.field, item.value)
 }
-
-// Update the min, max, step values on component initialization
-onBeforeMount(() => {
-  min.value = props.props?.min || 0
-  max.value = props.props?.max || Infinity
-})
 </script>
