@@ -3,7 +3,7 @@
  * @Date: 2021-08-27 15:16:07
  * @Description: 素材列表，主要用于文字组合列表
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
- * @LastEditTime: 2023-10-16 00:30:16
+ * @LastEditTime: 2023-11-27 18:26:08
 -->
 <template>
   <div class="wrap">
@@ -18,23 +18,64 @@
     <classHeader v-show="!currentCategory" :types="types" @select="selectTypes">
       <template v-slot="{ index }">
         <div class="list-wrap">
-          <div v-for="(item, i) in showList[index]" :key="i + 'sl'" draggable="false" @mousedown="dragStart($event, item)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="selectItem(item)" @dragstart="dragStart($event, item)">
-            <el-image class="list__img-thumb" :src="item.cover" fit="contain" lazy loading="lazy"></el-image>
+          <div
+            v-for="(item, i) in showList[index]"
+            :key="i + 'sl'"
+            draggable="false"
+            @mousedown="dragStart($event, item)"
+            @mousemove="mousemove"
+            @mouseup="mouseup"
+            @click.stop="selectItem(item)"
+            @dragstart="dragStart($event, item)"
+          >
+            <el-image
+              class="list__img-thumb"
+              :src="item.cover"
+              fit="contain"
+              lazy
+              loading="lazy"
+            ></el-image>
           </div>
         </div>
       </template>
     </classHeader>
 
-    <ul v-if="currentCategory" v-infinite-scroll="load" class="infinite-list" :infinite-scroll-distance="150" style="overflow: auto">
-      <classHeader :is-back="true" @back="back">{{ currentCategory.name }}</classHeader>
+    <ul
+      v-if="currentCategory"
+      v-infinite-scroll="load"
+      class="infinite-list"
+      :infinite-scroll-distance="150"
+      style="overflow: auto"
+    >
+      <classHeader :is-back="true" @back="back">{{
+        currentCategory.name
+      }}</classHeader>
       <el-space fill wrap :fillRatio="30" direction="horizontal" class="list">
-        <div v-for="(item, i) in list" :key="i + 'i'" class="list__item" draggable="false" @mousedown="dragStart($event, item)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="selectItem(item)" @dragstart="dragStart($event, item)">
+        <div
+          v-for="(item, i) in list"
+          :key="i + 'i'"
+          class="list__item"
+          draggable="false"
+          @mousedown="dragStart($event, item)"
+          @mousemove="mousemove"
+          @mouseup="mouseup"
+          @click.stop="selectItem(item)"
+          @dragstart="dragStart($event, item)"
+        >
           <!-- <edit-model :isComp="true" @action="action($event, item, i)"> -->
-          <el-image class="list__img" :src="item.cover" fit="contain" lazy loading="lazy" />
+          <el-image
+            class="list__img"
+            :src="item.cover"
+            fit="contain"
+            lazy
+            loading="lazy"
+          />
           <!-- </edit-model> -->
         </div>
       </el-space>
-      <div v-show="loading" class="loading"><i class="el-icon-loading"></i> 拼命加载中</div>
+      <div v-show="loading" class="loading">
+        <i class="el-icon-loading"></i> 拼命加载中
+      </div>
       <div v-show="loadDone" class="loading">全部加载完毕</div>
     </ul>
   </div>
@@ -42,7 +83,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted, watch } from 'vue'
-// import { ElDivider } from 'element-plus'
 import api from '@/api'
 import { mapActions } from 'vuex'
 import getComponentsData from '@/common/methods/DesignFeatures/setComponents'
@@ -84,11 +124,11 @@ export default defineComponent({
     })
     const mouseup = (e: any) => {
       e.preventDefault()
-      setTimeout(() => {
-        isDrag = false
-        tempDetail = null
-        startPoint = { x: 99999, y: 99999 }
-      }, 10)
+      // setTimeout(() => {
+      isDrag = false
+      tempDetail = null
+      startPoint = { x: 99999, y: 99999 }
+      // }, 10)
     }
     const mousemove = (e: any) => {
       e.preventDefault()
@@ -162,7 +202,8 @@ export default defineComponent({
         return
       }
       this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择
-      tempDetail = tempDetail || (await api.home.getTempDetail({ id: item.id, type: 1 }))
+      tempDetail =
+        tempDetail || (await api.home.getTempDetail({ id: item.id, type: 1 }))
       // let group = JSON.parse(tempDetail.data)
       const group: any = await getComponentsData(tempDetail.data)
       let parent: any = { x: 0, y: 0 }
@@ -185,19 +226,27 @@ export default defineComponent({
         this.addWidget(group)
       }
     },
-    async dragStart(e: any, { id }: any) {
+    async dragStart(e: any, { id, width, height, cover }: any) {
       startPoint = { x: e.x, y: e.y }
-      tempDetail = await api.home.getTempDetail({ id, type: 1 })
-      let finalWidth = tempDetail.width
+      // tempDetail = await api.home.getTempDetail({ id, type: 1 })
+      // let finalWidth = tempDetail.width
+      let finalWidth = 0
       if (finalWidth) {
-        const img = await setImageData(tempDetail)
+        const img = await setImageData({ width, height, url: cover })
         finalWidth = img.canvasWidth
       }
       dragHelper.start(e, finalWidth)
+      tempDetail = await api.home.getTempDetail({ id, type: 1 })
       if (Array.isArray(JSON.parse(tempDetail.data))) {
-        this.$store.commit('selectItem', { data: JSON.parse(tempDetail.data), type: 'group' })
+        this.$store.commit('selectItem', {
+          data: JSON.parse(tempDetail.data),
+          type: 'group',
+        })
       } else {
-        this.$store.commit('selectItem', { data: JSON.parse(tempDetail.data), type: 'text' })
+        this.$store.commit('selectItem', {
+          data: JSON.parse(tempDetail.data),
+          type: 'text',
+        })
       }
     },
   },

@@ -24,12 +24,21 @@ export default function keyCodeOptions(e: any, params: any) {
       break
     case 46:
     case 8:
-      if (store.getters.dActiveElement.isContainer) {
-        if (checkGroupChild(store.getters.dActiveElement.uuid, 'editable')) {
-          return
+      {
+        if (store.getters.dActiveElement.isContainer) {
+          if (checkGroupChild(store.getters.dActiveElement.uuid, 'editable')) {
+            return
+          }
         }
+        const { type, editable }: any = store.getters.dActiveElement
+
+        if (type === 'w-text') {
+          // 不在编辑状态则执行删除
+          !editable &&
+            store.getters.showMoveable &&
+            store.dispatch('deleteWidget')
+        } else store.dispatch('deleteWidget')
       }
-      !store.getters.dActiveElement.editable && store.dispatch('deleteWidget')
       break
   }
 }
@@ -38,7 +47,8 @@ export default function keyCodeOptions(e: any, params: any) {
  */
 function checkGroupChild(pid: number | string, key: any) {
   let itHas = false
-  const childs = store.getters.dWidgets.filter((x: any) => x.parent === pid) || []
+  const childs =
+    store.getters.dWidgets.filter((x: any) => x.parent === pid) || []
   childs.forEach((element: any) => {
     element[key] && (itHas = true)
   })
@@ -51,7 +61,10 @@ function udlr(type: any, value: any, event: any) {
   if (store.getters.dActiveElement.uuid != -1) {
     if (store.getters.dActiveElement.editable) {
       return
-    } else if (store.getters.dActiveElement.isContainer && checkGroupChild(store.getters.dActiveElement.uuid, 'editable')) {
+    } else if (
+      store.getters.dActiveElement.isContainer &&
+      checkGroupChild(store.getters.dActiveElement.uuid, 'editable')
+    ) {
       return
     }
     event.preventDefault()

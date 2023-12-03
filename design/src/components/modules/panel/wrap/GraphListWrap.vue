@@ -18,22 +18,69 @@
     <classHeader v-show="!currentCategory" :types="types" @select="selectTypes">
       <template v-slot="{ index }">
         <div class="list-wrap">
-          <div v-for="(item, i) in showList[index]" :key="i + 'sl'" draggable="false" @mousedown="dragStart($event, item)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="selectItem(item)" @dragstart="dragStart($event, item)">
-            <el-image class="list__img-thumb" :src="item.thumb" fit="contain" lazy loading="lazy" />
+          <div
+            v-for="(item, i) in showList[index]"
+            :key="i + 'sl'"
+            draggable="false"
+            @mousedown="dragStart($event, item)"
+            @mousemove="mousemove"
+            @mouseup="mouseup"
+            @click.stop="selectItem(item)"
+            @dragstart="dragStart($event, item)"
+          >
+            <el-image
+              class="list__img-thumb"
+              :src="item.thumb"
+              fit="contain"
+              lazy
+              loading="lazy"
+            />
           </div>
         </div>
       </template>
     </classHeader>
 
-    <ul v-if="currentCategory" v-infinite-scroll="load" class="infinite-list" :infinite-scroll-distance="150" style="overflow: auto">
-      <classHeader :is-back="true" @back="back">{{ currentCategory.name }}</classHeader>
+    <ul
+      v-if="currentCategory"
+      v-infinite-scroll="load"
+      class="infinite-list"
+      :infinite-scroll-distance="150"
+      style="overflow: auto"
+    >
+      <classHeader :is-back="true" @back="back">{{
+        currentCategory.name
+      }}</classHeader>
       <el-space fill wrap :fillRatio="30" direction="horizontal" class="list">
-        <div v-for="(item, i) in list" :key="i + 'i'" class="list__item" draggable="false" @mousedown="dragStart($event, item)" @mousemove="mousemove" @mouseup="mouseup" @click.stop="selectItem(item)" @dragstart="dragStart($event, item)">
-          <el-image class="list__img" :src="item.thumb" fit="contain" lazy loading="lazy" />
+        <div
+          v-for="(item, i) in list"
+          :key="i + 'i'"
+          class="list__item"
+          draggable="false"
+          @mousedown="dragStart($event, item)"
+          @mousemove="mousemove"
+          @mouseup="mouseup"
+          @click.stop="selectItem(item)"
+          @dragstart="dragStart($event, item)"
+        >
+          <el-image
+            class="list__img"
+            :src="item.thumb"
+            fit="contain"
+            lazy
+            loading="lazy"
+          />
         </div>
       </el-space>
-      <div v-show="loading" class="loading"><i class="el-icon-loading" /> 拼命加载中</div>
-      <div v-show="loadDone" :style="list.length <= 0 ? 'padding-top: 4rem' : ''" class="loading">全部加载完毕</div>
+      <div v-show="loading" class="loading">
+        <i class="el-icon-loading" /> 拼命加载中
+      </div>
+      <div
+        v-show="loadDone"
+        :style="list.length <= 0 ? 'padding-top: 4rem' : ''"
+        class="loading"
+      >
+        全部加载完毕
+      </div>
     </ul>
   </div>
 </template>
@@ -113,7 +160,11 @@ export default defineComponent({
       state.loading = true
       pageOptions.page += 1
       const list = await api.material.getList({
-        ...{ cate: state.currentCategory?.id, search: state.searchKeyword, ...pageOptions },
+        ...{
+          cate: state.currentCategory?.id,
+          search: state.searchKeyword,
+          ...pageOptions,
+        },
       })
       if (init) {
         state.list = list?.list
@@ -159,7 +210,10 @@ export default defineComponent({
         return
       }
       this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择
-      let setting = item.type === 'svg' ? JSON.parse(JSON.stringify(wSvg.setting)) : JSON.parse(JSON.stringify(wImage.setting))
+      let setting =
+        item.type === 'svg'
+          ? JSON.parse(JSON.stringify(wSvg.setting))
+          : JSON.parse(JSON.stringify(wImage.setting))
       const img: any = await setImageData(item)
 
       setting.width = img.width
@@ -184,9 +238,13 @@ export default defineComponent({
     },
     async dragStart(e: any, item: any) {
       startPoint = { x: e.x, y: e.y }
-      const img = await setImageData(item)
+      const { width, height, thumb, url } = item
+      const img = await setImageData({ width, height, url: thumb || url })
       dragHelper.start(e, img.canvasWidth)
-      this.$store.commit('selectItem', { data: { value: item }, type: item.type })
+      this.$store.commit('selectItem', {
+        data: { value: item },
+        type: item.type,
+      })
     },
   },
 })

@@ -3,20 +3,61 @@
     <el-collapse v-model="activeNames">
       <el-collapse-item title="位置尺寸" name="1">
         <div class="line-layout">
-          <number-input v-model="innerElement.left" label="X" @finish="(value) => finish('left', value)" />
-          <number-input v-model="innerElement.top" label="Y" @finish="(value) => finish('top', value)" />
-          <number-input v-model="innerElement.width" style="margin-top: 0.5rem" label="宽" :editable="true" @finish="(value) => finish('width', value)" />
-          <number-input v-model="innerElement.height" style="margin-top: 0.5rem" label="高" :editable="true" @finish="(value) => finish('height', value)" />
+          <number-input
+            v-model="innerElement.left"
+            label="X"
+            @finish="(value) => finish('left', value)"
+          />
+          <number-input
+            v-model="innerElement.top"
+            label="Y"
+            @finish="(value) => finish('top', value)"
+          />
+          <number-input
+            v-model="innerElement.width"
+            style="margin-top: 0.5rem"
+            label="宽"
+            :editable="true"
+            @finish="(value) => finish('width', value)"
+          />
+          <number-input
+            v-model="innerElement.height"
+            style="margin-top: 0.5rem"
+            label="高"
+            :editable="true"
+            @finish="(value) => finish('height', value)"
+          />
         </div>
       </el-collapse-item>
       <!-- <el-collapse-item title="样式设置" name="2"> -->
       <div class="line-layout style-item">
-        <value-select v-model="innerElement.fontClass" label="文字" :data="fontClassList" inputWidth="152px" :readonly="true" @finish="(font) => finish('fontClass', font)" />
-        <value-select v-model="innerElement.fontSize" label="大小" suffix="px" :data="fontSizeList" @finish="(value) => finish('fontSize', value)" />
+        <value-select
+          v-model="innerElement.fontClass"
+          label="文字"
+          :data="fontClassList"
+          inputWidth="152px"
+          :readonly="true"
+          @finish="(font) => finish('fontClass', font)"
+        />
+        <value-select
+          v-model="innerElement.fontSize"
+          label="大小"
+          suffix="px"
+          :data="fontSizeList"
+          @finish="(value) => finish('fontSize', value)"
+        />
       </div>
 
-      <icon-item-select class="style-item" :data="styleIconList1" @finish="textStyleAction" />
-      <icon-item-select class="style-item" :data="styleIconList2" @finish="textStyleAction" />
+      <icon-item-select
+        class="style-item"
+        :data="styleIconList1"
+        @finish="textStyleAction"
+      />
+      <icon-item-select
+        class="style-item"
+        :data="styleIconList2"
+        @finish="textStyleAction"
+      />
 
       <!-- <div style="flex-wrap: nowrap" class="line-layout style-item">
         <value-select v-model="innerElement.lineHeight" label="行距" suffix="倍" :data="lineHeightList" @finish="(value) => finish('lineHeight', value)" />
@@ -24,24 +65,62 @@
       </div> -->
       <!-- <el-collapse-item title="位置尺寸" name="1"> -->
       <div class="style-item slide-wrap">
-        <number-slider v-model="innerElement.letterSpacing" style="font-size: 14px" label="字距" labelWidth="40px" :step="0.05" :minValue="-innerElement.fontSize" :maxValue="innerElement.fontSize * 2" @finish="(value) => finish('letterSpacing', value)" />
-        <number-slider v-model="innerElement.lineHeight" style="font-size: 14px" label="行距" labelWidth="40px" :step="0.05" :minValue="0" :maxValue="2.5" @finish="(value) => finish('lineHeight', value)" />
+        <number-slider
+          v-model="innerElement.letterSpacing"
+          style="font-size: 14px"
+          label="字距"
+          labelWidth="40px"
+          :step="0.05"
+          :minValue="-innerElement.fontSize"
+          :maxValue="innerElement.fontSize * 2"
+          @finish="(value) => finish('letterSpacing', value)"
+        />
+        <number-slider
+          v-model="innerElement.lineHeight"
+          style="font-size: 14px"
+          label="行距"
+          labelWidth="40px"
+          :step="0.05"
+          :minValue="0"
+          :maxValue="2.5"
+          @finish="(value) => finish('lineHeight', value)"
+        />
       </div>
       <!-- </el-collapse-item> -->
 
       <div style="flex-wrap: nowrap" class="line-layout style-item">
-        <color-select v-model="innerElement.color" label="颜色" @finish="(value) => finish('color', value)" />
+        <color-select
+          v-model="innerElement.color"
+          label="颜色"
+          @finish="(value) => finish('color', value)"
+        />
         <!-- <color-select v-model="innerElement.backgroundColor" label="背景颜色" @finish="(value) => finish('backgroundColor', value)" /> -->
       </div>
       <div class="line-layout style-item">
-        <effect-wrap v-model="innerElement.isEffect" :data="innerElement.textEffects" :degree="innerElement.degree" @select="testEffect" />
+        <effect-wrap
+          v-model="innerElement.textEffects"
+          :data="innerElement"
+          :degree="innerElement.degree"
+          @select="testEffect"
+        />
       </div>
-      <icon-item-select class="style-item" :data="layerIconList" @finish="layerAction" />
-      <icon-item-select class="style-item" :data="alignIconList" @finish="alignAction" />
+      <icon-item-select
+        class="style-item"
+        :data="layerIconList"
+        @finish="layerAction"
+      />
+      <icon-item-select
+        class="style-item"
+        :data="alignIconList"
+        @finish="alignAction"
+      />
 
       <!-- v-show="!innerElement.editable"  -->
       <div style="margin-top: 10px" class="line-layout style-item">
-        <text-input-area v-model="innerElement.text" @finish="(value) => finish('text', value)" />
+        <text-input-area
+          v-model="innerElement.text"
+          @finish="(value) => finish('text', value)"
+        />
       </div>
       <div>uuid: {{ dActiveElement.uuid }}</div>
       <!-- </el-collapse-item> -->
@@ -55,7 +134,11 @@ const NAME = 'w-text-style'
 // import api from '@/api'
 // import _config from '@/config'
 import { mapGetters, mapActions } from 'vuex'
-import { styleIconList1, styleIconList2, alignIconList } from '../../../../assets/data/TextIconsData'
+import {
+  styleIconList1,
+  styleIconList2,
+  alignIconList,
+} from '../../../../assets/data/TextIconsData'
 import layerIconList from '@/assets/data/LayerIconList'
 import numberInput from '../../settings/numberInput.vue'
 import numberSlider from '../../settings/numberSlider.vue'
@@ -69,14 +152,34 @@ import usePageFontsFilter from './pageFontsFilter.ts'
 
 export default {
   name: NAME,
-  components: { numberInput, colorSelect, iconItemSelect, textInputArea, valueSelect, effectWrap, numberSlider },
+  components: {
+    numberInput,
+    colorSelect,
+    iconItemSelect,
+    textInputArea,
+    valueSelect,
+    effectWrap,
+    numberSlider,
+  },
   data() {
     return {
       activeNames: [],
       innerElement: {},
       tag: false,
-      ingoreKeys: ['left', 'top', 'name', 'width', 'height', 'text', 'color', 'backgroundColor'],
-      fontSizeList: [12, 14, 24, 26, 28, 30, 36, 48, 60, 72, 96, 108, 120, 140, 180, 200, 250, 300, 400, 500],
+      ingoreKeys: [
+        'left',
+        'top',
+        'name',
+        'width',
+        'height',
+        'text',
+        'color',
+        'backgroundColor',
+      ],
+      fontSizeList: [
+        12, 14, 24, 26, 28, 30, 36, 48, 60, 72, 96, 108, 120, 140, 180, 200,
+        250, 300, 400, 500,
+      ],
       fontClassList: [], // 不能设空字体系统默认字体，因为截图服务的默认字体无法保证一致
       lineHeightList: [1, 1.5, 2],
       letterSpacingList: [0, 10, 25, 50, 75, 100, 200],
@@ -114,7 +217,12 @@ export default {
     }, 100)
   },
   methods: {
-    ...mapActions(['updateWidgetData', 'updateAlign', 'updateLayerIndex', 'pushHistory']),
+    ...mapActions([
+      'updateWidgetData',
+      'updateAlign',
+      'updateLayerIndex',
+      'pushHistory',
+    ]),
     testEffect({ key, value, style }) {
       const uuid = this.dActiveElement.uuid
       this.$store.commit('setWidgetStyle', { uuid, key, value })
@@ -130,7 +238,9 @@ export default {
       for (const font of localFonts) {
         const { id, oid, value, url, alias, preview, lang } = font
         const item = { id, oid, value, url, alias, preview }
-        lang === 'zh' ? fontLists['中文'].unshift(item) : fontLists['英文'].unshift(item)
+        lang === 'zh'
+          ? fontLists['中文'].unshift(item)
+          : fontLists['英文'].unshift(item)
       }
       fontLists['当前页面'] = usePageFontsFilter()
       this.fontClassList = fontLists
@@ -165,7 +275,11 @@ export default {
       for (let key in this.innerElement) {
         if (this.ingoreKeys.indexOf(key) !== -1) {
           this.dActiveElement[key] = this.innerElement[key]
-        } else if (key !== 'setting' && key !== 'record' && this.innerElement[key] !== this.dActiveElement[key]) {
+        } else if (
+          key !== 'setting' &&
+          key !== 'record' &&
+          this.innerElement[key] !== this.dActiveElement[key]
+        ) {
           // console.log('???', key)
           // const pushHistory = !['textEffects', 'transformData', 'fontClass'].includes(key)
           this.updateWidgetData({
@@ -185,7 +299,8 @@ export default {
         pushHistory: false,
       })
       setTimeout(() => {
-        key === 'fontClass' && (this.fontClassList['当前页面'] = usePageFontsFilter())
+        key === 'fontClass' &&
+          (this.fontClassList['当前页面'] = usePageFontsFilter())
       }, 300)
     },
     layerAction(item) {
@@ -195,7 +310,8 @@ export default {
       })
     },
     async textStyleAction(item) {
-      let value = item.key === 'textAlign' ? item.value : item.value[item.select ? 1 : 0]
+      let value =
+        item.key === 'textAlign' ? item.value : item.value[item.select ? 1 : 0]
       this.innerElement[item.key] = value
       // TODO: 对竖版文字的特殊处理
       item.key === 'writingMode' && this.relationChange()
@@ -222,7 +338,10 @@ export default {
             }
             break
           case 'textDecoration':
-            if (this.innerElement[key] !== this.styleIconList1[i].value[0] && this.innerElement[key] == this.styleIconList1[i].value[1]) {
+            if (
+              this.innerElement[key] !== this.styleIconList1[i].value[0] &&
+              this.innerElement[key] == this.styleIconList1[i].value[1]
+            ) {
               this.styleIconList1[i].select = !this.styleIconList1[i].select
             }
             break
@@ -236,7 +355,10 @@ export default {
       for (let i = 0; i < this.styleIconList2.length; i++) {
         let key = this.styleIconList2[i].key
         this.styleIconList2[i].select = false
-        if (key === 'textAlign' && this.innerElement[key] === this.styleIconList2[i].value) {
+        if (
+          key === 'textAlign' &&
+          this.innerElement[key] === this.styleIconList2[i].value
+        ) {
           this.styleIconList2[i].select = true
           continue
         }

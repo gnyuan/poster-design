@@ -91,9 +91,13 @@ export default {
     cropEdit(val) {
       // TODO 移动事件绑定
       if (val) {
-        document.getElementById(this.params.uuid).addEventListener('mousedown', this.touchstart, false)
+        document
+          .getElementById(this.params.uuid)
+          .addEventListener('mousedown', this.touchstart, false)
       } else {
-        document.getElementById(this.params.uuid).removeEventListener('mousedown', this.touchstart, false)
+        document
+          .getElementById(this.params.uuid)
+          .removeEventListener('mousedown', this.touchstart, false)
       }
     },
   },
@@ -107,8 +111,10 @@ export default {
     this.updateRecord()
     // document.getElementById(this.params.uuid).addEventListener('mousedown', this.touchstart, false)
     document.addEventListener('mouseup', this.touchend, false)
-    this.params.transform && (this.$refs.widget.style.transform = this.params.transform)
-    this.params.rotate && (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
+    this.params.transform &&
+      (this.$refs.widget.style.transform = this.params.transform)
+    this.params.rotate &&
+      (this.$refs.widget.style.transform += `rotate(${this.params.rotate})`)
   },
   beforeUnmount() {
     document.removeEventListener('mouseup', this.touchend, false)
@@ -160,6 +166,7 @@ export default {
       // console.log(this.params)
       const _this = this
       const Snap = window.Snap
+      console.log('hhhhh', Snap)
       return new Promise((resolve) => {
         Snap.load(
           this.params.svgUrl,
@@ -204,7 +211,9 @@ export default {
                   if (colorsObj[attr.value]) {
                     // console.log(attr.name, colorsObj[attr.value])
                     attr.value = colorsObj[attr.value]
-                    attrsColor[attr.name] = _this.params.colors.findIndex((x) => x == attr.value)
+                    attrsColor[attr.name] = _this.params.colors.findIndex(
+                      (x) => x == attr.value,
+                    )
                   }
                 })
               } catch (e) {}

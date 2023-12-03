@@ -3,7 +3,11 @@
     :id="params.uuid"
     ref="widget"
     v-loading="loading"
-    :class="['w-text', { editing: editable, 'layer-lock': params.lock }, params.uuid]"
+    :class="[
+      'w-text',
+      { editing: editable, 'layer-lock': params.lock },
+      params.uuid,
+    ]"
     :style="{
       position: 'absolute',
       left: params.left - parent.left + 'px',
@@ -33,18 +37,50 @@
         :key="efi + 'effect'"
         :style="{
           fontFamily: `'${params.fontClass.value}'`,
-          color: ef.filling && ef.filling.type === 0 ? ef.filling.color : 'transparent',
-          webkitTextStroke: ef.stroke ? `${ef.stroke.width}px ${ef.stroke.color}` : undefined,
-          textShadow: ef.shadow ? `${ef.shadow.offsetX}px ${ef.shadow.offsetY}px ${ef.shadow.blur}px ${ef.shadow.color}` : undefined,
-          backgroundImage: ef.filling ? (ef.filling.type === 0 ? undefined : getGradientOrImg(ef)) : undefined,
-          webkitBackgroundClip: ef.filling ? (ef.filling.type === 0 ? undefined : 'text') : undefined,
+          color:
+            ef.filling && ef.filling.enable && ef.filling.type === 0
+              ? ef.filling.color
+              : 'transparent',
+          webkitTextStroke:
+            ef.stroke && ef.stroke.enable
+              ? `${ef.stroke.width}px ${ef.stroke.color}`
+              : undefined,
+          textShadow:
+            ef.shadow && ef.shadow.enable
+              ? `${ef.shadow.offsetX}px ${ef.shadow.offsetY}px ${ef.shadow.blur}px ${ef.shadow.color}`
+              : undefined,
+          backgroundImage:
+            ef.filling && ef.filling.enable
+              ? ef.filling.type === 0
+                ? undefined
+                : getGradientOrImg(ef)
+              : undefined,
+          webkitBackgroundClip:
+            ef.filling && ef.filling.enable
+              ? ef.filling.type === 0
+                ? undefined
+                : 'text'
+              : undefined,
+          transform:
+            ef.offset && ef.offset.enable
+              ? `translate(${ef.offset.x}px, ${ef.offset.y}px)`
+              : undefined,
         }"
         class="edit-text effect-text"
         spellcheck="false"
         v-html="params.text"
       ></div>
     </template>
-    <div ref="editWrap" :style="{ fontFamily: `'${params.fontClass.value}'` }" class="edit-text" spellcheck="false" :contenteditable="editable ? 'plaintext-only' : false" @input="writingText($event)" @blur="writeDone($event)" v-html="params.text"></div>
+    <div
+      ref="editWrap"
+      :style="{ fontFamily: `'${params.fontClass.value}'` }"
+      class="edit-text"
+      spellcheck="false"
+      :contenteditable="editable ? 'plaintext-only' : false"
+      @input="writingText($event)"
+      @blur="writeDone($event)"
+      v-html="params.text"
+    ></div>
   </div>
 </template>
 
@@ -54,6 +90,7 @@ const NAME = 'w-text'
 
 import { mapGetters, mapActions } from 'vuex'
 import { fontWithDraw } from '@/utils/widgets/loadFontRule'
+import getGradientOrImg from './getGradientOrImg.ts'
 
 export default {
   name: NAME,
@@ -70,10 +107,10 @@ export default {
     fontSize: 24,
     zoom: 1,
     fontClass: {
-      alias: '思源黑体',
-      id: 904,
-      value: 'hua-wen-xi-hei',
-      url: '/static/fonts/20231116-SourceHanSansCN-VF.woff2',
+      alias: '站酷快乐体',
+      id: 543,
+      value: 'zcool-kuaile-regular',
+      url: 'https://lib.baomitu.com/fonts/zcool-kuaile/zcool-kuaile-regular.woff2',
     },
     fontFamily: 'SourceHanSansSC-Regular',
     fontWeight: 'normal',
@@ -151,34 +188,15 @@ export default {
   async mounted() {
     this.updateRecord()
     // await this.$nextTick()
-    this.styleEffect()
-    this.params.transform && (this.$refs.widget.style.transform = this.params.transform)
-    this.params.rotate && (this.$refs.widget.style.transform += `translate(0px, 0px) rotate(${this.params.rotate}) scale(1, 1)`)
+    this.params.transform &&
+      (this.$refs.widget.style.transform = this.params.transform)
+    this.params.rotate &&
+      (this.$refs.widget.style.transform += `translate(0px, 0px) rotate(${this.params.rotate}) scale(1, 1)`)
     // this.$store.commit('updateRect')
   },
   methods: {
     ...mapActions(['updateWidgetData', 'pushHistory']),
-    getGradientOrImg(ef) {
-      return ef.filling.type === 2 ? `linear-gradient(${ef.filling.gradient.angle}deg, ${ef.filling.gradient.stops[0].color} ${Number(ef.filling.gradient.stops[0].offset) * 100}%, ${ef.filling.gradient.stops[1].color} ${Number(ef.filling.gradient.stops[1].offset) * 100}%)` : `url(${ef.filling.imageContent.image})`
-    },
-    styleEffect() {
-      if (this.params.textEffects && this.params.textEffects.length > 0) {
-        const style = this.params.textEffects[this.params.textEffects.length - 1]
-        if (style.filling && style.filling.color && style.filling.type == 0) {
-          this.params.color = style.filling.color
-        }
-      }
-      // if (this.params.textEffects && this.params.textEffects.length <= 2 && this.params.textEffects[0]) {
-      //   // 填充
-      //   const grad = this.params.textEffects[0].type == 1 && this.params.textEffects[0].filling?.gradient
-      // if (grad) {
-      //   this.$refs.widget.style['-webkit-background-clip'] = 'text' // background-clip: text;
-      //   // this.$refs.widget.style['-webkit-text-fill-color'] = 'transparent' // -webkit-text-fill-color: transparent;
-      //   // // this.$refs.widget.style.backgroundImage = `url('https://st-gdx.dancf.com/gaodingx/0/personal/my-tasks/20210827-183407-abd3.jpg?x-oss-process=image/resize,w_176,h_176,m_fill/interlace,1,image/format,webp')`
-      //   this.$refs.widget.style.backgroundImage = `linear-gradient(${grad.angle}deg, ${grad.stops[0].color} ${Number(grad.stops[0].offset) * 100}%, ${grad.stops[1].color} ${Number(grad.stops[1].offset) * 100}%)`
-      // }
-      // }
-    },
+    getGradientOrImg,
     updateRecord() {
       if (this.dActiveElement.uuid === this.params.uuid) {
         let record = this.dActiveElement.record
@@ -190,7 +208,9 @@ export default {
       }
     },
     updateText(e) {
-      const value = e ? e.target.innerHTML : this.params.text.replace(/\n/g, '<br/>')
+      const value = e
+        ? e.target.innerHTML
+        : this.params.text.replace(/\n/g, '<br/>')
       // const value = (e ? e.target.innerText : this.params.text).replace(/<br\/>/g, '\r\n').replace(/&nbsp;/g, ' ')
       if (value !== this.params.text) {
         this.updateWidgetData({
@@ -212,7 +232,6 @@ export default {
         pushHistory: false,
       })
       this.$store.commit('updateRect')
-      // this.styleEffect()
     },
     writeDone(e) {
       this.editable = false

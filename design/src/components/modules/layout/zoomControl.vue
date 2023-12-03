@@ -1,18 +1,40 @@
 <template>
   <div id="zoom-control">
     <ul v-show="show" class="zoom-selecter">
-      <li v-for="(item, index) in zoomList" :key="index" :class="['zoom-item', { 'zoom-item-active': activezoomIndex === index }]" @click.stop="selectItem(index)">
+      <li
+        v-for="(item, index) in zoomList"
+        :key="index"
+        :class="[
+          'zoom-item',
+          { 'zoom-item-active': activezoomIndex === index },
+        ]"
+        @click.stop="selectItem(index)"
+      >
         <!-- <i v-if="item.icon" :class="['iconfont', item.icon]"></i> -->
         <span>{{ item.text }}</span>
         <i v-if="activezoomIndex === index" class="iconfont icon-selected"></i>
       </li>
     </ul>
     <div v-if="!hideControl" class="zoom-control-wrap">
-      <div :class="['zoom-icon radius-left', { disable: activezoomIndex === 0 }]" @click.stop="activezoomIndex > 0 ? sub() : ''">
+      <div
+        :class="['zoom-icon radius-left', { disable: activezoomIndex === 0 }]"
+        @click.stop="activezoomIndex > 0 ? sub() : ''"
+      >
         <i class="iconfont icon-sub"></i>
       </div>
-      <div :class="['zoom-text', { 'zoom-text-active': show }]" @click.stop="show = !show">{{ zoom.text }}</div>
-      <div :class="['zoom-icon radius-right', { disable: otherIndex === otherList.length - 1 }]" @click.stop="otherIndex < otherList.length - 1 ? add() : ''">
+      <div
+        :class="['zoom-text', { 'zoom-text-active': show }]"
+        @click.stop="show = !show"
+      >
+        {{ zoom.text }}
+      </div>
+      <div
+        :class="[
+          'zoom-icon radius-right',
+          { disable: otherIndex === otherList.length - 1 },
+        ]"
+        @click.stop="otherIndex < otherList.length - 1 ? add() : ''"
+      >
         <i class="iconfont icon-add"></i>
       </div>
     </div>
@@ -195,7 +217,10 @@ export default {
     add() {
       this.curAction = 'add'
       this.show = false
-      if (this.activezoomIndex === this.zoomList.length - 2 || this.activezoomIndex === this.zoomList.length - 1) {
+      if (
+        this.activezoomIndex === this.zoomList.length - 2 ||
+        this.activezoomIndex === this.zoomList.length - 1
+      ) {
         this.activezoomIndex = this.zoomList.length
         // this.otherIndex += 1
         if (this.bestZoom) {
@@ -239,6 +264,7 @@ export default {
     },
     mousewheelZoom(down) {
       const value = Number(this.dZoom.toFixed(0))
+      if (down && value <= 1) return
       this.updateZoom(down ? value - 1 : value + 1)
       this.zoom.text = value + '%'
       this.autoFixTop()

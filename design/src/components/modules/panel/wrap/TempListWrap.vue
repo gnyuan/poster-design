@@ -2,19 +2,31 @@
  * @Author: ShawnPhang
  * @Date: 2021-08-27 15:16:07
  * @Description: 模板列表
- * @LastEditors: ShawnPhang <site: book.palxp.com>
- * @LastEditTime: 2023-07-04 00:00:54
+ * @LastEditors: ShawnPhang <https://m.palxp.cn>
+ * @LastEditTime: 2023-11-22 09:55:59
 -->
 <template>
   <div class="wrap">
     <search-header v-model="searchKeyword" @change="cateChange" />
-    <el-divider v-show="title" style="margin-top: 1.7rem" content-position="left">
+    <el-divider
+      v-show="title"
+      style="margin-top: 1.7rem"
+      content-position="left"
+    >
       <span style="font-weight: bold">{{ title }}</span>
     </el-divider>
 
-    <ul ref="listRef" v-infinite-scroll="load" class="infinite-list" :infinite-scroll-distance="150" style="overflow: auto">
+    <ul
+      ref="listRef"
+      v-infinite-scroll="load"
+      class="infinite-list"
+      :infinite-scroll-distance="150"
+      style="overflow: auto"
+    >
       <img-water-fall :listData="list" @select="selectItem" />
-      <div v-show="loading" class="loading"><i class="el-icon-loading"></i> 拼命加载中</div>
+      <div v-show="loading" class="loading">
+        <i class="el-icon-loading"></i> 拼命加载中
+      </div>
       <div v-show="loadDone" class="loading">全部加载完毕</div>
     </ul>
   </div>
@@ -22,7 +34,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted, ref } from 'vue'
-import { ElDivider } from 'element-plus'
 import api from '@/api'
 import { mapActions, mapGetters, useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -32,7 +43,7 @@ import searchHeader from './components/searchHeader.vue'
 import useConfirm from '@/common/methods/confirm'
 
 export default defineComponent({
-  components: { ElDivider, searchHeader },
+  components: { searchHeader },
   setup() {
     const listRef = ref(null)
     const route = useRoute()
@@ -67,7 +78,10 @@ export default defineComponent({
       state.loading = true
       pageOptions.page += 1
 
-      const res = await api.home.getTempList({ search: state.searchKeyword, ...pageOptions })
+      const res = await api.home.getTempList({
+        search: state.searchKeyword,
+        ...pageOptions,
+      })
       res.list.length <= 0 && (state.loadDone = true)
       state.list = state.list.concat(res.list)
 
@@ -86,7 +100,9 @@ export default defineComponent({
 
     function checkHeight() {
       // 检查高度是否占满，否则继续请求下一页
-      const isLess = listRef.value.offsetHeight > listRef.value.firstElementChild.offsetHeight
+      const isLess =
+        listRef.value.offsetHeight >
+        listRef.value.firstElementChild.offsetHeight
       isLess && load()
     }
 
@@ -101,11 +117,20 @@ export default defineComponent({
     ...mapGetters(['tempEditing', 'dHistoryParams']),
   },
   methods: {
-    ...mapActions(['selectWidget', 'updatePageData', 'setTemplate', 'pushHistory']),
+    ...mapActions([
+      'selectWidget',
+      'updatePageData',
+      'setTemplate',
+      'pushHistory',
+    ]),
     async selectItem(item: any) {
       this.$store.commit('setShowMoveable', false) // 清理掉上一次的选择框
       if (this.dHistoryParams.length > 0) {
-        const isPass = await useConfirm('提示', '使用模板后，当前页面将会被替换，是否继续', 'warning')
+        const isPass = await useConfirm(
+          '提示',
+          '使用模板后，当前页面将会被替换，是否继续',
+          'warning',
+        )
         if (!isPass) {
           return false
         }
@@ -161,7 +186,11 @@ export default defineComponent({
     // },
     setTempId(tempId: number | string) {
       const { id } = this.$route.query
-      this.$router.push({ path: '/home', query: { tempid: tempId, id }, replace: true })
+      this.$router.push({
+        path: '/home',
+        query: { tempid: tempId, id },
+        replace: true,
+      })
     },
   },
 })

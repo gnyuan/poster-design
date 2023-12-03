@@ -14,7 +14,7 @@ export default {
   SCREEN_URL: '/screenshots',
   // ICONFONT_URL: '//at.alicdn.com/t/font_3223711_74mlzj4jdue.css',
   ICONFONT_URL: '//at.alicdn.com/t/font_2717063_ypy8vprc3b.css?display=swap',
-  ICONFONT_EXTRA: '//at.alicdn.com/t/c/font_3228074_zubqmza1sdk.css',
+  ICONFONT_EXTRA: '//at.alicdn.com/t/c/font_3228074_42xym3extur.css',
   ICONFONT2: '//at.alicdn.com/t/c/font_4337374_m56zab5h49r.css',
   supportSubFont: true, // 是否开启服务端字体压缩
   UPLOAD_URL: '/ai/remove',

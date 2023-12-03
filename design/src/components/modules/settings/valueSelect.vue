@@ -3,38 +3,79 @@
  * @Date: 2021-08-02 19:10:06
  * @Description: 选项选择（未拆分字体选择器）
  * @LastEditors: ShawnPhang <https://m.palxp.cn>
- * @LastEditTime: 2023-10-14 21:03:17
+ * @LastEditTime: 2023-11-20 18:21:55
 -->
 <template>
-  <div id="value-select" ref="select" :style="{ width: inputWidth }">
+  <div ref="select" class="value-select" :style="{ width: inputWidth }">
     <p v-if="label" class="input-label">
       {{ label }}
     </p>
-    <el-popover placement="bottom-end" width="auto">
+    <el-popover placement="bottom-end" trigger="click" width="auto">
       <!-- 单列表 -->
       <ul v-if="data && Array.isArray(data)" class="list-ul">
-        <li v-for="listItem in data" :key="typeof listItem === 'object' ? listItem.alias : listItem" :class="{ active: listItem == innerValue }" @click="selectItem(listItem)">
-          <img v-if="listItem.preview" class="preview" :src="listItem.preview" />
-          <span v-else>{{ (typeof listItem === 'object' ? listItem.alias : listItem) + suffix }}</span>
+        <li
+          v-for="listItem in data"
+          :key="typeof listItem === 'object' ? listItem.alias : listItem"
+          :class="{ active: listItem == innerValue }"
+          @click="selectItem(listItem)"
+        >
+          <img
+            v-if="listItem.preview"
+            class="preview"
+            :src="listItem.preview"
+          />
+          <span v-else>{{
+            (typeof listItem === 'object' ? listItem.alias : listItem) + suffix
+          }}</span>
         </li>
       </ul>
       <!-- tab分类列表 -->
       <div v-else class="tabs-wrap">
         <el-tabs v-model="activeTab">
-          <el-tab-pane v-for="(val, key, i) in data" :key="'tab' + i" :label="key" :name="key">
+          <el-tab-pane
+            v-for="(val, key, i) in data"
+            :key="'tab' + i"
+            :label="key"
+            :name="key"
+          >
             <ul class="list-ul">
-              <li v-for="listItem in data[key]" :key="typeof listItem === 'object' ? listItem.alias : listItem" :class="{ active: listItem == innerValue }" @click="selectItem(listItem)">
-                <img v-if="listItem.preview" class="preview" :src="listItem.preview" />
-                <span v-else :style="{ fontFamily: `'${listItem.value}'` }">{{ (typeof listItem === 'object' ? listItem.alias : listItem) + suffix }}</span>
+              <li
+                v-for="listItem in data[key]"
+                :key="typeof listItem === 'object' ? listItem.alias : listItem"
+                :class="{ active: listItem == innerValue }"
+                @click="selectItem(listItem)"
+              >
+                <img
+                  v-if="listItem.preview"
+                  class="preview"
+                  :src="listItem.preview"
+                />
+                <span v-else :style="{ fontFamily: `'${listItem.value}'` }">{{
+                  (typeof listItem === 'object' ? listItem.alias : listItem) +
+                  suffix
+                }}</span>
               </li>
             </ul>
           </el-tab-pane>
         </el-tabs>
       </div>
       <template #reference>
-        <div :class="['input-wrap', { active: inputBorder }]" :style="{ width: inputWidth }">
+        <div
+          :class="['input-wrap', { active: inputBorder }]"
+          :style="{ width: inputWidth }"
+        >
           <!-- <img v-if="innerPreview" class="preview" :src="innerPreview" /> -->
-          <input :style="{ fontFamily: modelValue.value }" :class="['real-input', { disable: !disable }]" :readonly="readonly ? 'readonly' : false" type="text" :value="showValue" @input="inputText" @focus="inputBorder = true" @blur="inputBorder = false" @keydown="(e) => opNumber(e)" />
+          <input
+            :style="{ fontFamily: modelValue.value }"
+            :class="['real-input', { disable: !disable }]"
+            :readonly="readonly ? 'readonly' : false"
+            type="text"
+            :value="showValue"
+            @input="inputText"
+            @focus="inputBorder = true"
+            @blur="inputBorder = false"
+            @keydown="(e) => opNumber(e)"
+          />
           <!-- <span class="input-unit">{{ suffix }}</span> -->
           <div class="op-btn">
             <!-- <div class="down" @click="inputBorder = !inputBorder"></div> -->
@@ -102,7 +143,10 @@ export default {
   },
   watch: {
     modelValue(value) {
-      this.innerValue = typeof this.modelValue === 'object' ? this.modelValue.alias : this.modelValue
+      this.innerValue =
+        typeof this.modelValue === 'object'
+          ? this.modelValue.alias
+          : this.modelValue
     },
     inputBorder(value) {
       if (value) {
@@ -115,7 +159,10 @@ export default {
     },
   },
   created() {
-    this.innerValue = typeof this.modelValue === 'object' ? this.modelValue.alias : this.modelValue
+    this.innerValue =
+      typeof this.modelValue === 'object'
+        ? this.modelValue.alias
+        : this.modelValue
   },
   mounted() {
     this.width = this.$refs.select.offsetWidth
@@ -154,7 +201,10 @@ export default {
       }
     },
     up() {
-      this.$emit('update:modelValue', parseInt(this.modelValue || 0, 10) + this.step)
+      this.$emit(
+        'update:modelValue',
+        parseInt(this.modelValue || 0, 10) + this.step,
+      )
     },
     down() {
       let value = parseInt(this.modelValue || 0, 10) - this.step
@@ -179,7 +229,7 @@ export default {
 @color0: #e1e1e1; // Appears 2 times
 @color1: #d1d1d1; // Appears 2 times
 
-#value-select {
+.value-select {
   // height: 60px;
   line-height: 1.15;
   width: 80px;
