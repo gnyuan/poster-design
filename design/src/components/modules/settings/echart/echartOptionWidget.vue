@@ -79,6 +79,7 @@ import { useStore } from 'vuex'
 
 import fontFamilySelector from './fontFamilySelector.vue'
 import iconItemSelect from '../iconItemSelect.vue'
+import { processPSD2Page } from '@/utils/plugins/psd'
 const store = useStore() //  用于保存信息
 const dActiveElement = computed(() => store.getters.dActiveElement) // 用户获取信息
 
