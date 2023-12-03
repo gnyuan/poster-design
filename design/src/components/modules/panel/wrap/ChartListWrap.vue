@@ -121,7 +121,6 @@ const getDataList = async () => {
   setTimeout(() => {
     loading = false
   }, 100)
-  console.log(876, state)
 }
 
 const dragStart = (index, list) => {

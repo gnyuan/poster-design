@@ -33,7 +33,7 @@ export default [
   },
   {
     name: '图表',
-    icon: 'sd-tubiao',
+    icon: 'icon-zujian02',
     show: false,
     component: 'chart-list-wrap',
   },
