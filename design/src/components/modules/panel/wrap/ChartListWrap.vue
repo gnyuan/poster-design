@@ -8,12 +8,12 @@
       @select="selectTypes"
     >
       <template v-slot="{ index }">
-        <photo-list
+        <chart-list
           :isShort="true"
           :listData="state.showList[index]"
           @load="getDataList"
           @drag="dragStart($event, state.showList[index])"
-          @select="selectImg($event, state.showList[index])"
+          @select="selectChart($event, state.showList[index])"
         />
       </template>
     </classHeader>
@@ -23,12 +23,12 @@
       }}</classHeader>
       <br /><br /><br />
       <div style="margin: 0 1rem; height: 100vh">
-        <photo-list
+        <chart-list
           :isDone="state.loadDone"
           :listData="state.recommendImgList"
           @load="getDataList"
           @drag="dragStart"
-          @select="selectImg"
+          @select="selectChart"
         />
       </div>
     </div>
@@ -36,10 +36,11 @@
 </template>
 
 <script lang="ts" setup>
-// 图片列表
+// 图表列表
 const NAME = 'chart-list-wrap'
 import { reactive, computed, onMounted } from 'vue'
-import wImage from '../../widgets/wImage/wImage.vue'
+// import wImage from '../../widgets/wImage/wImage.vue'
+import wPiechart from '../../widgets/wEcharts/wPiechart.vue'
 import api from '@/api'
 import { useStore } from 'vuex'
 import setImageData from '@/common/methods/DesignFeatures/setImage'
@@ -48,8 +49,6 @@ defineOptions({
   name: NAME,
   inheritAttrs: false,
 })
-
-// defineProps(['active'])
 
 const store = useStore()
 const state = reactive({
@@ -79,18 +78,30 @@ onMounted(async () => {
   }
 })
 
-const selectImg = async (index, list) => {
+const selectChart = async (index, list) => {
+  console.log(index, list, 776777)
   const item = list ? list[index] : state.recommendImgList[index]
   store.commit('setShowMoveable', false) // 清理掉上一次的选择
-  let setting = JSON.parse(JSON.stringify(wImage.setting))
-  const img = await setImageData(item) // await getImage(item.url)
-  setting.width = img.width
-  setting.height = img.height // parseInt(100 / item.value.ratio, 10)
-  setting.imgUrl = item.url
+  console.log('USE!!', item)
+
+  let setting = JSON.parse(JSON.stringify(wPiechart.setting))
   const { width: pW, height: pH } = dPage
-  setting.left = pW / 2 - img.width / 2
-  setting.top = pH / 2 - img.height / 2
+  setting.left = pW / 2 - setting.width / 2
+  setting.top = pH / 2 - setting.height / 2
+  setting.echarttype = item.chartId // 设置预设模板
   store.dispatch('addWidget', setting)
+  console.log('!!!!!', setting)
+
+  // let setting = JSON.parse(JSON.stringify(wImage.setting))
+  // const img = await setImageData(item) // await getImage(item.url)
+  // console.log('!!!!', item, img)
+  // setting.width = img.width
+  // setting.height = img.height // parseInt(100 / item.value.ratio, 10)
+  // setting.imgUrl = item.wgtCover
+  // const { width: pW, height: pH } = dPage
+  // setting.left = pW / 2 - img.width / 2
+  // setting.top = pH / 2 - img.height / 2
+  // store.dispatch('addWidget', setting)
 }
 
 const getDataList = async () => {
@@ -110,6 +121,7 @@ const getDataList = async () => {
   setTimeout(() => {
     loading = false
   }, 100)
+  console.log(876, state)
 }
 
 const dragStart = (index, list) => {

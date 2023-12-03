@@ -53,7 +53,7 @@ def update_poster_template(request, dept_id: int, data: SchemaIn):
 
 @router.get("/cate", response=List[SchemaOut], auth=None)
 def list_poster_template(request, filters: Filters = Query(...)):
-    qs = retrieve(request, Cate, filters)
+    qs = retrieve(request, Cate, filters).order_by('id')
     return qs
 
 

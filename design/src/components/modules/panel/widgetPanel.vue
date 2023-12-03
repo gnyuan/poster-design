@@ -2,8 +2,17 @@
   <div id="widget-panel">
     <div class="widget-classify">
       <ul class="classify-wrap">
-        <li v-for="(item, index) in widgetClassifyList" :key="index" :class="['classify-item', { 'active-classify-item': activeWidgetClassify === index }]" @click="clickClassify(index)">
+        <li
+          v-for="(item, index) in widgetClassifyList"
+          :key="index"
+          :class="[
+            'classify-item',
+            { 'active-classify-item': activeWidgetClassify === index },
+          ]"
+          @click="clickClassify(index)"
+        >
           <i :class="['iconfont', 'icon', item.icon]" :style="item.style"></i>
+          <!-- <i class="icon sd-tubiao" :style="item.style"></i> -->
           <p>{{ item.name }}</p>
         </li>
       </ul>
@@ -27,7 +36,15 @@
 // 组件面板
 const NAME = 'widget-panel'
 import widgetClassifyListData from '@/assets/data/WidgetClassifyList.ts'
-import { reactive, toRefs, onMounted, watch, nextTick, getCurrentInstance, ComponentInternalInstance } from 'vue'
+import {
+  reactive,
+  toRefs,
+  onMounted,
+  watch,
+  nextTick,
+  getCurrentInstance,
+  ComponentInternalInstance,
+} from 'vue'
 import { mapActions } from 'vuex'
 import { useRoute } from 'vue-router'
 

@@ -31,7 +31,6 @@ import { merge } from 'lodash-es'
 import api from '@/api'
 import PieChart from '@/components/business/echarts/pie.ts'
 import { echarts_default } from './echartdefault'
-import { nextTick } from 'vue'
 
 const COLORS = [
   '#4E70F0',
@@ -74,6 +73,7 @@ export default {
     setting: [],
     opts: {}, // 当前的echart具体某项配置的key以及value
     echartopts: {}, // 当前的echart全部配置
+    echarttype: 'doughnut_pie', // 当前是哪个预定义的echart图类型  doughnut_pie  group_line_bar
     record: {
       width: 0,
       height: 0,
@@ -120,8 +120,11 @@ export default {
 
   async created() {
     try {
-      const chart_type_id = 'group_line_bar' // doughnut_pie  group_line_bar
-      const mypie = await api.echart.getEchart({ chartId: chart_type_id })
+      const chart_type_id = this.params.echarttype // doughnut_pie  group_line_bar
+      console.log('HOPEE', this.params, this.dActiveElement)
+      const mypie = await api.echart.getEchart({
+        chartId: chart_type_id,
+      })
       const data = mypie.data.data
       const option = mypie.option.option
       const mergedOptions = merge(
