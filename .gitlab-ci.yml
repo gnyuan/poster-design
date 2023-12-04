@@ -1,0 +1,28 @@
+stages:
+  - deploy
+  - clean
+
+deploy_chart_dev:
+  stage: deploy
+  tags:
+    - chartdev
+  only:
+    - main
+  script:
+    - export MYENV=dev
+    - docker-compose -f docker-compose.yml build design-django design-web design-screenshots
+    - docker-compose -f docker-compose.yml up -d
+  environment:
+    name: dev
+    url: http://10.18.12.113:9001
+
+clean_chart_dev:
+  stage: clean
+  tags:
+    - chartdev
+  only:
+    - main
+  script:
+    - if [ -n "$(docker images -q --filter 'dangling=true' --no-trunc)" ]; then docker rmi $(docker images -q --filter 'dangling=true' --no-trunc); fi
+  environment:
+    name: dev
