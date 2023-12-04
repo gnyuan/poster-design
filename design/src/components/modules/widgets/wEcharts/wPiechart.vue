@@ -132,11 +132,17 @@ export default {
         echarts_default[chart_type_id],
         this.params.echartopts,
       ) // 设置echart option
-      if (mypie.data.columns !== undefined) {
-        mergedOptions.legend.data = data[0].slice(1)
-      } else {
-        // 如果没定义columns说明数据是单列的
-        mergedOptions.legend.data = data.slice(1).map((item) => item[0])
+      if (
+        mergedOptions.legend !== undefined &&
+        mergedOptions.legend.data !== undefined
+      ) {
+        // 在有图例的情况下
+        if (mypie.data.columns !== undefined || data[0].length > 2) {
+          mergedOptions.legend.data = data[0].slice(1)
+        } else {
+          // 一定是单列的
+          mergedOptions.legend.data = data.slice(1).map((item) => item[0])
+        }
       }
       mergedOptions.color = COLORS.slice(0, data.length - 1) // 设置color
       mergedOptions.series[0].data = []

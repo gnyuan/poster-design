@@ -553,6 +553,291 @@ export const echarts_default = {
       },
     },
   },
+  dynamic_race_a_td_bar: {
+    backgroundColor: '#FFFFFF',
+    title: [
+      {
+        text: '计算机板块部分公司2016-2021营收情况',
+        show: true,
+        top: '3.5%',
+        left: 'center',
+        textStyle: {
+          fontSize: 85.3344,
+          color: '#333333',
+          fontFamily: 'HarmonyOS_Sans_SC_Medium',
+          fontStyle: 'normal',
+        },
+      },
+      {
+        text: '数据来源:Wind',
+        show: true,
+        bottom: '2%',
+        right: '5%',
+        textStyle: {
+          fontSize: 42.6672,
+          color: '#777777',
+          fontFamily: 'HarmonyOS_Sans_SC_Regular',
+          fontStyle: 'normal',
+          fontWeight: 'lighter',
+        },
+        left: 'right',
+      },
+    ],
+    grid: {
+      top: '22%',
+      bottom: '10%',
+      left: '3%',
+      right: '13%',
+      containLabel: true,
+    },
+    xAxis: {
+      show: true,
+      type: 'value',
+      nameTextStyle: {
+        fontSize: 42.6672,
+        align: 'center',
+        color: '#888888',
+        fontFamily: 'HarmonyOS_Sans_SC_Regular',
+      },
+      nameGap: -50,
+      axisLabel: {
+        show: true,
+        fontSize: 42.6672,
+        margin: 10,
+        color: '#333333',
+        fontWeight: 'lighter',
+        fontFamily: 'HarmonyOS_Sans_SC_Regular',
+      },
+      position: 'top',
+      axisTick: {
+        show: false,
+      },
+      boundaryGap: false,
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#696565',
+          width: 1,
+        },
+      },
+      axisLine: {
+        show: false,
+        lineStyle: {
+          width: 4,
+        },
+      },
+    },
+    dataset: {
+      source: [
+        ['5.425', '金山办公', '2016'],
+        ['33.2', '科大讯飞', '2016'],
+        ['39.6', '宝信软件', '2016'],
+        ['99.04', '三六零', '2016'],
+        ['51.13', '用友网络', '2016'],
+        ['21.7', '恒生电子', '2016'],
+        ['14.1', '同花顺', '2016'],
+        ['20.39', '广联达', '2016'],
+        ['17.5', '深信服', '2016'],
+        ['11.62', '中科创达', '2016'],
+        ['45.3', '中国软件', '2016'],
+        ['26.63', '石基信息', '2016'],
+      ],
+    },
+    yAxis: {
+      show: true,
+      type: 'category',
+      nameTextStyle: {
+        color: '#888888',
+        fontSize: 42.6672,
+        fontFamily: 'HarmonyOS_Sans_SC_Regular',
+      },
+      inverse: true,
+      max: 9,
+      axisLine: {
+        show: false,
+        lineStyle: {
+          width: 4,
+        },
+      },
+      axisTick: {
+        show: false,
+      },
+      axisLabel: {
+        show: true,
+        fontSize: 42.6672,
+        margin: 10,
+        color: '#333333',
+        formatter: '{value}',
+        fontWeight: 'lighter',
+        fontFamily: 'HarmonyOS_Sans_SC_Regular',
+        rich: {
+          flag: {
+            fontSize: 25,
+            padding: 5,
+          },
+        },
+      },
+      animationDuration: 300,
+      animationDurationUpdate: 300,
+    },
+    series: [
+      {
+        realtimeSort: true,
+        seriesLayoutBy: 'column',
+        type: 'bar',
+        itemStyle: {},
+        showBackground: false,
+        backgroundStyle: {
+          color: {
+            colorStops: [
+              {
+                offset: 0,
+                color: 'rgba(0, 34, 85, 0.8)',
+              },
+              {
+                offset: 1,
+                color: 'rgba(0, 34, 85, 0.2)',
+              },
+            ],
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            type: 'linear',
+            global: false,
+          },
+        },
+        encode: {
+          x: 0,
+          y: 3,
+        },
+        label: {
+          show: true,
+          position: 'right',
+          color: 'inherit',
+          fontSize: 53.334,
+          precision: 1,
+          valueAnimation: true,
+          fontFamily: 'Barlow_Condensed_Regular',
+        },
+        data: [
+          ['32.8', '金山办公', '2021'],
+          ['183.1', '科大讯飞', '2021'],
+          ['117.6', '宝信软件', '2021'],
+          ['108.9', '三六零', '2021'],
+          ['89.32', '用友网络', '2021'],
+          ['54.97', '恒生电子', '2021'],
+          ['35.59', '同花顺', '2021'],
+          ['56.19', '广联达', '2021'],
+          ['68.05', '深信服', '2021'],
+          ['54.45', '中科创达', '2021'],
+          ['103.5', '中国软件', '2021'],
+          ['32.15', '石基信息', '2021'],
+        ],
+      },
+    ],
+    animationDuration: 0,
+    animationDurationUpdate: 3800,
+    animationEasing: 'linear',
+    animationEasingUpdate: 'linear',
+    graphic: {
+      elements: [
+        {
+          type: 'text',
+          right: '13%',
+          bottom: '10%',
+          style: {
+            text: 2021,
+            font: '58px HarmonyOS_Sans_SC_Regular',
+            fill: 'rgba(100, 100, 100, 0.5)',
+            fontFamily: 'HarmonyOS_Sans_SC_Regular',
+            fontSize: 58,
+            size: '103.11240000000001',
+          },
+          z: 100,
+        },
+        {
+          type: 'text',
+          top: '13%',
+          left: '10%',
+          style: {
+            text: '单位:亿元',
+            font: '18px HarmonyOS_Sans_SC_Regular',
+            fill: '#000000',
+            fontFamily: 'HarmonyOS_Sans_SC_Regular',
+            fontSize: 24,
+            size: '42.6672',
+          },
+          z: 100,
+        },
+      ],
+    },
+    cache: {
+      dataDecimal: 2,
+      sundry: {
+        dataDecimal: 2,
+        dylayout: true,
+        dataFormat: {
+          dataDecimal: '默认',
+          percent: false,
+          isScale: false,
+        },
+      },
+      chart: {
+        size: [1280, 720],
+        backgroundColor: {
+          show: true,
+          color: '#FFFFFF',
+        },
+        axis: {
+          axisLabel: {
+            show: 'all',
+            textStyle: {
+              color: '#333333',
+              fontSize: 24,
+              fontFamily: 'HarmonyOS_Sans_SC_Regular',
+            },
+          },
+          splitLine: {
+            show: 'onlyyAxis',
+            lineStyle: {
+              width: 1,
+              type: 'dashed',
+              color: '#CCCCCC',
+            },
+          },
+        },
+        legend: {
+          color: ['#4E70F0'],
+          location: 'top-center',
+        },
+        series: {
+          label: {
+            show: true,
+            fontSize: 24,
+            fontFamily: 'Barlow_Condensed_Regular',
+          },
+          borderRadius: 2,
+        },
+      },
+      dyEffect: {
+        duration: 20,
+        transform: {
+          show: true,
+          easing: 'sameTime',
+        },
+        animation: {
+          show: false,
+          easing: 'linear',
+        },
+        time: {
+          duration: 2,
+          startDelay: 0,
+          endDelay: 0,
+        },
+      },
+    },
+  },
   basic_2d_bar: {
     backgroundColor: '#FFFFFF',
     title: [
@@ -10172,7 +10457,7 @@ export const echarts_default = {
         itemStyle: {
           color: '#F5222D',
         },
-        hoverAnimation: false,
+        emphasis: { scale: false },
         legendHoverLink: false,
         data: [
           {
@@ -13940,8 +14225,8 @@ export const echarts_default = {
       {
         name: '进度条',
         type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['75%', '65.625%'],
         center: ['50%', '53%'],
         label: {
@@ -13971,7 +14256,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -13984,8 +14269,8 @@ export const echarts_default = {
         type: 'pie',
         silent: true,
         z: 1,
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['75%', '65.625%'],
         center: ['50%', '53%'],
         label: {
@@ -14010,7 +14295,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
           {
             value: 2.5,
@@ -14022,7 +14307,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14033,8 +14318,8 @@ export const echarts_default = {
       {
         name: '进度条',
         type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['56.25%', '46.875%'],
         center: ['50%', '53%'],
         label: {
@@ -14064,7 +14349,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14077,8 +14362,8 @@ export const echarts_default = {
         type: 'pie',
         silent: true,
         z: 1,
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['56.25%', '46.875%'],
         center: ['50%', '53%'],
         label: {
@@ -14103,7 +14388,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
           {
             value: 2.5,
@@ -14115,7 +14400,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14126,8 +14411,8 @@ export const echarts_default = {
       {
         name: '进度条',
         type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['37.5%', '28.125%'],
         center: ['50%', '53%'],
         label: {
@@ -14157,7 +14442,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14170,8 +14455,8 @@ export const echarts_default = {
         type: 'pie',
         silent: true,
         z: 1,
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['37.5%', '28.125%'],
         center: ['50%', '53%'],
         label: {
@@ -14196,7 +14481,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
           {
             value: 2.5,
@@ -14208,7 +14493,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14219,8 +14504,8 @@ export const echarts_default = {
       {
         name: '进度条',
         type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['18.75%', '9.375%'],
         center: ['50%', '53%'],
         label: {
@@ -14250,7 +14535,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -14263,8 +14548,8 @@ export const echarts_default = {
         type: 'pie',
         silent: true,
         z: 1,
-        clockWise: false,
-        hoverAnimation: false,
+        clockwise: false,
+        emphasis: { scale: false },
         radius: ['18.75%', '9.375%'],
         center: ['50%', '53%'],
         label: {
@@ -14289,7 +14574,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
           {
             value: 2.5,
@@ -14301,7 +14586,7 @@ export const echarts_default = {
             tooltip: {
               show: false,
             },
-            hoverAnimation: false,
+            emphasis: { scale: false },
           },
         ],
         animation: false,
@@ -17189,7 +17474,7 @@ export const echarts_default = {
           valueAnimation: true,
           fontSize: 30,
           color: '#000000',
-          borderColor: 'auto',
+          borderColor: 'inherit',
           formatter: '{value}%',
           fontFamily: 'HarmonyOS_Sans_SC_Regular',
         },
