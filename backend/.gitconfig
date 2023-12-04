@@ -1,0 +1,15 @@
+[user]
+	email = yuangn@ccfund.com.cn
+	name = yuangn
+[alias]
+	st = status
+	co = checkout
+	ci = commit
+	br = branch
+	unstage = reset HEAD
+	last = log -1
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[core]
+	autocrlf = true
+[credential]
+	helper = "!f() { /root/.vscode-server-insiders/bin/dd112ec0243c4b42bb3106e64df1688e242a6559-insider/node /tmp/vscode-remote-containers-61a561bc-ce49-4af2-b3c8-d9f8b0a8b676.js git-credential-helper $*; }; f"

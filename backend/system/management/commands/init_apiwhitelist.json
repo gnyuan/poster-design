@@ -1,0 +1,48 @@
+[
+    {
+        "url": "/api/system/userinfo",
+        "method": 0,
+        "remark": "获得用户信息",
+        "enable_datasource": false
+    },
+    {
+        "url": "/api/system/permCode",
+        "method": 0,
+        "remark": "用于前端获取当前用户的按钮权限"
+    },
+    {
+        "url": "/api/system/user/*",
+        "method": 0,
+        "remark": "对用户表的操作"
+    },
+    {
+        "url": "/api/system/user/set/repassword",
+        "method": 0,
+        "remark": "修改密码"
+    },
+    {
+        "url": "/api/system/role/list/menu",
+        "method": 0,
+        "remark": "list menue tree"
+    },
+    {
+        "url": "/api/system/role/list/menu_button",
+        "method": 0,
+        "remark": "list menu button tree"
+    },
+    {
+        "url": "/api/system/role/list/menu_column",
+        "method": 0,
+        "remark": "菜单字段树"
+    },
+    {
+        "url": "/api/system/dict_item/by/code",
+        "method": 0,
+        "remark": "下拉框获得数据字典"
+    },
+    {
+        "url": "/api/system/dict_item",
+        "method": 0,
+        "remark": "获取数据字典详情"
+    }
+]

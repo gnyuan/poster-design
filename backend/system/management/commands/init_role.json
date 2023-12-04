@@ -1,0 +1,50 @@
+[
+    {
+        "remark": null,
+        "name": "企业主",
+        "code": "owner",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    },
+    {
+        "remark": null,
+        "name": "店长",
+        "code": "manager",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    },
+    {
+        "remark": null,
+        "name": "美容师",
+        "code": "beautician",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    },
+    {
+        "remark": null,
+        "name": "前台",
+        "code": "frontend",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    },
+    {
+        "remark": null,
+        "name": "财务",
+        "code": "accountant",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    },
+    {
+        "remark": null,
+        "name": "店员",
+        "code": "employee",
+        "status": 1,
+        "admin": 0,
+        "data_range": 4
+    }
+]
