@@ -92,7 +92,7 @@
         <color-select
           v-model="innerElement.color"
           label="颜色"
-          @finish="(value) => finish('color', value)"
+          @finish="(value) => finishColor('color', value)"
         />
         <!-- <color-select v-model="innerElement.backgroundColor" label="背景颜色" @finish="(value) => finish('backgroundColor', value)" /> -->
       </div>
@@ -302,6 +302,14 @@ export default {
         key === 'fontClass' &&
           (this.fontClassList['当前页面'] = usePageFontsFilter())
       }, 300)
+    },
+    finishColor(key, value) {
+      this.updateWidgetData({
+        uuid: this.dActiveElement.uuid,
+        key: key,
+        value: value,
+        pushHistory: false,
+      })
     },
     layerAction(item) {
       this.updateLayerIndex({
