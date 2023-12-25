@@ -2140,5 +2140,61 @@
     "version": null,
     "lang": "zh",
     "woff_size": 7786716
+  },
+  {
+    "id": 905,
+    "oid": null,
+    "alias": "思源黑体Bold",
+    "preview": "/static/fonts/20231225-SourceHanSansCN-Bold-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231225-SourceHanSansCN-Bold.woff2",
+    "value": "si-yuan-hei-ti-bold",
+    "font_family": "Si Yuan Hei Ti",
+    "size": 6414940,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 6414940
+  },
+  {
+    "id": 906,
+    "oid": null,
+    "alias": "思源黑体Light",
+    "preview": "/static/fonts/20231225-SourceHanSansCN-Light-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231225-SourceHanSansCN-Light.woff2",
+    "value": "si-yuan-hei-ti-light",
+    "font_family": "Si Yuan Hei Ti",
+    "size": 5879356,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 5879356
+  },
+  {
+    "id": 907,
+    "oid": null,
+    "alias": "思源黑体Medium",
+    "preview": "/static/fonts/20231225-SourceHanSansCN-Medium-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231225-SourceHanSansCN-Medium.woff2",
+    "value": "si-yuan-hei-ti-medium",
+    "font_family": "Si Yuan Hei Ti",
+    "size": 6199876,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 6199876
+  },
+  {
+    "id": 908,
+    "oid": null,
+    "alias": "思源黑体Regular",
+    "preview": "/static/fonts/20231225-SourceHanSansCN-Regular-preview.png",
+    "ttf": null,
+    "woff": "/static/fonts/20231225-SourceHanSansCN-Regular.woff2",
+    "value": "si-yuan-hei-ti-regular",
+    "font_family": "Si Yuan Hei Ti",
+    "size": 6090160,
+    "version": null,
+    "lang": "zh",
+    "woff_size": 6090160
   }
 ]
