@@ -1,5 +1,7 @@
 // import { colorer } from './color'
 import { RGBA2HexA } from './color/color'
+import { getFonts } from '@/api/material'
+
 const colorer = { RGBA2HexA }
 
 export const CLOUD_TYPE = {
@@ -14,6 +16,34 @@ export const WRITING_MODE = {
 export async function parsePSDFromURL(url: string) {
   return await (window as any).PSD.fromURL(url)
 }
+
+// 取得所有字体
+interface FontData {
+  id: number;
+  remark: string | null;
+  creator: number;
+  modifier: string | null;
+  belong_dept: string | null;
+  update_datetime: string;
+  create_datetime: string;
+  sort: number;
+  alias: string;
+  font_family: string;
+  lang: string;
+  oid: string | null;
+  preview: string;
+  size: number;
+  ttf: string | null;
+  value: string;
+  version: string | null;
+  woff: string;
+  woff_size: number;
+}
+let fonts: FontData[] = getFonts({ pageSize: 400 });
+
+getFonts({ pageSize: 400 }).then((res:any) => {
+  fonts = res
+})
 
 function toRGBAColor(data: number[]) {
   const [r, g, b] = data
@@ -49,7 +79,21 @@ function calcTransform({ xx, xy }: { xx: number; xy: number }): {
   return { scale, angle }
 }
 
-function toTransformMatrix({ xx, xy, yx, yy, tx, ty }: { xx: number; xy: number; yx: number; yy: number; tx: number; ty: number }) {
+function toTransformMatrix({
+  xx,
+  xy,
+  yx,
+  yy,
+  tx,
+  ty,
+}: {
+  xx: number
+  xy: number
+  yx: number
+  yy: number
+  tx: number
+  ty: number
+}) {
   return { a: xx, b: xy, c: yx, d: yy, tx, ty }
 }
 
@@ -83,13 +127,23 @@ function toCloudTextConfig(data: any, layer: any) {
       strokes.push({
         type: Reflect.get(STROKE_TYPE, FrFX.Styl.value),
         width: FrFX['Sz  '].value,
-        color: [FrFX['Clr ']['Rd  '], FrFX['Clr ']['Grn '], FrFX['Clr ']['Bl  '], FrFX.Opct.value / 100],
+        color: [
+          FrFX['Clr ']['Rd  '],
+          FrFX['Clr ']['Grn '],
+          FrFX['Clr ']['Bl  '],
+          FrFX.Opct.value / 100,
+        ],
       })
     }
 
     if (DrSh) {
       shadows.push({
-        color: [DrSh['Clr ']['Rd  '], DrSh['Clr ']['Grn '], DrSh['Clr ']['Bl  '], DrSh.Opct.value / 100],
+        color: [
+          DrSh['Clr ']['Rd  '],
+          DrSh['Clr ']['Grn '],
+          DrSh['Clr ']['Bl  '],
+          DrSh.Opct.value / 100,
+        ],
         distance: DrSh.Dstn.value,
         blur: DrSh.blur.value,
         angle: DrSh.lagl.value,
@@ -98,6 +152,45 @@ function toCloudTextConfig(data: any, layer: any) {
   }
 
   const { angle } = calcTransform(typeTool.transform)
+  const fontFamily = typeTool.fonts()[0].replace('\u0000', '')
+
+    // 假设这是字体数据
+  interface FontItem {
+    alias: string;
+    id: number;
+    value: string;
+    url: string;
+  }
+
+  // 初始化默认的 fontClass
+  let fontClass: FontItem = {
+    "alias": "思源黑体",
+    "id": 904,
+    "value": "si-yuan-hei-ti",
+    "url": "/static/fonts/20231116-SourceHanSansCN-VF.woff2"
+  }
+
+  // 检查 fonts.items 中是否存在与 fontFamily 对应的字体数据
+  const foundFont = fonts.items.find((item) => item.value === fontFamily)
+
+  // 如果找到对应的字体数据，则更新 fontClass
+  if (foundFont) {
+    fontClass = {
+      "alias": foundFont.alias,
+      "id": foundFont.id,
+      "value": foundFont.value,
+      "url": foundFont.woff,
+    }
+  }
+
+  console.log(
+    '使用的字体有：',
+    typeTool.fonts()[0].replace('\u0000', ''),
+    typeTool.fonts(),
+    data.text.font.sizes,
+    data.text.font.sizes[0],
+    data.height,
+  )
 
   return {
     type: CLOUD_TYPE.text,
@@ -111,11 +204,17 @@ function toCloudTextConfig(data: any, layer: any) {
     // fontFamily: typeTool
     //   .fonts()
     //   .map((font: string) => font.slice(1).replace('\u0000', '')),
-    fontFamily: typeTool.fonts()[0].slice(1).replace('\u0000', ''),
+    fontFamily: fontFamily,
+    fontClass: fontClass,
     fontSize: data.text.font.sizes ? data.text.font.sizes[0] : data.height,
     color: colorer.RGBA2HexA(...toRGBAColor(data.text.font.colors[0])),
-    textDecoration: StyleRun.RunArray[0].StyleSheet.StyleSheetData.Underline ? 'underline' : '',
-    writingMode: typeTool.obj.textData.Ornt.value === 'Hrzn' ? WRITING_MODE.h : WRITING_MODE.v,
+    textDecoration: StyleRun.RunArray[0].StyleSheet.StyleSheetData.Underline
+      ? 'underline'
+      : '',
+    writingMode:
+      typeTool.obj.textData.Ornt.value === 'Hrzn'
+        ? WRITING_MODE.h
+        : WRITING_MODE.v,
     fontWeight: '',
     fontStyle: '',
     texts,
@@ -160,7 +259,18 @@ export async function convertPSD2Page(psd: any) {
   // vectorMask.parse()
 
   const findLayer = (data: any) => {
-    const result = !data.visible ? null : psd.layers.find((layer: any) => layer.name === data.name && layer.top === data.top && layer.right === data.right && layer.bottom === data.bottom && layer.left === data.left && layer.width === data.width && layer.height === data.height)
+    const result = !data.visible
+      ? null
+      : psd.layers.find(
+          (layer: any) =>
+            layer.name === data.name &&
+            layer.top === data.top &&
+            layer.right === data.right &&
+            layer.bottom === data.bottom &&
+            layer.left === data.left &&
+            layer.width === data.width &&
+            layer.height === data.height,
+        )
     return result
   }
 
@@ -217,6 +327,7 @@ export async function convertPSD2Page(psd: any) {
   }
 
   await process(children)
+  console.log('pages:', page)
 
   return page
 }
