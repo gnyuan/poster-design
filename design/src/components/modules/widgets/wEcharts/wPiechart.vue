@@ -131,24 +131,49 @@ export default {
         option,
         echarts_default[chart_type_id],
         this.params.echartopts,
-      ) // 设置echart option
-      if (mypie.data.columns !== undefined) {
-        mergedOptions.legend.data = data[0].slice(1)
-      } else {
-        // 如果没定义columns说明数据是单列的
-        mergedOptions.legend.data = data.slice(1).map((item) => item[0])
+      )
+      // 初始化1，设置图例
+      if (
+        mergedOptions.legend !== undefined &&
+        mergedOptions.legend.data !== undefined
+      ) {
+        // 在有图例的情况下
+        if (mypie.data.columns !== undefined || data[0].length > 2) {
+          mergedOptions.legend.data = data[0].slice(1)
+        } else {
+          // 一定是单列的
+          mergedOptions.legend.data = data.slice(1).map((item) => item[0])
+        }
       }
-      mergedOptions.color = COLORS.slice(0, data.length - 1) // 设置color
+      // 初始化2，设置color
+      mergedOptions.color = COLORS.slice(0, data.length - 1)
+
+      // 初始化3，设置数据
       mergedOptions.series[0].data = []
       data.slice(1).forEach((item, index) => {
-        const [name, value] = item
+        const [n, v] = item
         mergedOptions.series[0].data.push({
-          value: value.toString(),
-          name,
+          value: v.toString(),
+          name: n,
+          label: echarts_default[chart_type_id].cache.chart.series.label,
         })
       })
-
       this.echartOptions = JSON.parse(JSON.stringify(mergedOptions))
+      if (chart_type_id === 'basic_portrait_time_line') {
+        // 纵向时间图，json不支持函数
+        data.slice(1).forEach((item, index) => {
+          this.echartOptions.series[0].data[index].value = 0 // 关键！！
+          this.echartOptions.series[0].data[index].country = item[0]
+          this.echartOptions.series[0].data[index].date = item[1]
+          this.echartOptions.series[0].data[index].content = item[2]
+          this.echartOptions.series[0].data[index].label.align =
+            index % 2 === 0 ? 'left' : 'right'
+          this.echartOptions.series[0].data[index].label.position =
+            index % 2 === 0 ? 'left' : 'right'
+          this.echartOptions.series[0].data[index].label.formatter = (pt) =>
+            `{a|${pt.name}}\n{b|${pt.data.content}}`
+        })
+      }
     } catch (error) {
       console.error('获取数据时出错：', error)
     }

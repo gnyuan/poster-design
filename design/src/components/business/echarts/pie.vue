@@ -37,10 +37,10 @@ watch(
 )
 
 const render = debounce(300, false, async () => {
-  console.log('要进行渲染了！！因为height width 或者opts变动')
+  console.log('要进行渲染了！！因为height width 或者opts变动', props.opts)
   setOptions(props.opts)
   await nextTick()
-  resize()
+  await resize()
 })
 
 onMounted(() => {

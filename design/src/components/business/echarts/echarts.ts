@@ -1,4 +1,6 @@
 import * as echarts from 'echarts/core'
+import 'echarts-liquidfill'
+import 'echarts-wordcloud'
 
 import {
   BarChart,
@@ -10,6 +12,10 @@ import {
   ScatterChart,
   TreemapChart,
   SunburstChart,
+  CandlestickChart,
+  GaugeChart,
+  FunnelChart,
+  BoxplotChart,
 } from 'echarts/charts'
 
 import {
@@ -60,6 +66,11 @@ echarts.use([
   DatasetComponent,
   TransformComponent,
   ScatterChart,
+  CandlestickChart,
+  GaugeChart,
+  MapChart,
+  FunnelChart,
+  BoxplotChart,
 ])
 
 export default echarts

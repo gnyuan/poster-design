@@ -107,12 +107,12 @@ export default {
     fontSize: 24,
     zoom: 1,
     fontClass: {
-      alias: '站酷快乐体',
-      id: 543,
-      value: 'zcool-kuaile-regular',
-      url: 'https://lib.baomitu.com/fonts/zcool-kuaile/zcool-kuaile-regular.woff2',
+      alias: '思源黑体',
+      id: 904,
+      value: 'si-yuan-hei-ti',
+      url: '/static/fonts/20231116-SourceHanSansCN-VF.woff2',
     },
-    fontFamily: 'SourceHanSansSC-Regular',
+    fontFamily: 'Si Yuan Hei Ti',
     fontWeight: 'normal',
     fontStyle: 'normal',
     writingMode: 'horizontal-tb',
@@ -257,6 +257,36 @@ export default {
           window.getSelection().addRange(range)
         }
       }, 100)
+      // 新增：监听文字选中事件
+      // el.addEventListener('mouseup', this.highlightedText.bind(this))
+    },
+    highlightedText(e) {
+      const selection = window.getSelection()
+      const selectedText = selection.toString()
+      const range = selection.getRangeAt(0)
+
+      // 检查是否选中文字
+      console.log('seeeeee', selectedText, selection, range, e, 123)
+      if (selectedText.length > 0) {
+        // 获取选中文字的位置信息
+        const startOffset = range.startOffset
+        const endOffset = range.endOffset
+
+        // 设置选中文字的颜色
+        console.log(
+          '选中文字了！！！',
+          startOffset,
+          endOffset,
+          this.params.text,
+          this.params.text.slice(startOffset, endOffset),
+        )
+        this.updateWidgetData({
+          uuid: this.params.uuid,
+          key: 'text',
+          value: '<p>你<span style="color: yellow">好</span>吗？</p>',
+          pushHistory: false,
+        })
+      }
     },
   },
 }
