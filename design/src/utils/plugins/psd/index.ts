@@ -187,9 +187,8 @@ function toCloudTextConfig(data: any, layer: any) {
     '使用的字体有：',
     typeTool.fonts()[0].replace('\u0000', ''),
     typeTool.fonts(),
-    data.text.font.sizes,
-    data.text.font.sizes[0],
-    data.height,
+    texts,
+    data,
   )
 
   return {
